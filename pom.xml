@@ -13,7 +13,28 @@
 			<artifactId>lakenono</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- 正文提取 -->
+		<dependency>
+			<groupId>de.jetwick</groupId>
+			<artifactId>snacktory</artifactId>
+			<version>1.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
+
+
+	<repositories>
+		<!-- 正文提取 -->
+		<repository>
+			<id>karussell_snapshots</id>
+			<url>https://github.com/karussell/mvnrepo/raw/master/snapshots/</url>
+		</repository>
+		<repository>
+			<id>karussell_releases</id>
+			<url>https://github.com/karussell/mvnrepo/raw/master/releases/</url>
+		</repository>
+	</repositories>
+
 
 	<build>
 		<plugins>
