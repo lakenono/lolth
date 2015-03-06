@@ -1,4 +1,4 @@
-package lolth.news.baidu;
+package lolth.baidu.news;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -8,8 +8,8 @@ import java.util.Date;
 
 import lakenono.core.GlobalComponents;
 import lakenono.db.DB;
-import lolth.news.baidu.bean.BaiduNewsBean;
-import lolth.news.baidu.bean.BaiduNewsJobStatus;
+import lolth.baidu.news.bean.BaiduNewsBean;
+import lolth.baidu.news.bean.BaiduNewsJobStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;

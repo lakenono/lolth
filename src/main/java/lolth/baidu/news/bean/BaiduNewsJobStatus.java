@@ -1,4 +1,4 @@
-package lolth.news.baidu.bean;
+package lolth.baidu.news.bean;
 
 import java.sql.SQLException;
 
