@@ -208,7 +208,9 @@ public class BaiduNewsFetch
 	{
 		Date date = DateUtils.parseDate("20140101", new String[] { "yyyyMMdd" });
 
-		String[] keywords = new String[] { "中国第一汽车集团公司", "中国一汽", "一汽集团", "东风汽车", "东风公司", "原名二汽", "上汽", "上海汽车", "上海汽车集团", "长安汽车", "长安集团" };
+		//String[] keywords = new String[] { "中国第一汽车集团公司", "中国一汽", "一汽集团", "东风汽车", "东风公司", "原名二汽", "上汽", "上海汽车", "上海汽车集团", "长安汽车", "长安集团" };
+		//String[] keywords = new String[] { "中国第一汽车集团公司", "中国一汽", "一汽集团", "东风汽车", "东风公司" };
+		String[] keywords = new String[] { "原名二汽", "上汽", "上海汽车", "上海汽车集团", "长安汽车", "长安集团" };
 
 		while (true)
 		{
