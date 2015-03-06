@@ -16,24 +16,25 @@ public class WeiboBean extends BaseBean
 	// 数据字段
 	private String id;
 	private String mid;
+	private String weibourl;
 	private String text;
 	private String postTime;
 	private String source;
 	private String username;
+	private String userid;
 	private String userurl;
-	private String geo;
 	private String reposts;
 	private String comments;
 	private String likes;
 	private String pid;
-
-	// 业务字段
+	private String pmid;
+	private String pweibourl;
 	private String keyword;
 
 	@Override
 	public String toString()
 	{
-		return "WeiboBean [id=" + id + ", mid=" + mid + ", text=" + text + ", postTime=" + postTime + ", source=" + source + ", username=" + username + ", userurl=" + userurl + ", geo=" + geo + ", reposts=" + reposts + ", comments=" + comments + ", likes=" + likes + ", pid=" + pid + ", keyword=" + keyword + "]";
+		return "WeiboBean [id=" + id + ", mid=" + mid + ", weibourl=" + weibourl + ", text=" + text + ", postTime=" + postTime + ", source=" + source + ", username=" + username + ", userid=" + userid + ", userurl=" + userurl + ", reposts=" + reposts + ", comments=" + comments + ", likes=" + likes + ", pid=" + pid + ", pmid=" + pmid + ", pweibourl=" + pweibourl + ", keyword=" + keyword + "]";
 	}
 
 	public String getId()
@@ -54,6 +55,16 @@ public class WeiboBean extends BaseBean
 	public void setMid(String mid)
 	{
 		this.mid = mid;
+	}
+
+	public String getWeibourl()
+	{
+		return weibourl;
+	}
+
+	public void setWeibourl(String weibourl)
+	{
+		this.weibourl = weibourl;
 	}
 
 	public String getText()
@@ -96,6 +107,16 @@ public class WeiboBean extends BaseBean
 		this.username = username;
 	}
 
+	public String getUserid()
+	{
+		return userid;
+	}
+
+	public void setUserid(String userid)
+	{
+		this.userid = userid;
+	}
+
 	public String getUserurl()
 	{
 		return userurl;
@@ -104,16 +125,6 @@ public class WeiboBean extends BaseBean
 	public void setUserurl(String userurl)
 	{
 		this.userurl = userurl;
-	}
-
-	public String getGeo()
-	{
-		return geo;
-	}
-
-	public void setGeo(String geo)
-	{
-		this.geo = geo;
 	}
 
 	public String getReposts()
@@ -154,6 +165,26 @@ public class WeiboBean extends BaseBean
 	public void setPid(String pid)
 	{
 		this.pid = pid;
+	}
+
+	public String getPmid()
+	{
+		return pmid;
+	}
+
+	public void setPmid(String pmid)
+	{
+		this.pmid = pmid;
+	}
+
+	public String getPweibourl()
+	{
+		return pweibourl;
+	}
+
+	public void setPweibourl(String pweibourl)
+	{
+		this.pweibourl = pweibourl;
 	}
 
 	public String getKeyword()

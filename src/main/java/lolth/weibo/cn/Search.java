@@ -73,7 +73,7 @@ public class Search
 		}
 	}
 
-	// TODO 修改
+	// TODO 需要COOKIE池
 	public Document fetch(String keyword, String beginDate, String endDate, int page) throws IOException, InterruptedException
 	{
 		Connection connect = Jsoup.connect("http://weibo.cn/search/");
@@ -113,7 +113,6 @@ public class Search
 			}
 
 		}
-
 		throw new RuntimeException("fetcher重试[" + retry + "]次后无法成功.");
 	}
 
@@ -125,6 +124,8 @@ public class Search
 
 		for (Element element : elements)
 		{
+			String html = element.html();
+
 			WeiboBean bean = new WeiboBean();
 
 			// mid
@@ -134,19 +135,10 @@ public class Search
 			// id
 			bean.setId(WeiboIdUtils.toId(mid));
 
-			// text
-			String text = element.select("span.ctt").text();
-			bean.setText(StringUtils.substringAfter(text, ":"));
-
 			// 发布时间
 			String postTimeText = element.select("span.ct").text();
 			postTimeText = StringUtils.substringBefore(postTimeText, "来自");
 			bean.setPostTime(postTimeText);
-
-			// source
-			String source = element.select("span.ct").text();
-			postTimeText = StringUtils.substringAfter(postTimeText, "来自");
-			bean.setSource(source);
 
 			// username
 			String username = element.select("a.nk[href]").first().text();
@@ -156,24 +148,56 @@ public class Search
 			String userurl = element.select("a.nk[href]").first().attr("href");
 			bean.setUserurl(userurl);
 
-			String html = element.html();
+			// userid
+			String userid = StringUtils.substringAfterLast(userurl, "/");
+			bean.setUserid(userid);
+
+			// weibourl
+			bean.setWeibourl("http://weibo.cn/comment/" + mid);
+
+			// source
+			String source = element.select("span.ct").text();
+			source = StringUtils.substringAfter(source, "来自");
+			bean.setSource(source);
 
 			// 赞
-			String likes = StringUtils.substringBetween(html, "赞[", "]");
+			Element likesElement = element.getElementsMatchingOwnText("赞\\[").last();
+			String likes = StringUtils.substringBetween(likesElement.text(), "赞[", "]");
 			bean.setLikes(likes);
 
 			// 转发
-			String forwards = StringUtils.substringBetween(html, "转发[", "]");
+			String forwards = StringUtils.substringBetween(html, ">转发[", "]");
 			bean.setReposts(forwards);
 
 			// 评论
-			String comments = StringUtils.substringBetween(html, "评论[", "]");
+			String comments = StringUtils.substringBetween(html, ">评论[", "]");
 			bean.setComments(comments);
+
+			// 原创
+			if (!StringUtils.contains(html, "原文转发"))
+			{
+				// text
+				String text = element.select("span.ctt").text();
+				bean.setText(StringUtils.substringAfter(text, ":"));
+			}
+			else
+			{
+				String pweibourl = element.select("a.cc").first().attr("href");
+				bean.setPweibourl(pweibourl);
+
+				String pmid = StringUtils.substringBetween(pweibourl, "comment/", "?");
+				bean.setPmid(pmid);
+
+				String pid = WeiboIdUtils.toId(pmid);
+				bean.setPid(pid);
+
+				String text = StringUtils.substringBetween(element.select("div").last().text(), "转发理由:", "赞[");
+				bean.setText(text);
+			}
 
 			weiboBeans.add(bean);
 			this.log.info(bean.toString());
 		}
-
 		return weiboBeans;
 	}
 
@@ -181,9 +205,9 @@ public class Search
 	{
 		String[] brands = new String[] { "美素佳儿" };
 
-		for (String brand : brands)
+		for (String keyword : brands)
 		{
-			new Search().process(brand, "20141228", "20141231");
+			new Search().process(keyword, "20141228", "20141228");
 		}
 	}
 }
