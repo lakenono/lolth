@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lakenono.core.GlobalComponents;
-import lolth.autohome.bbs.bean.AutoHomeBBSBean;
+import lolth.autohome.bbs.bean.AutoHomeBBSPostBean;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
@@ -15,14 +15,14 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AutoHomeBBSList
+public class AutoHomeBBSPostListFetch
 {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private String id;
 	private String jobId;
 
-	public AutoHomeBBSList(String id, String jobId)
+	public AutoHomeBBSPostListFetch(String id, String jobId)
 	{
 		this.id = id;
 		this.jobId = jobId;
@@ -36,9 +36,9 @@ public class AutoHomeBBSList
 		{
 			String url = this.buildUrl(id, i);
 			String html = GlobalComponents.fetcher.fetch(url);
-			List<AutoHomeBBSBean> beans = this.parse(html);
+			List<AutoHomeBBSPostBean> beans = this.parse(html);
 
-			for (AutoHomeBBSBean bean : beans)
+			for (AutoHomeBBSPostBean bean : beans)
 			{
 				try
 				{
@@ -53,16 +53,16 @@ public class AutoHomeBBSList
 		}
 	}
 
-	private List<AutoHomeBBSBean> parse(String html)
+	private List<AutoHomeBBSPostBean> parse(String html)
 	{
-		List<AutoHomeBBSBean> autoHomeBBSBeans = new LinkedList<AutoHomeBBSBean>();
+		List<AutoHomeBBSPostBean> autoHomeBBSBeans = new LinkedList<AutoHomeBBSPostBean>();
 
 		Document document = Jsoup.parse(html);
 		Elements elements = document.select("dl.list_dl[lang]");
 
 		for (Element element : elements)
 		{
-			AutoHomeBBSBean bean = new AutoHomeBBSBean();
+			AutoHomeBBSPostBean bean = new AutoHomeBBSPostBean();
 
 			// title
 			String title = element.select("dt a").first().text();
@@ -109,18 +109,18 @@ public class AutoHomeBBSList
 	public static void main(String[] args) throws Exception
 	{
 		// 东风风度MX6 3637 http://club.autohome.com.cn/bbs/forum-c-3637-1.html
-		new AutoHomeBBSList("3637", "东风风度MX6").run();
+		new AutoHomeBBSPostListFetch("3637", "东风风度MX6").run();
 
 		// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
-		new AutoHomeBBSList("2123", "哈弗H6").run();
+		new AutoHomeBBSPostListFetch("2123", "哈弗H6").run();
 
 		// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
-		new AutoHomeBBSList("3000", "奔驰C级").run();
+		new AutoHomeBBSPostListFetch("3000", "奔驰C级").run();
 
 		// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
-		new AutoHomeBBSList("3204", "长安CS75").run();
+		new AutoHomeBBSPostListFetch("3204", "长安CS75").run();
 
 		// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
-		new AutoHomeBBSList("2560", "长安CS75").run();
+		new AutoHomeBBSPostListFetch("2560", "传祺GS5").run();
 	}
 }

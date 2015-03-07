@@ -3,6 +3,7 @@ package lolth.autohome.bbs.bean;
 import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
+import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 
 @DBTable(name = "data_autohome_bbs_comment")
@@ -17,6 +18,7 @@ public class AutoHomeBBSCommentBean extends BaseBean
 	private String floor;
 
 	// text 
+	@DBField(type = "text")
 	private String text;
 
 	// 作者

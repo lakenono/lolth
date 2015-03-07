@@ -7,12 +7,12 @@ import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 
-@DBTable(name = "data_autohome_bbs_list")
-public class AutoHomeBBSBean extends BaseBean
+@DBTable(name = "data_autohome_bbs_post")
+public class AutoHomeBBSPostBean extends BaseBean
 {
 	public static void main(String[] args) throws SQLException
 	{
-		new AutoHomeBBSBean().buildTable();
+		new AutoHomeBBSPostBean().buildTable();
 	}
 
 	private String jobId;
@@ -34,6 +34,8 @@ public class AutoHomeBBSBean extends BaseBean
 	@DBField(type = "text")
 	private String text;
 
+	private String comment_status;
+
 	@Override
 	public String toString()
 	{
@@ -42,7 +44,17 @@ public class AutoHomeBBSBean extends BaseBean
 
 	public void update() throws SQLException
 	{
-		GlobalComponents.db.getRunner().update("update data_autohome_bbs_list set views=? ,replys=? ,text=? where url=?", this.views, this.replys, this.text, this.url);
+		GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " set views=? ,replys=? ,text=? where url=?", this.views, this.replys, this.text, this.url);
+	}
+
+	public String getComment_status()
+	{
+		return comment_status;
+	}
+
+	public void setComment_status(String comment_status)
+	{
+		this.comment_status = comment_status;
 	}
 
 	public String getJobId()

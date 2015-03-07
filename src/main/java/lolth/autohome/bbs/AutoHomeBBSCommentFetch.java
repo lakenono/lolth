@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lakenono.core.GlobalComponents;
+import lakenono.db.BaseBean;
+import lolth.autohome.bbs.bean.AutoHomeBBSPostBean;
 import lolth.autohome.bbs.bean.AutoHomeBBSCommentBean;
 
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
@@ -15,7 +17,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HuiFu
+public class AutoHomeBBSCommentFetch
 {
 
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -24,7 +26,9 @@ public class HuiFu
 	{
 		while (true)
 		{
-			List<String> todo = GlobalComponents.db.getRunner().query("select url from sns_autohome_bbs where postTime >= '2014-12-01' and views is not null and status!='success' limit 1000", new ColumnListHandler<String>());
+			String todoSql = "select url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-12-01' and views is not null and comment_status is null limit 1000";
+			this.log.info(todoSql);
+			List<String> todo = GlobalComponents.db.getRunner().query(todoSql, new ColumnListHandler<String>());
 
 			this.log.info("待爬取帖子{}...", todo.size());
 
@@ -60,7 +64,7 @@ public class HuiFu
 					}
 				}
 
-				GlobalComponents.db.getRunner().update("update sns_autohome_bbs set status = 'success' where url=?", url);
+				GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " set comment_status = 'success' where url=?", url);
 			}
 		}
 	}
@@ -123,6 +127,6 @@ public class HuiFu
 
 	public static void main(String[] args) throws Exception
 	{
-		new HuiFu().run();
+		new AutoHomeBBSCommentFetch().run();
 	}
 }

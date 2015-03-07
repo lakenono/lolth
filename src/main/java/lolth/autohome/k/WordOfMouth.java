@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lakenono.core.GlobalComponents;
-import lolth.autohome.bbs.AutoHomeBBSList;
 import lolth.autohome.k.bean.WordOfMouthBean;
 
 import org.apache.commons.lang.StringUtils;

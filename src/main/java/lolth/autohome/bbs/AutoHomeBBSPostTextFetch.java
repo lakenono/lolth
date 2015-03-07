@@ -3,7 +3,8 @@ package lolth.autohome.bbs;
 import java.util.List;
 
 import lakenono.core.GlobalComponents;
-import lolth.autohome.bbs.bean.AutoHomeBBSBean;
+import lakenono.db.BaseBean;
+import lolth.autohome.bbs.bean.AutoHomeBBSPostBean;
 
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.jsoup.Jsoup;
@@ -13,7 +14,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Tiezi
+public class AutoHomeBBSPostTextFetch
 {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -21,15 +22,14 @@ public class Tiezi
 	{
 		while (true)
 		{
-			List<String> todo = GlobalComponents.db.getRunner().query("select url from sns_autohome_bbs where postTime >= '2014-12-01' and views is null limit 1000", new ColumnListHandler<String>());
-			//			List<String> todo = GlobalComponents.db.getRunner().query("select url from sns_autohome_bbs where views is null limit 1000", new ColumnListHandler<String>());
+			List<String> todo = GlobalComponents.db.getRunner().query("select url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-12-01' and views is null limit 1000", new ColumnListHandler<String>());
 
 			for (String url : todo)
 			{
 				try
 				{
 					String html = GlobalComponents.fetcher.fetch(url);
-					AutoHomeBBSBean bean = this.parse(html);
+					AutoHomeBBSPostBean bean = this.parse(html);
 					bean.setUrl(url);
 					bean.update();
 				}
@@ -37,17 +37,15 @@ public class Tiezi
 				{
 					this.log.error("", e);
 				}
-
 			}
-
 		}
 	}
 
-	public AutoHomeBBSBean parse(String html)
+	public AutoHomeBBSPostBean parse(String html)
 	{
 		Document document = Jsoup.parse(html);
 
-		AutoHomeBBSBean bean = new AutoHomeBBSBean();
+		AutoHomeBBSPostBean bean = new AutoHomeBBSPostBean();
 
 		// views
 		String views = document.select("font#x-views").first().text();
@@ -74,6 +72,6 @@ public class Tiezi
 
 	public static void main(String[] args) throws Exception
 	{
-		new Tiezi().run();
+		new AutoHomeBBSPostTextFetch().run();
 	}
 }
