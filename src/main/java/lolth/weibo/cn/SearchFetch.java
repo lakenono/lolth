@@ -18,7 +18,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Search
+public class SearchFetch
 {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -213,7 +213,7 @@ public class Search
 
 		for (String keyword : brands)
 		{
-			new Search().process(keyword, "20141228", "20141228");
+			new SearchFetch().process(keyword, "20141228", "20141228");
 		}
 	}
 }
