@@ -8,7 +8,7 @@ import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 
-@DBTable(name = "meta_search_news_baidu")
+@DBTable(name = "data_baidu_news")
 public class BaiduNewsBean extends BaseBean
 {
 	public static void main(String[] args) throws SQLException

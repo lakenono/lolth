@@ -77,6 +77,8 @@ public class Search
 	public Document fetch(String keyword, String beginDate, String endDate, int page) throws IOException, InterruptedException
 	{
 		Connection connect = Jsoup.connect("http://weibo.cn/search/");
+
+		// post 
 		connect.data("vt", "1");
 		connect.data("advancedfilter", "1");
 		connect.data("starttime", beginDate);
@@ -85,10 +87,14 @@ public class Search
 		connect.data("smblog", "搜索");
 		connect.data("sort", "time");
 		connect.data("page", page + "");
+
+		// cookie
 		connect.cookie("_T_WM", "0f0602cfd6ce7a1ae8dd3020d31aafdc");
 		connect.cookie("SUB", "_2A2551RSYDeTxGeVO71QT8SbFyTmIHXVbObzQrDV6PUJbrdANLVXhkW0Gk7s86reO8Lb7VV8jQvjftR9KlQ..");
 		connect.cookie("gsid_CTandWM", "4uFQ731b1WNb44bDzIUsjcMsyeV");
 		connect.cookie("M_WEIBOCN_PARAMS", "rl%3D1");
+
+		// ua
 		connect.userAgent("Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
 		connect.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		connect.timeout(1000 * 5);

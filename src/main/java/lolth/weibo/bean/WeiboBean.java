@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBTable;
 
-@DBTable(name = "sns_sinaweibo_weibo_list")
+@DBTable(name = "data_sina_weibo")
 public class WeiboBean extends BaseBean
 {
 	public static void main(String[] args) throws SQLException
