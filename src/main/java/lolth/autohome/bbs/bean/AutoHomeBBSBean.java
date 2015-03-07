@@ -42,7 +42,7 @@ public class AutoHomeBBSBean extends BaseBean
 
 	public void update() throws SQLException
 	{
-		GlobalComponents.db.getRunner().update("update sns_autohome_bbs set views=? ,replys=? ,text=? where url=?", this.views, this.replys, this.text, this.url);
+		GlobalComponents.db.getRunner().update("update data_autohome_bbs_list set views=? ,replys=? ,text=? where url=?", this.views, this.replys, this.text, this.url);
 	}
 
 	public String getJobId()
