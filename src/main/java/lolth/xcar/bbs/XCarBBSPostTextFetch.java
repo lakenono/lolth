@@ -6,7 +6,6 @@ import java.util.List;
 
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
-import lakenono.db.annotation.DBTable;
 import lolth.xcar.bbs.bean.XCarBBSPostBean;
 
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
@@ -34,7 +33,7 @@ public class XCarBBSPostTextFetch
 				}
 				catch (Exception e)
 				{
-					this.log.error("",e);
+					this.log.error("", e);
 				}
 			}
 		}
