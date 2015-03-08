@@ -45,11 +45,13 @@ public class WordOfMouth
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private String id;
+	private String name;
 
-	public WordOfMouth(String id)
+	public WordOfMouth(String id, String name)
 	{
 		super();
 		this.id = id;
+		this.name = name;
 	}
 
 	public void run() throws Exception
@@ -59,6 +61,14 @@ public class WordOfMouth
 
 		for (int i = 0; i < maxPage; i++)
 		{
+			String taskname = MessageFormat.format("autohome-koubei-{0}-{1}-{2}", this.name, maxPage, i + 1);
+
+			if (GlobalComponents.taskService.isCompleted(taskname))
+			{
+				this.log.info("task {} is completed", taskname);
+				continue;
+			}
+
 			this.log.info("start job {}/{}", i + 1, maxPage);
 
 			String url = this.buildUrl(this.id, i);
@@ -69,6 +79,8 @@ public class WordOfMouth
 			{
 				wordOfMouthBean.persist();
 			}
+
+			GlobalComponents.taskService.success(taskname);
 		}
 	}
 
@@ -282,19 +294,22 @@ public class WordOfMouth
 
 	public static void main(String[] args) throws Exception
 	{
-		//东风风度MX6 3637 -- 目前没有口碑
-		//new WordOfMouth("3637").run();
+		while (true)
+		{
+			//东风风度MX6 3637 -- 目前没有口碑
+			//new WordOfMouth("3637").run();
 
-		// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
-		new WordOfMouth("2123").run();
+			// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
+			new WordOfMouth("2123", "哈弗H6").run();
 
-		// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
-		new WordOfMouth("3000").run();
+			// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
+			new WordOfMouth("3000", "奔腾X80").run();
 
-		// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
-		new WordOfMouth("3204").run();
+			// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
+			new WordOfMouth("3204", "长安CS75").run();
 
-		// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
-		new WordOfMouth("2560").run();
+			// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
+			new WordOfMouth("2560", "传祺GS5").run();
+		}
 	}
 }
