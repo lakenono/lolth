@@ -9,6 +9,7 @@ import lakenono.db.BaseBean;
 import lolth.xcar.bbs.bean.XCarBBSPostBean;
 
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -22,7 +23,9 @@ public class XCarBBSPostTextFetch
 	{
 		while (true)
 		{
-			String todosql = "select url from " + BaseBean.getTableName(XCarBBSPostBean.class) + " where postTime >= '2014-12-01' and text is null";
+			//String todosql = "select url from " + BaseBean.getTableName(XCarBBSPostBean.class) + " where postTime >= '2014-12-01' and text is null";
+			String todosql = "select url from " + BaseBean.getTableName(XCarBBSPostBean.class) + " where text is null";
+
 			List<String> urls = GlobalComponents.db.getRunner().query(todosql, new ColumnListHandler<String>());
 
 			for (String url : urls)
@@ -43,7 +46,14 @@ public class XCarBBSPostTextFetch
 	{
 		String html = GlobalComponents.fetcher.fetch(url);
 		Document document = Jsoup.parse(html);
-		String text = document.select("div.F_box_2 table.t_row tbody tr td table.t_msg tbody tr").get(1).text();
+
+		if (StringUtils.contains(html, "抱歉，您无法进行当前操作，可能的原因是"))
+		{
+			this.log.info("帖子无法查看..");
+			return;
+		}
+
+		String text = document.select("table.t_msg tbody tr td.line").first().text();
 
 		XCarBBSPostBean bean = new XCarBBSPostBean();
 		bean.setText(text);
