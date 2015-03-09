@@ -37,6 +37,7 @@ public class WeiboTaskRunner extends BaseLog
 			if (!this.isFinish(task))
 			{
 				this.fetch.process(task.getKeyword(), task.getStarttime(), task.getEndtime());
+				this.setFinish(task);
 			}
 		}
 	}
@@ -72,6 +73,8 @@ public class WeiboTaskRunner extends BaseLog
 
 	public void setFinish(WeiboTaskBean task) throws SQLException
 	{
+		this.log.info("任务完成... {}", task.toString());
+		this.log.info("update " + BaseBean.getTableName(WeiboTaskBean.class) + " set status='success' where id=?", task.getId());
 		GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(WeiboTaskBean.class) + " set status='success' where id=?", task.getId());
 	}
 }
