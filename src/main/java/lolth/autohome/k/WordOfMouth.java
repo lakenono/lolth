@@ -296,20 +296,27 @@ public class WordOfMouth
 	{
 		while (true)
 		{
-			//东风风度MX6 3637 -- 目前没有口碑
-			//new WordOfMouth("3637").run();
+			try
+			{
+				//东风风度MX6 3637 -- 目前没有口碑
+				//new WordOfMouth("3637").run();
 
-			// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
-			new WordOfMouth("2123", "哈弗H6").run();
+				// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
+				new WordOfMouth("2123", "哈弗H6").run();
 
-			// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
-			new WordOfMouth("3000", "奔腾X80").run();
+				// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
+				new WordOfMouth("3000", "奔腾X80").run();
 
-			// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
-			new WordOfMouth("3204", "长安CS75").run();
+				// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
+				new WordOfMouth("3204", "长安CS75").run();
 
-			// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
-			new WordOfMouth("2560", "传祺GS5").run();
+				// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
+				new WordOfMouth("2560", "传祺GS5").run();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 }
