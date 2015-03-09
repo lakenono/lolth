@@ -33,6 +33,7 @@ public class WeiboSearchFetch
 			this.log.info("begin {} {}/{} ...", keyword, i, maxPage);
 
 			Document document = this.fetch(keyword, begin, end, i);
+
 			List<WeiboBean> beans = this.parse(document);
 
 			for (WeiboBean bean : beans)
@@ -105,6 +106,8 @@ public class WeiboSearchFetch
 		{
 			try
 			{
+				// 休眠时间
+				Thread.sleep(15 * 1000);
 				return connect.post();
 			}
 			catch (java.net.SocketTimeoutException e)
