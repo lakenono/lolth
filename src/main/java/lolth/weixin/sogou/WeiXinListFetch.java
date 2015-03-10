@@ -8,6 +8,7 @@ import java.util.Date;
 
 import lakenono.core.GlobalComponents;
 import lakenono.log.BaseLog;
+import lolth.autohome.k.WordOfMouth;
 import lolth.weixin.sogou.bean.WeiXinBean;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,11 +33,22 @@ public class WeiXinListFetch extends BaseLog
 
 		for (int i = 0; i < maxPage; i++)
 		{
-			this.log.info("keyword[{}] {}/{}...", this.keyword, i + 1, maxPage);
+			String taskname = MessageFormat.format("weixin-{0}-{1}", this.keyword, i);
+
+			if (GlobalComponents.taskService.isCompleted(taskname))
+			{
+				i++;
+				this.log.info("task {} is completed", taskname);
+				continue;
+			}
+
+			this.log.info("keyword[{}] {}/{}...", this.keyword, i, maxPage);
 
 			String url = this.buildUrl(keyword, i);
 			Document document = GlobalComponents.dynamicFetch.document(url);
 			this.process(document);
+
+			GlobalComponents.taskService.success(taskname);
 		}
 	}
 
@@ -111,8 +123,25 @@ public class WeiXinListFetch extends BaseLog
 
 	public static void main(String[] args) throws Exception
 	{
-		new WeiXinListFetch("穹顶之下").run();
-		new WeiXinListFetch("柴静").run();
-		new WeiXinListFetch("12369").run();
+		while (true)
+		{
+			try
+			{
+				new WeiXinListFetch("东风风度MX6").run();
+				new WeiXinListFetch("哈弗H6").run();
+				new WeiXinListFetch("奔腾X80").run();
+				new WeiXinListFetch("长安CS75").run();
+				new WeiXinListFetch("传祺GS5").run();
+
+				new WeiXinListFetch("穹顶之下").run();
+				new WeiXinListFetch("柴静").run();
+				new WeiXinListFetch("12369").run();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
 	}
 }
