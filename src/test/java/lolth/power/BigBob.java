@@ -21,7 +21,7 @@ public class BigBob
 		driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-		driver.manage().window().maximize();
+		//driver.manage().window().maximize();
 
 		Thread.sleep(2000);
 
@@ -72,7 +72,7 @@ public class BigBob
 
 		//输入微博正文
 		System.out.println("action: input text");
-		driver.findElement(By.cssSelector("textarea.W_input")).sendKeys("...自动发帖 '绳帅雷喝, 喝吐为止, 有塑料袋, 送你回家...' 这是什么奇怪的诗..." + new Date());
+		driver.findElement(By.cssSelector("textarea.W_input")).sendKeys("我有特别的网页交互能力.." + new Date());
 		Thread.sleep(5000);
 
 		//点击发布..
