@@ -7,9 +7,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import lakenono.core.GlobalComponents;
+import lakenono.db.BaseBean;
 import lakenono.db.DB;
 import lolth.baidu.news.bean.BaiduNewsBean;
-import lolth.baidu.news.bean.BaiduNewsJobStatus;
+import lolth.baidu.news.bean.BaiduNewsTaskStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -204,13 +205,20 @@ public class BaiduNewsFetch
 		return sb.toString();
 	}
 
+	/**
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		Date date = DateUtils.parseDate("20140101", new String[] { "yyyyMMdd" });
 
 		//String[] keywords = new String[] { "中国第一汽车集团公司", "中国一汽", "一汽集团", "东风汽车", "东风公司", "原名二汽", "上汽", "上海汽车", "上海汽车集团", "长安汽车", "长安集团" };
 		//String[] keywords = new String[] { "中国第一汽车集团公司", "中国一汽", "一汽集团", "东风汽车", "东风公司" };
-		String[] keywords = new String[] { "原名二汽", "上汽", "上海汽车", "上海汽车集团", "长安汽车", "长安集团" };
+		//String[] keywords = new String[] { "原名二汽", "上汽", "上海汽车", "上海汽车集团", "长安汽车", "长安集团" };
+		//String[] keywords = new String[] { "穹顶之下", "柴静", "12369" };
+		String[] keywords = new String[] { "一汽奔腾" };
 
 		while (true)
 		{
@@ -222,7 +230,8 @@ public class BaiduNewsFetch
 					String format = DateFormatUtils.format(targetDate, "yyyyMMdd");
 
 					@SuppressWarnings("unchecked")
-					long count = (long) GlobalComponents.db.getRunner().query("select count(*) from meta_search_news_baidu_status where date=? and keyword=?", DB.scaleHandler, format, keyword);
+					long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(BaiduNewsTaskStatus.class) + " where date=? and keyword=?", DB.scaleHandler, format, keyword);
+
 					if (count > 0)
 					{
 						System.out.println(format + " is success.. so continue..");
@@ -231,7 +240,7 @@ public class BaiduNewsFetch
 
 					new BaiduNewsFetch().process(keyword, format, format);
 
-					BaiduNewsJobStatus jobStatus = new BaiduNewsJobStatus();
+					BaiduNewsTaskStatus jobStatus = new BaiduNewsTaskStatus();
 					jobStatus.setDate(format);
 					jobStatus.setStatus("success");
 					jobStatus.setKeyword(keyword);

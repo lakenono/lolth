@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBTable;
 
-@DBTable(name = "job_baidu_news")
-public class BaiduNewsJobStatus extends BaseBean
+@DBTable(name = "lakenono_task_baidu_news")
+public class BaiduNewsTaskStatus extends BaseBean
 {
 	public static void main(String[] args) throws SQLException
 	{
-		new BaiduNewsJobStatus().buildTable();
+		new BaiduNewsTaskStatus().buildTable();
 	}
 
 	private String date;

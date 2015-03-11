@@ -35,6 +35,7 @@ public class BaiduNewsBean extends BaseBean
 	private String moreLink = "";
 
 	// baidu cache url
+	@DBField(type = "varchar(500)")
 	private String baiduCacheUrl;
 
 	@DBField(type = "text")
