@@ -26,18 +26,25 @@ public class WeiboTaskRunner extends BaseLog
 	{
 		while (true)
 		{
-			WeiboTaskBean task = this.getTask();
-
-			if (task == null)
+			try
 			{
-				this.log.info("队列执行完成..");
-				break;
+				WeiboTaskBean task = this.getTask();
+
+				if (task == null)
+				{
+					this.log.info("队列执行完成..");
+					break;
+				}
+
+				if (!this.isFinish(task))
+				{
+					this.fetch.process(task.getKeyword(), task.getStarttime(), task.getEndtime());
+					this.setFinish(task);
+				}
 			}
-
-			if (!this.isFinish(task))
+			catch (Exception e)
 			{
-				this.fetch.process(task.getKeyword(), task.getStarttime(), task.getEndtime());
-				this.setFinish(task);
+				this.log.error("", e);
 			}
 		}
 	}
