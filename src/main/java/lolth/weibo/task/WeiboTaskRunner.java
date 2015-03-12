@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import com.alibaba.fastjson.JSON;
-
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
 import lakenono.log.BaseLog;
 import lolth.weibo.cn.WeiboSearchFetch;
 import lolth.weibo.task.bean.WeiboTaskBean;
+
+import com.alibaba.fastjson.JSON;
 
 public class WeiboTaskRunner extends BaseLog
 {
