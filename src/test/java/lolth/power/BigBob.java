@@ -62,7 +62,7 @@ public class BigBob
 
 		//输入密码
 		System.out.println("action: password");
-		driver.findElement(By.cssSelector(".password > input:nth-child(1)")).sendKeys("night870905");
+		driver.findElement(By.cssSelector(".password > input:nth-child(1)")).sendKeys("123");
 		Thread.sleep(3000);
 
 		// 点击登录按钮
