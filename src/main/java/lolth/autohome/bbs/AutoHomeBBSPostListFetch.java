@@ -93,8 +93,7 @@ public class AutoHomeBBSPostListFetch
 	public int getMaxPage() throws Exception
 	{
 		String url = this.buildUrl(id, 1);
-		String html = GlobalComponents.fetcher.fetch(url);
-		Document document = Jsoup.parse(html);
+		Document document = GlobalComponents.fetcher.document(url);
 		String text = document.select("div.pagearea span.fr").text();
 		String page = StringUtils.substringBetween(text, "共", "页");
 		return Integer.parseInt(page);
