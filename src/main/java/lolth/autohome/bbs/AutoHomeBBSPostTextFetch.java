@@ -65,6 +65,10 @@ public class AutoHomeBBSPostTextFetch
 				text = text + " " + attr;
 			}
 		}
+		
+		// 车主信息
+		
+		
 		bean.setText(text);
 
 		return bean;
