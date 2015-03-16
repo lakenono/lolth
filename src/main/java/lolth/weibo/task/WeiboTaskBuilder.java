@@ -29,9 +29,9 @@ public class WeiboTaskBuilder extends BaseLog
 		//new WeiboTaskBuilder().buildDB("奔腾X80", "20150101", "20150230");
 		//new WeiboTaskBuilder().buildDB("长安CS75", "20150101", "20150230");
 		//new WeiboTaskBuilder().buildDB("传祺GS5", "20150101", "20150230");
-		new WeiboTaskBuilder().buildDB("穹顶之下", "20150228", "20150310");
-		new WeiboTaskBuilder().buildDB("12369", "20150228", "20150310");
-		new WeiboTaskBuilder().buildDB("柴静", "20150228", "20150310");
+		//new WeiboTaskBuilder().buildDB("穹顶之下", "20150228", "20150310");
+		//new WeiboTaskBuilder().buildDB("12369", "20150228", "20150310");
+		//new WeiboTaskBuilder().buildDB("柴静", "20150228", "20150310");
 		new WeiboTaskBuilder().pushMQ();
 	}
 
