@@ -88,9 +88,9 @@ public class AutoHomeBBSPostUserFetch {
 		Element ulElement = topicElement.select("ul.leftlist").first();
 
 		if (ulElement.getElementsMatchingOwnText("来自：").size() != 0) {
-			String from = ulElement.getElementsMatchingOwnText("来自：").first()
+			String area = ulElement.getElementsMatchingOwnText("来自：").first()
 					.child(0).text();
-			bean.setFrom(from);
+			bean.setArea(area);
 		}
 
 		if (ulElement.getElementsMatchingOwnText("关注：").size() != 0) {

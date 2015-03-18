@@ -11,7 +11,7 @@ public class AutoHomeBBSUserBean extends BaseBean {
 	// 作者地址
 	private String authorUrl;
 	// 区域
-	private String from;
+	private String area;
 
 	private String car;
 	// 关注
@@ -21,12 +21,12 @@ public class AutoHomeBBSUserBean extends BaseBean {
 		new AutoHomeBBSUserBean().buildTable();
 	}
 
-	public String getFrom() {
-		return from;
+	public String getArea() {
+		return area;
 	}
 
-	public void setFrom(String from) {
-		this.from = from;
+	public void setArea(String area) {
+		this.area = area;
 	}
 
 	public String getCar() {
@@ -55,7 +55,7 @@ public class AutoHomeBBSUserBean extends BaseBean {
 
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append(from).append('|');
+		str.append(area).append('|');
 		str.append(car).append('|');
 		str.append(concern);
 		return str.toString();
