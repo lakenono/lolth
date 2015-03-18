@@ -76,9 +76,10 @@ public class Double5BBSPostFetch {
 					.text();
 
 			if (StringUtils.isNotBlank(viewAndReplay)) {
-				bean.setViews(StringUtils.substringBetween(viewAndReplay,
-						"回复：", "查看").trim());
 				bean.setReplys(StringUtils.substringBetween(viewAndReplay,
+						"回复：", "查看").trim());
+				
+				bean.setViews(StringUtils.substringBetween(viewAndReplay,
 						"查看：", "】"));
 			}
 			// 用户信息
