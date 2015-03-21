@@ -6,7 +6,6 @@ import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
-import lolth.autohome.bbs.bean.AutoHomeBBSPostBean;
 
 @DBTable(name = "data_55bbs_post")
 public class Double5BBSPostBean extends BaseBean {

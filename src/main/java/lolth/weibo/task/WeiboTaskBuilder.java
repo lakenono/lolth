@@ -12,13 +12,10 @@ import lakenono.log.BaseLog;
 import lolth.weibo.task.bean.WeiboTaskBean;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.alibaba.fastjson.JSON;
-
-import redis.clients.jedis.Jedis;
 
 public class WeiboTaskBuilder extends BaseLog
 {

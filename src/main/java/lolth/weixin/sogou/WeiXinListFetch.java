@@ -8,7 +8,6 @@ import java.util.Date;
 
 import lakenono.core.GlobalComponents;
 import lakenono.log.BaseLog;
-import lolth.autohome.k.WordOfMouth;
 import lolth.weixin.sogou.bean.WeiXinBean;
 
 import org.apache.commons.lang.StringUtils;
