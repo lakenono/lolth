@@ -3,7 +3,6 @@ package lolth.baidu.news.bean;
 import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
-import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 
 @DBTable(name = "lakenono_task_baidu_news")
