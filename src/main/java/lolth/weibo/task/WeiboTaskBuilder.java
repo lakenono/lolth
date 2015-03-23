@@ -12,13 +12,10 @@ import lakenono.log.BaseLog;
 import lolth.weibo.task.bean.WeiboTaskBean;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.alibaba.fastjson.JSON;
-
-import redis.clients.jedis.Jedis;
 
 public class WeiboTaskBuilder extends BaseLog
 {
@@ -34,14 +31,17 @@ public class WeiboTaskBuilder extends BaseLog
 		//new WeiboTaskBuilder().buildDB("柴静", "20150228", "20150310");
 		
 		//
-		new WeiboTaskBuilder().buildDB("香奈儿 香水", "20150101", "20150315");
+//		new WeiboTaskBuilder().buildDB("香奈儿 香水", "20150101", "20150315");
+		new WeiboTaskBuilder().buildDB("香水", "20150201", "20150315");
+		new WeiboTaskBuilder().buildDB("香水", "20150101", "20150131");
+		
 		new WeiboTaskBuilder().pushMQ();
 	}
 
 	public void pushMQ() throws SQLException
 	{
 		// 清空
-		GlobalComponents.jedis.ltrim(BaseBean.getTableName(WeiboTaskBean.class), 0, -1);
+		GlobalComponents.jedis.del(BaseBean.getTableName(WeiboTaskBean.class));
 
 		List<WeiboTaskBean> tasks = GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(WeiboTaskBean.class) + " where status='todo'", new BeanListHandler<WeiboTaskBean>(WeiboTaskBean.class));
 
@@ -57,6 +57,8 @@ public class WeiboTaskBuilder extends BaseLog
 	{
 		Date startDate = DateUtils.parseDate(startTime, new String[] { "yyyyMMdd" });
 		Date endDate = DateUtils.parseDate(endTime, new String[] { "yyyyMMdd" });
+		
+		endDate = DateUtils.addDays(endDate, 1);
 
 		while (true)
 		{

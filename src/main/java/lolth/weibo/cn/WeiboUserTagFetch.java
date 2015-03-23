@@ -129,7 +129,7 @@ public class WeiboUserTagFetch {
 		for (int i = 1; i <= retry; i++) {
 			try {
 				// 休眠时间
-				Thread.sleep(15 * 1000);
+				Thread.sleep(3 * 1000);
 				return connect.post();
 			} catch (java.net.SocketTimeoutException e) {
 				log.error("SocketTimeoutException [1]秒后重试第[{}]次..", i);

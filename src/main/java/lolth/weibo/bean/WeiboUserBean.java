@@ -47,7 +47,7 @@ public class WeiboUserBean extends BaseBean {
 		long count = (long) GlobalComponents.db.getRunner().query(
 				"select count(*) from "
 						+ BaseBean.getTableName(WeiboUserBean.class)
-						+ " where userId=? and tags is null", DB.scaleHandler,
+						+ " where userId=?", DB.scaleHandler,
 				userId);
 
 		if (count > 0) {

@@ -39,9 +39,10 @@ public class TmallDetailFetch {
 				for (String[] t : tasks) {
 					try {
 						TmallShopBean shop = parsePage(TMALL_GOODS_DETAIL_URL_PREFIX + t[0]);
-						shop.setId(t[1]);
-						shop.persist();
-
+						if(shop!=null){
+							shop.setId(t[1]);
+							shop.persist();
+						}
 						taskCount++;
 						Thread.sleep(10000);
 					} catch (Exception e) {
@@ -118,7 +119,7 @@ public class TmallDetailFetch {
 	}
 
 	private List<String[]> getTask() throws Exception {
-		String sql = "select max(g.id) id,g.shopId shopId from {0} g where g.shopId not in (select s.id from {1} s) group by g.shopId limit 100";
+		String sql = "select max(g.id) id,g.shopId shopId from {0} g where g.shopId not in (select s.id from {1} s) group by g.shopId limit 1000";
 		sql = MessageFormat.format(sql, BaseBean.getTableName(TmallGoodsBean.class), BaseBean.getTableName(TmallShopBean.class));
 
 		List<String[]> todo = GlobalComponents.db.getRunner().query(sql, new ResultSetHandler<List<String[]>>() {

@@ -25,9 +25,9 @@ public class WeiboSearchFetch
 	public void process(String keyword, String begin, String end) throws IOException, ParseException, InterruptedException, IllegalArgumentException, IllegalAccessException, InstantiationException
 	{
 		int maxPage = this.getMaxPage(keyword, begin, end);
-
+		
 		this.log.info("begin {} 0/{} ...", keyword, maxPage);
-
+		
 		for (int i = 1; i <= maxPage; i++)
 		{
 			this.log.info("begin {} {}/{} ...", keyword, i, maxPage);
@@ -91,8 +91,8 @@ public class WeiboSearchFetch
 
 		// cookie
 		connect.cookie("_T_WM", "0f0602cfd6ce7a1ae8dd3020d31aafdc");
-		connect.cookie("SUB", "_2A2551RSYDeTxGeVO71QT8SbFyTmIHXVbObzQrDV6PUJbrdANLVXhkW0Gk7s86reO8Lb7VV8jQvjftR9KlQ..");
-		connect.cookie("gsid_CTandWM", "4uFQ731b1WNb44bDzIUsjcMsyeV");
+		connect.cookie("SUB", "_2A254D5dsDeThGeVN7lIV9CnEzziIHXVYnK2krDV6PUJbrdAKLWHSkWpuSrt8a-1-y2RIOi8PCrqHJ_fNKw..");
+		connect.cookie("gsid_CTandWM", "4un3ca761seUts0bLF56je3BtdC");
 		connect.cookie("M_WEIBOCN_PARAMS", "rl%3D1");
 
 		// ua
