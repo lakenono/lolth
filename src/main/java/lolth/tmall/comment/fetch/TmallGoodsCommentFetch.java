@@ -8,10 +8,11 @@ import java.util.List;
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
-import lakenono.fetch.adv.utils.HttpURLUtils;
 import lolth.tmall.comment.bean.TmallGoodsCommentBean;
 import lolth.tmall.comment.task.bean.TmallCommentTaskBean;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -37,8 +38,8 @@ public class TmallGoodsCommentFetch {
 					Thread.sleep(60000);
 					continue;
 				}
-				
-				if(!isFinish(task)){
+
+				if (!isFinish(task)) {
 					String url = task.getUrl();
 					String content = GlobalComponents.fetcher.document(url).text();
 					if (content != null) {
@@ -50,11 +51,11 @@ public class TmallGoodsCommentFetch {
 					}
 					task.updateSuccess();
 					Thread.sleep(10000);
-				}else{
+				} else {
 					log.info("{} has finish!");
 				}
 			} catch (Exception e) {
-				log.error("{} task fail!",e);
+				log.error("{} task fail!", e);
 				try {
 					Thread.sleep(10000);
 				} catch (Exception e1) {
@@ -90,7 +91,18 @@ public class TmallGoodsCommentFetch {
 			bean.setComment(rate.getString("rateContent"));
 			bean.setCommentTime(rate.getString("rateDate"));
 			bean.setReplay(rate.getString("reply"));
-			bean.setAppendComment(rate.getString("appendComment"));
+
+			String appendCommentJson = rate.getString("appendComment");
+			if (!StringUtils.isBlank(appendCommentJson) && StringUtils.startsWith(appendCommentJson, "{")) {
+				try {
+					JSONObject appendComment = JSON.parseObject(appendCommentJson);
+					bean.setAppendComment(appendComment.getString("content"));
+				} catch (Exception e) {
+				}
+			} else {
+				bean.setAppendComment(appendCommentJson);
+			}
+
 			bean.setServiceComment(rate.getString("serviceRateContent"));
 
 			// user
@@ -101,7 +113,7 @@ public class TmallGoodsCommentFetch {
 		}
 		return beanList;
 	}
-	
+
 	private boolean isFinish(TmallCommentTaskBean task) throws SQLException {
 		@SuppressWarnings("unchecked")
 		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(TmallCommentTaskBean.class) + " where url=?  and status='success' ", DB.scaleHandler, task.getUrl());
