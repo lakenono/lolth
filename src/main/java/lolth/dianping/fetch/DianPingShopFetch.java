@@ -7,9 +7,9 @@ import java.text.MessageFormat;
 
 import lakenono.core.GlobalComponents;
 import lakenono.fetch.handlers.PageFetchHandler;
-import lakenono.log.BaseLog;
 import lolth.dianping.bean.DianPingShopBean;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
@@ -17,12 +17,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 @AllArgsConstructor
-public class DianPingShopFetch extends BaseLog implements PageFetchHandler
+@Slf4j
+public class DianPingShopFetch implements PageFetchHandler
 {
 	public static void main(String[] args) throws Exception
 	{
-		new DianPingShopFetch("酸菜鱼", 2).run();
-		new DianPingShopFetch("火锅", 2).run();
+		//北京=2,成都=8,广州=4,郑州=160,西安=17,沈阳 =18
+		int[] areas = {2,8,4,160,17,18};
+		for(int a:areas){
+			
+			new DianPingShopFetch("酸菜鱼", a).run();
+			log.info("酸菜鱼 at {} finish !" ,a);
+			
+			new DianPingShopFetch("火锅", a).run();
+			
+			log.info("火锅 at {} finish !" ,a);
+		}
+		log.info("all finish !");
 	}
 
 	private String keyword;
@@ -33,7 +44,7 @@ public class DianPingShopFetch extends BaseLog implements PageFetchHandler
 	{
 		int maxPage = this.getMaxPage();
 
-		this.log.info("begin keyword:[{}][{}] 0/{}", keyword, cityId, maxPage);
+		log.info("begin keyword:[{}][{}] 0/{}", keyword, cityId, maxPage);
 
 		for (int i = 0; i < maxPage; i++)
 		{
@@ -51,6 +62,9 @@ public class DianPingShopFetch extends BaseLog implements PageFetchHandler
 	public void process(int i) throws Exception
 	{
 		String url = this.buildUrl(i);
+		
+		Thread.sleep(3000);
+		
 		Document document = GlobalComponents.fetcher.document(url);
 
 		Elements elements = document.select("div#shop-all-list.shop-list.J_shop-list.shop-all-list ul li");
@@ -106,7 +120,7 @@ public class DianPingShopFetch extends BaseLog implements PageFetchHandler
 			bean.setCityid(this.cityId);
 			bean.setKeyword(this.keyword);
 
-			this.log.info(bean.toString());
+			log.info(bean.toString());
 			bean.persist();
 		}
 	}
