@@ -6,7 +6,6 @@ import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
 import lakenono.db.annotation.DBTable;
-import lolth.tmall.search.task.bean.TmallSearchListTaskBean;
 import lombok.Data;
 
 @DBTable(name = "lakenono_task_tmall_comment")
@@ -33,7 +32,15 @@ public class TmallCommentTaskBean extends BaseBean {
 		new TmallCommentTaskBean().buildTable();
 	}
 
+	private void updateResult(String status) throws Exception{
+		GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(TmallCommentTaskBean.class) + " set status=? where  goodsId=? and url=?", status, this.goodsId, this.url);
+	}
+	
 	public void updateSuccess() throws Exception {
-		GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(TmallCommentTaskBean.class) + " set status=? where  goodsId=? and url=?", "success", this.goodsId, this.url);
+		updateResult("success");
+	}
+	
+	public void updateError() throws Exception {
+		updateResult("error");
 	}
 }

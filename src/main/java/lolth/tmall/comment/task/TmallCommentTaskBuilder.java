@@ -28,6 +28,7 @@ public class TmallCommentTaskBuilder {
 		try {
 			log.info("TmallCommentTaskBuilder build task start!");
 			new TmallCommentTaskBuilder().run();
+//			new TmallCommentTaskBuilder().pushAll();
 		} catch (Exception e) {
 			log.error("TmallCommentTaskBuilder build task error ", e);
 		}
@@ -144,4 +145,13 @@ public class TmallCommentTaskBuilder {
 		log.info("TmallCommentTaskBuilder clean MQ");
 	}
 
+	public void pushAll() throws Exception {
+		List<TmallCommentTaskBean> tasks = GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(TmallCommentTaskBean.class) + " where status='todo'", new BeanListHandler<TmallCommentTaskBean>(TmallCommentTaskBean.class));
+
+		for (TmallCommentTaskBean bean : tasks) {
+			// push redis
+			log.info("push task {}", bean.toString());
+			GlobalComponents.jedis.lpush(BaseBean.getTableName(TmallCommentTaskBean.class), JSON.toJSONString(bean));
+		}
+	}
 }

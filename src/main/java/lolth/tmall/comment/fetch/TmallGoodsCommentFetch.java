@@ -84,32 +84,34 @@ public class TmallGoodsCommentFetch {
 		JSONArray rateList = rateDetail.getJSONArray("rateList");
 
 		for (int i = 0; i < rateList.size(); i++) {
-			TmallGoodsCommentBean bean = new TmallGoodsCommentBean();
-			JSONObject rate = rateList.getJSONObject(i);
+			try {
+				TmallGoodsCommentBean bean = new TmallGoodsCommentBean();
+				JSONObject rate = rateList.getJSONObject(i);
 
-			bean.setId(rate.getString("id"));
-			bean.setComment(rate.getString("rateContent"));
-			bean.setCommentTime(rate.getString("rateDate"));
-			bean.setReplay(rate.getString("reply"));
+				bean.setId(rate.getString("id"));
+				bean.setComment(rate.getString("rateContent"));
+				bean.setCommentTime(rate.getString("rateDate"));
+				bean.setReplay(rate.getString("reply"));
 
-			String appendCommentJson = rate.getString("appendComment");
-			if (!StringUtils.isBlank(appendCommentJson) && StringUtils.startsWith(appendCommentJson, "{")) {
-				try {
+				String appendCommentJson = rate.getString("appendComment");
+				if (!StringUtils.isBlank(appendCommentJson) && StringUtils.startsWith(appendCommentJson, "{")) {
 					JSONObject appendComment = JSON.parseObject(appendCommentJson);
 					bean.setAppendComment(appendComment.getString("content"));
-				} catch (Exception e) {
+
+				} else {
+					bean.setAppendComment(appendCommentJson);
 				}
-			} else {
-				bean.setAppendComment(appendCommentJson);
+
+				bean.setServiceComment(rate.getString("serviceRateContent"));
+
+				// user
+				bean.setUser(rate.getString("displayUserNick"));
+				bean.setUserVipLevel(rate.getString("tamllSweetLevel"));
+
+				beanList.add(bean);
+			} catch (Exception e) {
+				log.error("parse Json error : ", e);
 			}
-
-			bean.setServiceComment(rate.getString("serviceRateContent"));
-
-			// user
-			bean.setUser(rate.getString("displayUserNick"));
-			bean.setUserVipLevel(rate.getString("tamllSweetLevel"));
-
-			beanList.add(bean);
 		}
 		return beanList;
 	}
