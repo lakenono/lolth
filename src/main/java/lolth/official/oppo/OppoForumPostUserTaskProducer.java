@@ -38,7 +38,7 @@ public class OppoForumPostUserTaskProducer extends ListFetchTaskProducer<String>
 
 	@Override
 	protected List<String> getTaskArgs() throws Exception {
-		List<String> uids = GlobalComponents.db.getRunner().query("SELECT DISTINCT autherId from " + BaseBean.getTableName(OppoPostBean.class) + " WHERE autherId IS NOT NULL AND autherId NOT IN (SELECT autherId FROM "+ BaseBean.getTableName(OppoUserBean.class) +") ", new ColumnListHandler<String>());
+		List<String> uids = GlobalComponents.db.getRunner().query("SELECT DISTINCT autherId from " + BaseBean.getTableName(OppoPostBean.class) + " WHERE autherId IS NOT NULL AND autherId NOT IN (SELECT id FROM "+ BaseBean.getTableName(OppoUserBean.class) +") ", new ColumnListHandler<String>());
 		return uids;
 	}
 
