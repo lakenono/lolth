@@ -68,7 +68,7 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 			userBean.setUrl("http://tieba.baidu.com/home/main?un="+user.getString("name_u"));
 			
 			String sex = user.getString("user_sex");
-			if("1".equals(sex)){
+			if("0".equals(sex)||"1".equals(sex)){
 				userBean.setSex("男");
 			}else if("2".equals(sex)){
 				userBean.setSex("女");

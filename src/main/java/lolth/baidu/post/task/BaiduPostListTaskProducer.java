@@ -37,7 +37,7 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		new BaiduPostListTaskProducer(BAIDU_POST_LIST, "oppo").rePushTask("oppo");
+		new BaiduPostListTaskProducer(BAIDU_POST_LIST, "oppo").run();
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 			String pageSize = div.first().text();
 			pageSize = StringUtils.substringBetween(pageSize, "共有主题数", "个");
 
-			log.info("getMapPage: ");
+			log.info("getMapPage: {}",pageSize);
 
 			if (!StringUtils.isNumeric(pageSize)) {
 				return 0;
