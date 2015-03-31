@@ -23,8 +23,8 @@ public class OppoForumPostDetailFetch extends PageParseFetchTaskHandler {
 		String taskQueueName = OppoForumPostDetailTaskProducer.OPPO_FORUM_POST_DETAIL;
 		OppoForumPostDetailFetch fetch = new OppoForumPostDetailFetch(taskQueueName);
 
-		 fetch.setSleep(1000);
-		 fetch.run();
+		fetch.setSleep(1000);
+		fetch.run();
 	}
 
 	@Override
@@ -40,10 +40,10 @@ public class OppoForumPostDetailFetch extends PageParseFetchTaskHandler {
 			Elements table = mainPost.select("table div.t_fsz table");
 			if (table.size() > 0) {
 				postBean.setContent(table.text());
-			}else{
+			} else {
 				postBean.setContent("");
 			}
-			
+
 			// 赞美
 
 			Elements praise = mainPost.select("a#praise");
