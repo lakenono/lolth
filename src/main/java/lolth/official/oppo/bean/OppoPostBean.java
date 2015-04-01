@@ -13,6 +13,7 @@ public class OppoPostBean extends BaseBean{
 	private String id;
 	private String url;
 	private String forum;
+	private String topic;
 	private String title;
 	
 	@DBField(type="text")

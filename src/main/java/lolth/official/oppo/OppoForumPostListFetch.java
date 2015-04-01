@@ -71,6 +71,12 @@ public class OppoForumPostListFetch extends PageParseFetchTaskHandler {
 					post.setViews(views.first().text());
 				}
 
+				// 主题
+				Elements topic = item.select("span.thread_title em a");
+				if (topic.size() > 0) {
+					post.setTopic(topic.first().text());
+				}
+
 				// title
 				Elements title = item.select("span.thread_title a.xst");
 				if (title.size() > 0) {
