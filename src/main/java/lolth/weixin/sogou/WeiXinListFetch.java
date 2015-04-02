@@ -53,6 +53,12 @@ public class WeiXinListFetch extends BaseLog
 
 	private void process(Document document) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException
 	{
+		String text = document.text();
+		if (StringUtils.contains(text, "您的访问出现了一个错误"))
+		{
+			throw new RuntimeException("爬取失败页面.. sleep");
+		}
+
 		Elements elements = document.select("div.results div.wx-rb");
 
 		for (Element element : elements)
@@ -126,15 +132,9 @@ public class WeiXinListFetch extends BaseLog
 		{
 			try
 			{
-				new WeiXinListFetch("东风风度MX6").run();
-				new WeiXinListFetch("哈弗H6").run();
-				new WeiXinListFetch("奔腾X80").run();
-				new WeiXinListFetch("长安CS75").run();
-				new WeiXinListFetch("传祺GS5").run();
-
-				new WeiXinListFetch("穹顶之下").run();
-				new WeiXinListFetch("柴静").run();
-				new WeiXinListFetch("12369").run();
+				new WeiXinListFetch("奥迪").run();
+				new WeiXinListFetch("宝马").run();
+				new WeiXinListFetch("奔驰").run();
 			}
 			catch (Exception e)
 			{
