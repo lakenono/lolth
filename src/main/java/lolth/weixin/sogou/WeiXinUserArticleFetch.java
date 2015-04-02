@@ -23,6 +23,13 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 	public static void main(String[] args) throws Exception
 	{
 		new WeiXinUserArticleFetch("奧迪", "oIWsFtw87yg5Yjhh6vFO7lr9zf_Y").run();
+		new WeiXinUserArticleFetch("宝马中国", "oIWsFt67LTuaA8LD_QB9jj8VP26Y").run();
+		new WeiXinUserArticleFetch("梅赛德斯-奔驰", "oIWsFt3qXWm1Nn69_1akk0zjXWe4").run();
+		new WeiXinUserArticleFetch("706青年空间", "oIWsFtwKBBPDGq9g0zjpv3YVxaqw").run();
+
+		//宝马中国	http://weixin.sogou.com/gzh?openid=oIWsFt67LTuaA8LD_QB9jj8VP26Y
+		//梅赛德斯-奔驰	http://weixin.sogou.com/gzh?openid=oIWsFt3qXWm1Nn69_1akk0zjXWe4
+		//706青年空间	http://weixin.sogou.com/gzh?openid=oIWsFtwKBBPDGq9g0zjpv3YVxaqw
 	}
 
 	private String username;
