@@ -32,13 +32,36 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 	@Override
 	public void run() throws IOException, InterruptedException, SQLException, Exception
 	{
+		int maxPage = this.getMaxPage();
 
+		for (int i = 0; i < maxPage; i++)
+		{
+			String taskname = MessageFormat.format("weixin_user-{0}-{1}", this.username, i);
+
+			if (GlobalComponents.taskService.isCompleted(taskname))
+			{
+				i++;
+				this.log.info("task {} is completed", taskname);
+				continue;
+			}
+
+			this.log.info("keyword[{}] {}/{}...", this.username, i, maxPage);
+
+			this.process(i);
+
+			GlobalComponents.taskService.success(taskname);
+		}
 	}
 
 	@Override
 	public void process(int i) throws Exception
 	{
 		String html = GlobalComponents.dynamicFetch.fetch(this.buildUrl(i));
+
+		if (StringUtils.contains(html, "您的访问出现了一个错误"))
+		{
+			throw new RuntimeException("爬取失败页面.. sleep");
+		}
 
 		html = Jsoup.parse(html).text();
 
