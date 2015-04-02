@@ -22,8 +22,7 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 {
 	public static void main(String[] args) throws Exception
 	{
-		WeiXinUserArticleFetch fetch = new WeiXinUserArticleFetch("奧迪", "oIWsFtw87yg5Yjhh6vFO7lr9zf_Y");
-		fetch.process(0);
+		new WeiXinUserArticleFetch("奧迪", "oIWsFtw87yg5Yjhh6vFO7lr9zf_Y").run();
 	}
 
 	private String username;
