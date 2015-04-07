@@ -32,7 +32,7 @@ public class WeiboUserTagTaskProducer extends ListFetchTaskProducer<String> {
 	protected FetchTask buildTask(String uid) {
 		FetchTask task = new FetchTask();
 		task.setName(keyword);
-		task.setName(WEIBO_USER_TAG);
+		task.setBatchName(WEIBO_USER_TAG);
 		task.setUrl(buildUrl(uid));
 		task.setExtra(uid);
 		return task;
