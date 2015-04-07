@@ -52,7 +52,7 @@ public class WeiboUserTagFetch {
 						bean.setTags("unknown");
 					}
 					
-					bean.setUserId(uid);
+					bean.setId(uid);
 					update(bean);
 					log.info("{} success ", uid);
 				} catch (Exception e) {
@@ -91,7 +91,7 @@ public class WeiboUserTagFetch {
 		GlobalComponents.db.getRunner().update(
 				"update " + BaseBean.getTableName(WeiboUserBean.class)
 						+ " set tags=? where userId=?", bean.getTags(),
-				bean.getUserId());
+				bean.getId());
 	}
 
 	private String buildUrl(String uid) {
