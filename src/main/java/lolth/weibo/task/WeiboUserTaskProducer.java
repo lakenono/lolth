@@ -18,9 +18,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.google.common.base.Strings;
+
 @Slf4j
 public class WeiboUserTaskProducer extends ListFetchTaskProducer<String> {
-	private static final String WEIBO_USER_URL_TEMPLATE = "http://weibo.cn/u/{0}";
+	private static final String WEIBO_USER_URL_TEMPLATE = "http://weibo.cn/{0}";
 	private static final String WEIBO_USER_INFO_URL_TEMPLAGE = "http://weibo.cn/{0}/info";
 
 	public static final String WEIBO_USER = "weibo_user";
@@ -50,6 +52,10 @@ public class WeiboUserTaskProducer extends ListFetchTaskProducer<String> {
 			if (!StringUtils.isNumeric(uid)) {
 				uid = getUid(id);
 				Thread.sleep(sleep);
+			}
+			
+			if(Strings.isNullOrEmpty(uid)){
+				throw new RuntimeException("uid can not get id : " + id);
 			}
 
 			task = new FetchTask();
