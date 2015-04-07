@@ -32,8 +32,11 @@ public class WeiboTaskBuilder extends BaseLog
 		
 		//
 //		new WeiboTaskBuilder().buildDB("香奈儿 香水", "20150101", "20150315");
-		new WeiboTaskBuilder().buildDB("香水", "20150201", "20150315");
-		new WeiboTaskBuilder().buildDB("香水", "20150101", "20150131");
+//		new WeiboTaskBuilder().buildDB("香水", "20150201", "20150315");
+//		new WeiboTaskBuilder().buildDB("香水", "20150101", "20150131");
+		new WeiboTaskBuilder().buildDB("奥迪", "20141001", "20150331");
+		new WeiboTaskBuilder().buildDB("宝马", "20141001", "20150331");
+		new WeiboTaskBuilder().buildDB("奔驰", "20141001", "20150331");
 		
 		new WeiboTaskBuilder().pushMQ();
 	}

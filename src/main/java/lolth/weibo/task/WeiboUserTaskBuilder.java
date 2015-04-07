@@ -34,7 +34,7 @@ public class WeiboUserTaskBuilder {
 			List<String> uids = GlobalComponents.db.getRunner().query("select DISTINCT w.userid from " + BaseBean.getTableName(WeiboBean.class) + " w where w.keyword = ? order by w.reposts+0 desc limit ?,?", new ColumnListHandler<>(), keyword, start, pageSize);
 
 			for (String u : uids) {
-				new WeiboUserBean(u).persist();
+				new WeiboUserBean(u).persistOnNotExist();
 			}
 			Thread.sleep(60000);
 		}
@@ -45,7 +45,7 @@ public class WeiboUserTaskBuilder {
 			List<String> uids = GlobalComponents.db.getRunner().query("select DISTINCT w.userid from " + BaseBean.getTableName(WeiboBean.class) + " w where w.keyword=? and w.userid not in (select DISTINCT u.userId from " + BaseBean.getTableName(WeiboUserBean.class) + " u ) limit ?", new ColumnListHandler<>(), keyword, 100);
 			if(!uids.isEmpty()){
 				for (String u : uids) {
-					new WeiboUserBean(u).persist();
+					new WeiboUserBean(u).persistOnNotExist();
 				}
 			}else{
 				Thread.sleep(60000);
