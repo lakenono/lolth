@@ -5,9 +5,13 @@ import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @DBTable(name = "data_zol_bbs_post")
 @Data
+@EqualsAndHashCode(callSuper=false)
+@ToString(callSuper=false)
 public class ZolBBSPostBean extends BaseBean {
 	@DBConstraintPK
 	private String id;

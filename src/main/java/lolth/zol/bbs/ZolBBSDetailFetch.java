@@ -7,11 +7,13 @@ import lakenono.db.BaseBean;
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.zol.bbs.bean.ZolBBSPostBean;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+@Slf4j
 public class ZolBBSDetailFetch extends PageParseFetchTaskHandler {
 
 	public ZolBBSDetailFetch(String taskQueueName) {
@@ -56,6 +58,7 @@ public class ZolBBSDetailFetch extends PageParseFetchTaskHandler {
 	}
 
 	private void updatePostBean(ZolBBSPostBean post) throws SQLException {
+		log.debug("Update userId={},postTime={}",post.getUserId(),post.getPostTime());
 		GlobalComponents.db.getRunner().update("UPDATE " + BaseBean.getTableName(ZolBBSPostBean.class) + " SET userId=? , content = ? , postTime = ? where url=? ", post.getUserId(), post.getContent(), post.getPostTime(), post.getUrl());
 	}
 
