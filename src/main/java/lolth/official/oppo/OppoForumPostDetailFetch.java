@@ -7,12 +7,14 @@ import lakenono.db.BaseBean;
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.official.oppo.bean.OppoPostBean;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+@Slf4j
 public class OppoForumPostDetailFetch extends PageParseFetchTaskHandler {
 
 	public OppoForumPostDetailFetch(String taskQueueName) {
@@ -69,6 +71,7 @@ public class OppoForumPostDetailFetch extends PageParseFetchTaskHandler {
 	}
 
 	private void updatePostBean(OppoPostBean post) throws SQLException {
+		log.debug("Update Praise={},Collections={}",post.getPraise(),post.getCollections());
 		GlobalComponents.db.getRunner().update("UPDATE " + BaseBean.getTableName(OppoPostBean.class) + " SET content = ? , praise = ? , collections = ? WHERE url = ?", post.getContent(), post.getPraise(), post.getCollections(), post.getUrl());
 	}
 

@@ -1,6 +1,5 @@
 package lolth.official.oppo;
 
-import lakenono.fetch.adv.utils.HttpURLUtils;
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.official.oppo.bean.OppoPostBean;
@@ -57,7 +56,8 @@ public class OppoForumPostListFetch extends PageParseFetchTaskHandler {
 				Elements uid = item.select("tr td.h_avatar span a");
 				if (uid.size() > 0) {
 					String uidStr = uid.first().attr("href");
-					uidStr = HttpURLUtils.getUrlParams(uidStr, "utf-8").get("uid");
+					uidStr = StringUtils.substringAfterLast(uidStr, "-");
+					uidStr = StringUtils.substringBefore(uidStr, ".html");
 					if (StringUtils.isNotBlank(uidStr)) {
 						post.setAutherId(uidStr);
 					}

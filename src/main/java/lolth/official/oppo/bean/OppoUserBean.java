@@ -4,9 +4,13 @@ import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @DBTable(name = "data_oppo_user")
 @Data
+@EqualsAndHashCode(callSuper=false)
+@ToString(callSuper=false)
 public class OppoUserBean extends BaseBean {
 	@DBConstraintPK
 	private String id;

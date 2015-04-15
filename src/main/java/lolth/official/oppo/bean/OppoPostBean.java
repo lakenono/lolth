@@ -5,9 +5,13 @@ import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @DBTable(name="data_oppo_post")
 @Data
+@EqualsAndHashCode(callSuper=false)
+@ToString(callSuper=false)
 public class OppoPostBean extends BaseBean{
 	@DBConstraintPK
 	private String id;
