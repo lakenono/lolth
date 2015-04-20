@@ -8,10 +8,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BitautoBBSDetailTaskProducerTest {
-	private BitautoBBSDetailTaskProducer producer;
+	private static BitautoBBSDetailTaskProducer producer;
 
 	@BeforeClass
-	public void init() {
+	public static void init() {
 		producer = new BitautoBBSDetailTaskProducer();
 	}
 

@@ -8,10 +8,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BitautoWordOfMouthDetialFetchTest {
-	private BitautoWordOfMouthDetialFetch fetch;
+	private static BitautoWordOfMouthDetialFetch fetch;
 
 	@BeforeClass
-	public void init() {
+	public static void init() {
 		fetch = new BitautoWordOfMouthDetialFetch();
 	}
 

@@ -9,10 +9,10 @@ import org.junit.Test;
 
 public class BitautoWordOfMouthDetailTaskProducerTest {
 
-	private BitautoWordOfMouthDetailTaskProducer producer;
+	private static BitautoWordOfMouthDetailTaskProducer producer;
 
 	@BeforeClass
-	public void init() {
+	public static void init() {
 		producer = new BitautoWordOfMouthDetailTaskProducer();
 	}
 

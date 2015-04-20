@@ -4,13 +4,14 @@ import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 
 import org.jsoup.nodes.Document;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class XCarBBSPostDetailFetchTest {
-	private XCarBBSPostDetailFetch fetch = null;
-	@Before
-	public void init(){
+	private static XCarBBSPostDetailFetch fetch = null;
+
+	@BeforeClass
+	public static void init() {
 		fetch = new XCarBBSPostDetailFetch("test");
 	}
 

@@ -8,10 +8,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BitautoBBSDetailFetchTest {
-	private BitautoBBSDetailFetch fetch;
+	private static BitautoBBSDetailFetch fetch;
 
 	@BeforeClass
-	public void init() {
+	public static void init() {
 		fetch = new BitautoBBSDetailFetch();
 	}
 
