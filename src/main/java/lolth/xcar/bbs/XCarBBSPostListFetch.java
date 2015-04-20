@@ -45,7 +45,7 @@ public class XCarBBSPostListFetch
 			{
 				try
 				{
-					bean.setJobname(this.jobname);
+					bean.setBrandId(this.jobname);
 					this.log.info(bean.toString());
 					bean.persist();
 				}
@@ -78,11 +78,12 @@ public class XCarBBSPostListFetch
 
 			// 作者
 			String author = element.select("td[width=14%] a").first().text();
-			bean.setAuthor(author);
+			bean.setAuthorId(author);
 
 			// 作者url
-			String authorUrl = element.select("td[width=14%] a").first().attr("href");
-			bean.setAuthorUrl(authorUrl);
+			// String authorUrl =
+			// element.select("td[width=14%] a").first().attr("href");
+			// bean.setAuthorUrl(authorUrl);
 
 			// 发帖时间
 			String postTime = element.select("span.smalltxt.lighttxt").first().text();
