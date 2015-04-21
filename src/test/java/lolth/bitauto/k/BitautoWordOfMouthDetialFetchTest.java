@@ -21,12 +21,11 @@ public class BitautoWordOfMouthDetialFetchTest {
 
 		FetchTask task = new FetchTask();
 		task.setUrl(url);
-		task.setExtra("ix25");
+		task.setExtra("ix25,kb_lang");
 
 		Document doc = GlobalComponents.fetcher.document(url);
 
 		fetch.parsePage(doc, task);
-		;
 	}
 
 }

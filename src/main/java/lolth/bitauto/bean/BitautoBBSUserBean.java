@@ -1,6 +1,7 @@
 package lolth.bitauto.bean;
 
 import lakenono.db.BaseBean;
+import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
 public class BitautoBBSUserBean extends BaseBean {
+	@DBConstraintPK
 	private String id;
 	private String name;
 	private String url;
@@ -30,6 +32,8 @@ public class BitautoBBSUserBean extends BaseBean {
 	private String posts;
 	//精华数
 	private String elites;
+	//车型
+	private String car;
 	
 	public static void main(String[] args)throws Exception{
 		new BitautoBBSUserBean().buildTable();

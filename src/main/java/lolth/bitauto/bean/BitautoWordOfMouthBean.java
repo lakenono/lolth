@@ -1,6 +1,7 @@
 package lolth.bitauto.bean;
 
 import lakenono.db.BaseBean;
+import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,40 +12,65 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
 public class BitautoWordOfMouthBean extends BaseBean {
+	//------------------------------------同 BitautoBBSPostBean
+	@DBConstraintPK
 	private String id;
 	private String title;
+	private String url;
+	// 性质
+	private String type;
+
+	private String postTime;
+
 	private String content;
+	
+	private String forumId;
+	
 	private String authorId;
+
+	// 查看数
+	private String views;
+
+	// 回复数
+	private String replys;
+	
 	private String keyword;
+	//-----------------------------------------------------------
+	//外观
+	private String exteriorScores;
+	private String exteriorComment;
 
-	private String waiguan;
-	private String waiguanComment;
+	//内饰
+	private String interiorScores;
+	private String interiorComment;
 
-	private String neishi;
-	private String neishiComment;
+	//空间
+	private String spaceScores;
+	private String spaceComment;
 
-	private String kongjian;
-	private String kongjianComment;
+	//动力
+	private String powerScores;
+	private String powerComment;
 
-	private String dongli;
-	private String dongliComment;
+	//操控
+	private String operationScores;
+	private String operationComment;
 
-	private String caokong;
-	private String caokongComment;
+	//配置
+	private String configScores;
+	private String configComment;
 
-	private String peizhi;
-	private String peizhiComment;
+	//性价比
+	private String costperformanceScores;
+	private String costperformanceComment;
 
-	private String xingjiabi;
-	private String xingjiabiComment;
+	//舒适度
+	private String comfortScores;
+	private String comfortComment;
 
-	private String shushidu;
-	private String shushiduComment;
-
-	private String maintainCost;
 	private String buyTime;
 	private String price;
-	private String currentMile;
+	private String currentMiles;
 
 	public static void main(String[] args) throws Exception {
 		new BitautoWordOfMouthBean().buildTable();

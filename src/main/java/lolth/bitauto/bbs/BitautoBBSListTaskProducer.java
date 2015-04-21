@@ -2,9 +2,14 @@ package lolth.bitauto.bbs;
 
 import java.text.MessageFormat;
 
+import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.PagingFetchTaskProducer;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang.StringUtils;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 @Slf4j
 public class BitautoBBSListTaskProducer extends PagingFetchTaskProducer {
@@ -12,9 +17,9 @@ public class BitautoBBSListTaskProducer extends PagingFetchTaskProducer {
 
 	private static final String BITAUTO_BBS_POST_LIST_URL_TEMPLATE = "http://baa.bitauto.com/{0}/index-all-all-{1}-0.html";
 
-	private String name;
+	protected String name;
 
-	private String forumId;
+	protected String forumId;
 
 	public static void main(String[] args) {
 		String name = "chevrolet";
@@ -36,13 +41,40 @@ public class BitautoBBSListTaskProducer extends PagingFetchTaskProducer {
 	}
 
 	public BitautoBBSListTaskProducer(String name, String forumId) {
-		super(BITAUTO_BBS_POST_LIST);
+		this(BITAUTO_BBS_POST_LIST, name, forumId);
+	}
+
+	public BitautoBBSListTaskProducer(String queueName, String name, String forumId) {
+		super(queueName);
 		this.name = name;
 		this.forumId = forumId;
 	}
 
 	@Override
 	protected int getMaxPage() {
+		try {
+			Document doc = GlobalComponents.fetcher.document(buildUrl(1));
+
+			Elements pageEs = doc.select("div.the_pages a");
+
+			// 没有分页标签
+			if (pageEs.isEmpty()) {
+				if (!doc.select("div.postslist_xh").isEmpty()) {
+					return 1;
+				}
+			}
+
+			// 有分页标签
+			if (pageEs.size() >= 3) {
+				String pages = pageEs.get(pageEs.size() - 2).text();
+				if (StringUtils.isNumeric(pages)) {
+					return Integer.parseInt(pages);
+				}
+			}
+		} catch (Exception e) {
+			log.warn("Get max page error : ", e);
+		}
+
 		return 0;
 	}
 
