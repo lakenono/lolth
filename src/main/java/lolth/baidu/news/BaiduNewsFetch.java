@@ -220,8 +220,6 @@ public class BaiduNewsFetch
 		//String[] keywords = new String[] { "穹顶之下", "柴静", "12369" };
 		String[] keywords = new String[] { "一汽奔腾" };
 
-		while (true)
-		{
 			for (String keyword : keywords)
 			{
 				for (int i = 0; i < 365; i++)
@@ -247,6 +245,7 @@ public class BaiduNewsFetch
 					jobStatus.persist();
 				}
 			}
-		}
+			
+			System.out.println("All finish!");
 	}
 }

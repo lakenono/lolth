@@ -109,6 +109,7 @@ public class BitautoWordOfMouthDetialFetch extends PageParseFetchTaskHandler {
 
 				if (pAndC.length == 1) {
 					user.setProvince(pAndC[0]);
+					user.setCity(pAndC[0]);
 				}
 				if (pAndC.length == 2) {
 					user.setProvince(pAndC[0]);
