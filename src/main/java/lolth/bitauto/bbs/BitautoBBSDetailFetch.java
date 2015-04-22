@@ -41,37 +41,30 @@ public class BitautoBBSDetailFetch extends PageParseFetchTaskHandler {
 			Elements titleElements = doc.select("div.title_box>h1");
 			if (!titleElements.isEmpty()) {
 				post.setTitle(titleElements.first().text());
-			} else {
-				return;
 			}
 
 			// Views
 			// Replys
 			Elements contents = doc.select("div.title_box>span");
-			String str = contents.first().text();
-			String views = StringUtils.substringBefore(str, "/");
 
-			if (!views.isEmpty()) {
+			if (!contents.isEmpty()) {
+				String str = contents.first().text();
+				String views = StringUtils.substringBefore(str, "/");
+				String replys = StringUtils.substringAfter(str, "/");
 				post.setViews(views);
-			}
-
-			String replys = StringUtils.substringAfter(str, "/");
-
-			if (!replys.isEmpty()) {
 				post.setReplys(replys);
 			}
-			// postTime
 
+			// postTime
 			Elements postTimeElements = doc.select("div.time_box>span");
 
-			String PostTime = postTimeElements.first().text();
-			String ActuallyPostTime = StringUtils.substringAfter(PostTime, "发表于");
-
-			if (!ActuallyPostTime.isEmpty()) {
+			if (!postTimeElements.isEmpty()) {
+				String PostTime = postTimeElements.first().text();
+				String ActuallyPostTime = StringUtils.substringAfter(PostTime, "发表于");
 				post.setPostTime(ActuallyPostTime);
 			}
-			// content
 
+			// content
 			Elements contentElements = doc.select("div.post_width");
 
 			if (!contentElements.isEmpty()) {
@@ -84,17 +77,15 @@ public class BitautoBBSDetailFetch extends PageParseFetchTaskHandler {
 		if (!postLeft.isEmpty()) {
 			user = new BitautoBBSUserBean();
 
-			// authorId
-
 			Elements authorIdELements = doc.select("div.user_name a.mingzi");
-			String url = authorIdELements.first().absUrl("href");
-			String authorId = StringUtils.substringBetween(url, "http://i.yiche.com/", "/");
-
-			// id
+			// id url
 			if (!authorIdELements.isEmpty()) {
+				String url = authorIdELements.first().absUrl("href");
+				String authorId = StringUtils.substringBetween(url, "http://i.yiche.com/", "/");
 				user.setId(authorId);
 				user.setUrl(url);
 			}
+
 			// name
 			Elements nameElements = doc.select("div.user_name a.mingzi");
 			if (!nameElements.isEmpty()) {
@@ -124,11 +115,14 @@ public class BitautoBBSDetailFetch extends PageParseFetchTaskHandler {
 				}
 				if (dataTitle.equals("地 区")) {
 					String dataResult = StringUtils.substringAfter(data, "：");
-					user.setCity(StringUtils.trim(StringUtils.substringAfter(dataResult, " ")));
-					if (StringUtils.trim(StringUtils.substringBefore(dataResult, " ")).equals("")) {
-						user.setProvince(StringUtils.trim(StringUtils.substringAfter(dataResult, " ")));
+					String city = StringUtils.trim(StringUtils.substringAfter(dataResult, " "));
+					String province = StringUtils.trim(StringUtils.substringBefore(dataResult, " "));
+
+					user.setCity(city);
+					if (StringUtils.isNotBlank(province)) {
+						user.setProvince(province);
 					} else {
-						user.setProvince(StringUtils.trim(StringUtils.substringBefore(dataResult, " ")));
+						user.setProvince(city);
 					}
 
 				}
