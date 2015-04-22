@@ -2,6 +2,7 @@ package lolth.bitauto.bean;
 
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
+import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +22,7 @@ public class BitautoBBSPostBean extends BaseBean {
 
 	private String postTime;
 
+	@DBField(type="text")
 	private String content;
 
 	private String authorId;

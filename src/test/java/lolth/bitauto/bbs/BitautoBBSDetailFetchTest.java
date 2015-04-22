@@ -21,7 +21,7 @@ public class BitautoBBSDetailFetchTest {
 
 		FetchTask task = new FetchTask();
 		task.setUrl(url);
-		task.setExtra("trax");
+		task.setExtra("trax,img");
 
 		Document doc = GlobalComponents.fetcher.document(url);
 
