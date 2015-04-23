@@ -31,7 +31,7 @@ public class ZolBBSUserTaskProducer extends ListFetchTaskProducer<String> {
 
 	@Override
 	protected List<String> getTaskArgs() throws Exception {
-		List<String> users = GlobalComponents.db.getRunner().query("SELECT DISTINCT userId FROM " + BaseBean.getTableName(ZolBBSPostBean.class) + " WHERE userId is not null AND userId NOT IN (SELECT userId FROM "+BaseBean.getTableName(ZolBBSUserBean.class)+")", new ColumnListHandler<String>());
+		List<String> users = GlobalComponents.db.getRunner().query("SELECT DISTINCT userId FROM " + BaseBean.getTableName(ZolBBSPostBean.class) + " WHERE userId is not null AND userId NOT IN (SELECT id FROM "+BaseBean.getTableName(ZolBBSUserBean.class)+")", new ColumnListHandler<String>());
 		return users;
 	}
 
