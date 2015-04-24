@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@DBTable(name = "data_pacuto_k_user")
+@DBTable(name = "data_pacuto_koubei")
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
@@ -15,13 +15,22 @@ public class PacutoWordOfMouthPostBean extends BaseBean {
 	@DBConstraintPK
 	private String id;
 	private String url;
-	private String authorId;
 	private String postTime;
-
+	
+	@DBConstraintPK
+	private String forumId;
+	
+	//用户信息
+	private String authorId;
+	private String authorName;
+	private String authorUrl;
+	
+	//附加信息
 	private String car;
 	private String buyTime;
 	private String buyProvince;
 	private String buyCity;
+	
 	// 卖家
 	private String seller;
 	// 裸车价格
