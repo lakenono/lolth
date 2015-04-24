@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@DBTable(name = "data_pacuto_bbs_post")
+@DBTable(name = "data_pacuto_bbs_user")
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
