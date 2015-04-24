@@ -49,8 +49,8 @@ public class BitautoBBSDetailFetch extends PageParseFetchTaskHandler {
 
 			if (!contents.isEmpty()) {
 				String str = contents.first().text();
-				String views = StringUtils.substringBefore(str, "/");
-				String replys = StringUtils.substringAfter(str, "/");
+				String replys = StringUtils.substringBefore(str, "/");
+				String views = StringUtils.substringAfter(str, "/");
 				post.setViews(views);
 				post.setReplys(replys);
 			}
