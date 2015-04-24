@@ -21,8 +21,8 @@ public class XCarWordOfMouthListFetch extends PageParseFetchTaskHandler {
 		String taskQueue = XCarWordOfMouthListProducer.XCAR_K_LIST;
 
 		XCarWordOfMouthListFetch fetch = new XCarWordOfMouthListFetch(taskQueue);
-		 fetch.setSleep(1000);
-		 fetch.run();
+		fetch.setSleep(1000);
+		fetch.run();
 	}
 
 	public XCarWordOfMouthListFetch(String taskQueueName) {
