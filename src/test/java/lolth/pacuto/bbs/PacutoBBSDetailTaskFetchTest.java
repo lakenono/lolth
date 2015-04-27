@@ -23,7 +23,7 @@ public class PacutoBBSDetailTaskFetchTest {
 
 		FetchTask task = new FetchTask();
 		task.setUrl(url);
-		//task.setExtra("trax,img");
+		task.setExtra("trax,img");
 
 //		Document doc = GlobalComponents.fetcher.document(url);
 
