@@ -1,10 +1,6 @@
 package lolth.pacuto.bbs;
 
-import lakenono.fetch.adv.HttpFetcher;
-import lakenono.fetch.adv.HttpRequest;
-import lakenono.fetch.adv.HttpResponse;
-import lakenono.fetch.adv.selenium.SeleniumHttpFetcher;
-import lakenono.fetch.adv.selenium.SeleniumHttpFetcher.SeleniumWebAction;
+import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.FetchTaskHandler;
 import lolth.pacuto.bbs.bean.PacutoBBSPostBean;
@@ -12,10 +8,8 @@ import lolth.pacuto.bbs.bean.PacutoBBSUserBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.WebDriver;
 
 /**
  * 解析详情页帖子，用户，入库
@@ -122,22 +116,8 @@ public class PacutoBBSDetailTaskFetch extends FetchTaskHandler {
 
 	@Override
 	protected void handleTask(FetchTask task) throws Exception {
-		HttpFetcher fetcher = new SeleniumHttpFetcher(new SeleniumWebAction() {
-
-			@Override
-			public boolean doWeb(WebDriver webDriver, HttpRequest req, HttpResponse resp) {
-				return true;
-			}
-		});
-		byte[] content = fetcher.run(task.getUrl());
-
-		Document doc = Jsoup.parse(new String(content, "UTF-8"));
+		Document doc = GlobalComponents.dynamicFetch.document(task.getUrl());
 		parsePage(doc, task);
-		fetcher.close();
-
-		// Document doc = GlobalComponents.fetcher.document(task.getUrl());
-		// parsePage(doc, task);
-		// Thread.sleep(sleep);
 	}
 
 }

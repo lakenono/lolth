@@ -2,15 +2,13 @@ package lolth.autohome.buy;
 
 import java.io.IOException;
 
-import lakenono.fetch.adv.HttpFetcher;
-import lakenono.fetch.adv.selenium.SeleniumHttpFetcher;
+import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.autohome.buy.bean.AutohomeBuyInfoBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -167,14 +165,8 @@ public class AutohomeBuyInfoListTaskFetch extends PageParseFetchTaskHandler {
 
 	@Override
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		HttpFetcher httpFetcher = new SeleniumHttpFetcher();
-		byte[] content = httpFetcher.run(task.getUrl());
-
-		Document doc = Jsoup.parse(new String(content), "UTF-8");
-
+		Document doc = GlobalComponents.dynamicFetch.document(task.getUrl());
 		parsePage(doc, task);
-
-		httpFetcher.close();
 	}
 
 }
