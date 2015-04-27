@@ -93,7 +93,7 @@ public class PacutoBBSListTaskProducer extends PagingFetchTaskProducer {
 		// 任务要抓取的url
 		task.setUrl(url);
 		// 任务扩展信息，用于在任务之间传递附加数据
-		// task.setExtra(forumId);
+		task.setExtra(forumId);
 		return task;
 	}
 }

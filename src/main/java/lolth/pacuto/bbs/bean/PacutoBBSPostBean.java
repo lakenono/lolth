@@ -2,6 +2,7 @@ package lolth.pacuto.bbs.bean;
 
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
+import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,8 @@ public class PacutoBBSPostBean extends BaseBean {
 	private String title;
 	private String url;
 	private String authorId;
+	
+	@DBField(type="text")
 	private String content;
 	//主题性质——列表页获得
 	private String type;
