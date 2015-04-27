@@ -23,6 +23,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+ * oppo 实时抓取
+ * 
+ * @author shi.lei
+ *
+ */
 @Slf4j
 public class WeiboRealTimeFetch {
 	private static final String CN_WEIBO_SEARCH_URL_TEMPLATE = "http://weibo.cn/search/mblog?hideSearchFrame=&keyword={0}&advancedfilter=1&starttime={1}&endtime={2}&sort=time&page={3}";
