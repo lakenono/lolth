@@ -1,7 +1,9 @@
 package lolth.pacuto.bbs;
 
-import static org.junit.Assert.*;
+import lakenono.core.GlobalComponents;
+import lakenono.task.FetchTask;
 
+import org.jsoup.nodes.Document;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,8 +14,15 @@ public class PacutoBBSDetailTaskProducerTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void test() throws Exception {
+		FetchTask task = new FetchTask();
+		//task.setExtra("20095");
+
+		String url = "http://bbs.pcauto.com.cn/forum-20095.html";
+		Document doc = GlobalComponents.fetcher.document(url);
+
+		PacutoBBSDetailTaskProducer producer = new PacutoBBSDetailTaskProducer();
+		producer.parsePage(doc, task);
 	}
 
 }

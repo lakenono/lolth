@@ -26,6 +26,9 @@ public class PacutoBBSPostBean extends BaseBean {
 	private String replys;
 	
 	private String postTime;
+	
+	private String forumId;
+	private String keyword;
 
 	public static void main(String[] args) throws Exception {
 		new PacutoBBSPostBean().buildTable();

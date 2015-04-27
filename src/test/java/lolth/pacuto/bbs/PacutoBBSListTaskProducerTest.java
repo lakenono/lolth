@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class PacutoBBSListTaskProducerTest {
+	private PacutoBBSListTaskProducer  producer;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -13,7 +14,16 @@ public class PacutoBBSListTaskProducerTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		int expectResult = 42;
+		
+		   producer = new PacutoBBSListTaskProducer(null, null);
+		
+		
+		int actualResult = producer.getMaxPage();
+		System.out.println(actualResult);
+		
+		assertTrue("失败，取出的最大页数不是 : " + expectResult, expectResult==actualResult);
+		
 	}
 
 }
