@@ -18,7 +18,7 @@ import org.jsoup.select.Elements;
 public class XCarWordOfMouthListFetch extends PageParseFetchTaskHandler {
 
 	public static void main(String[] args) throws Exception {
-		String taskQueue = XCarWordOfMouthListProducer.XCAR_K_LIST;
+		String taskQueue = XCarWordOfMouthListTaskProducer.XCAR_K_LIST;
 
 		XCarWordOfMouthListFetch fetch = new XCarWordOfMouthListFetch(taskQueue);
 		fetch.setSleep(1000);

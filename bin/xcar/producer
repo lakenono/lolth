@@ -1,4 +1,3 @@
-lolth.xcar.k.XCarWordOfMouthListProducer
-lolth.xcar.k.XCarWordOfMouthPostProducer
-
-lolth.xcar.bbs.XCarBBSPostListProducer
+lolth.xcar.bbs。XCarBBSPostListTaskProducer
+lolth.xcar.k.XCarWordOfMouthListTaskProducer
+lolth.xcar.k.XCarWordOfMouthDetailTaskProducer

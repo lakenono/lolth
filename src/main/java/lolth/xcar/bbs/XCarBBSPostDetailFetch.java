@@ -14,7 +14,7 @@ import org.jsoup.select.Elements;
 public class XCarBBSPostDetailFetch extends PageParseFetchTaskHandler {
 
 	public static void main(String[] args) throws Exception {
-		String queueName = XCarBBSPostDetailProducer.XCAR_BBS_POST_DETAIL;
+		String queueName = XCarBBSPostDetailTaskProducer.XCAR_BBS_POST_DETAIL;
 
 		XCarBBSPostDetailFetch fetch = new XCarBBSPostDetailFetch(queueName);
 

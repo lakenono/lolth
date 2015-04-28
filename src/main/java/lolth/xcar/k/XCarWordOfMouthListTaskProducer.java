@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 @Slf4j
-public class XCarWordOfMouthListProducer extends PagingFetchTaskProducer {
+public class XCarWordOfMouthListTaskProducer extends PagingFetchTaskProducer {
 	private static final String XCAR_K_LIST_URL_TEMPLATE = "http://newcar.xcar.com.cn/{0}/review/0/0_{1}.htm";
 
 	public static final String XCAR_K_LIST = "xcar_k_list";
@@ -19,7 +19,7 @@ public class XCarWordOfMouthListProducer extends PagingFetchTaskProducer {
 	private String keyword;
 	private String brandId;
 
-	public XCarWordOfMouthListProducer(String keyword, String brandId) {
+	public XCarWordOfMouthListTaskProducer(String keyword, String brandId) {
 		super(XCAR_K_LIST);
 		this.keyword = keyword;
 		this.brandId = brandId;
@@ -40,7 +40,7 @@ public class XCarWordOfMouthListProducer extends PagingFetchTaskProducer {
 
 		for (String id : brandIds) {
 			log.info("Handler http://newcar.xcar.com.cn/{}/review/0.htm Start ! ", id);
-			XCarWordOfMouthListProducer producer = new XCarWordOfMouthListProducer(keyword, id);
+			XCarWordOfMouthListTaskProducer producer = new XCarWordOfMouthListTaskProducer(keyword, id);
 			log.info("Handler http://newcar.xcar.com.cn/{}/review/0.htm Finish ! ", id);
 			producer.setSleep(1000);
 			producer.run();

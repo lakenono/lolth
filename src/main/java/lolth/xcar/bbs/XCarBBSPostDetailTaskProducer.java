@@ -16,21 +16,21 @@ import org.jsoup.select.Elements;
  * @author shi.lei
  *
  */
-public class XCarBBSPostDetailProducer extends PageParseFetchTaskHandler {
+public class XCarBBSPostDetailTaskProducer extends PageParseFetchTaskHandler {
 	public static final String XCAR_BBS_POST_DETAIL = "xcar_bbs_post_detail";
 
 	private FetchTaskProducer postDetailProducer = new FetchTaskProducer(XCAR_BBS_POST_DETAIL);
 
 	public static void main(String[] args) {
-		String listQueue = XCarBBSPostListProducer.XCAR_BBS_POST_LIST;
+		String listQueue = XCarBBSPostListTaskProducer.XCAR_BBS_POST_LIST;
 
-		XCarBBSPostDetailProducer fetchProducer = new XCarBBSPostDetailProducer(listQueue);
+		XCarBBSPostDetailTaskProducer fetchProducer = new XCarBBSPostDetailTaskProducer(listQueue);
 		fetchProducer.setSleep(1000);
 		fetchProducer.run();
 
 	}
 
-	public XCarBBSPostDetailProducer(String taskQueueName) {
+	public XCarBBSPostDetailTaskProducer(String taskQueueName) {
 		super(taskQueueName);
 	}
 

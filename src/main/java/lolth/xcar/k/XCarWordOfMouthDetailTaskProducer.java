@@ -7,18 +7,18 @@ import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.task.FetchTask;
 import lakenono.task.ListFetchTaskProducer;
-import lolth.xcar.bbs.XCarBBSPostDetailProducer;
+import lolth.xcar.bbs.XCarBBSPostDetailTaskProducer;
 import lolth.xcar.bbs.bean.XCarBBSPostBean;
 import lolth.xcar.k.bean.XCarWordOfMouthBean;
 
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 
-public class XCarWordOfMouthPostProducer extends ListFetchTaskProducer<String> {
+public class XCarWordOfMouthDetailTaskProducer extends ListFetchTaskProducer<String> {
 	private static final String XCAR_BBS_POST_DETAIL_URL_TEMPLATE = "http://www.xcar.com.cn/bbs/viewthread.php?tid={0}";
 	private String keyword;
 
-	public XCarWordOfMouthPostProducer(String keyword) {
-		super(XCarBBSPostDetailProducer.XCAR_BBS_POST_DETAIL);
+	public XCarWordOfMouthDetailTaskProducer(String keyword) {
+		super(XCarBBSPostDetailTaskProducer.XCAR_BBS_POST_DETAIL);
 		this.keyword = keyword;
 	}
 
@@ -44,7 +44,7 @@ public class XCarWordOfMouthPostProducer extends ListFetchTaskProducer<String> {
 
 	public static void main(String[] args) throws Exception {
 		String keyword = "chevrolet";
-		XCarWordOfMouthPostProducer producer = new XCarWordOfMouthPostProducer(keyword);
+		XCarWordOfMouthDetailTaskProducer producer = new XCarWordOfMouthDetailTaskProducer(keyword);
 		producer.run();
 	}
 

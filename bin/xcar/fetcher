@@ -1,4 +1,3 @@
-lolth.xcar.k.XCarWordOfMouthListFetch
-
-lolth.xcar.bbs.XCarBBSPostDetailProducer
+lolth.xcar.bbs.XCarBBSPostDetailTaskProducer
 lolth.xcar.bbs.XCarBBSPostDetailFetch
+lolth.xcar.k.XCarWordOfMouthListFetch

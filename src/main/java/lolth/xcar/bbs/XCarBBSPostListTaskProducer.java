@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
  *
  */
 @Slf4j
-public class XCarBBSPostListProducer extends PagingFetchTaskProducer {
+public class XCarBBSPostListTaskProducer extends PagingFetchTaskProducer {
 	public static final String XCAR_BBS_POST_LIST = "xcar_bbs_post_list";
 
 	private static final String XCAR_BBS_POST_LIST_URL_TEMPLATE = "http://www.xcar.com.cn/bbs/forumdisplay.php?fid={0}&page={1}";
@@ -25,7 +25,7 @@ public class XCarBBSPostListProducer extends PagingFetchTaskProducer {
 	private String keyword;
 	private String brandId;
 
-	public XCarBBSPostListProducer(String keyword, String brandId) {
+	public XCarBBSPostListTaskProducer(String keyword, String brandId) {
 		super(XCAR_BBS_POST_LIST);
 		this.keyword = keyword;
 		this.brandId = brandId;
@@ -45,7 +45,7 @@ public class XCarBBSPostListProducer extends PagingFetchTaskProducer {
 
 		for (String id : brandIds) {
 			log.info("Handler http://www.xcar.com.cn/bbs/forumdisplay.php?fid={} Start ! ", id);
-			XCarBBSPostListProducer producer = new XCarBBSPostListProducer(keyword, id);
+			XCarBBSPostListTaskProducer producer = new XCarBBSPostListTaskProducer(keyword, id);
 			log.info("Handler http://www.xcar.com.cn/bbs/forumdisplay.php?fid={} Finish ! ", id);
 
 			producer.run();
