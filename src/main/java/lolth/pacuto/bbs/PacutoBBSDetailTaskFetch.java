@@ -45,50 +45,61 @@ public class PacutoBBSDetailTaskFetch extends FetchTaskHandler {
 
 			// userId name url
 			Elements userInfoElements = postList.select("td.post_left p.uName>a");
-			String url = userInfoElements.first().absUrl("href");
-			user.setUrl(url);
-			String userId = StringUtils.substringBetween(url, "http://my.pcauto.com.cn/", "/forum/");
-			user.setId(userId);
-			String name = userInfoElements.first().text();
-			user.setName(name);
+			if (!userInfoElements.isEmpty()) {
+				String url = userInfoElements.first().absUrl("href");
+				user.setUrl(url);
+				String userId = StringUtils.substringBetween(url, "http://my.pcauto.com.cn/", "/forum/");
+				user.setId(userId);
+				String name = userInfoElements.first().text();
+				user.setName(name);
+
+			}
 
 			// city
 			Elements areaElements = doc.select("td.post_left div.user_info a.dblue");
-			String city = areaElements.first().text();
-			user.setCity(city);
+			if (!areaElements.isEmpty()) {
+				String city = areaElements.first().text();
+				user.setCity(city);
+			}
 
 			// post对象
 			post = new PacutoBBSPostBean();
-
 			// content
 			Elements contentElements = postList.select("td.post_right div.post_main");
-			String content = contentElements.first().text();
-			post.setContent(content);
+			if (!contentElements.isEmpty()) {
+				String content = contentElements.first().text();
+				post.setContent(content);
+			}
 
 			// postTime
 			Elements postTimeElements = postList.select("td.post_right div.post_time");
-			String postTime = StringUtils.substringAfter(postTimeElements.first().text(), "发表于");
-			post.setPostTime(postTime);
+			if (!postTimeElements.isEmpty()) {
+				String postTime = StringUtils.substringAfter(postTimeElements.first().text(), "发表于");
+				post.setPostTime(postTime);
+			}
 
 			// views replys
 			Elements overView = doc.select("td.post_left p.overView");
-			String viewReply = overView.first().text();
-			String views = StringUtils.substringBetween(viewReply, "查看：", " ");
-			String replys = StringUtils.substringAfter(viewReply, "回复：");
-			post.setViews(views);
-			post.setReplys(replys);
+			if (!overView.isEmpty()) {
+				String viewReply = overView.first().text();
+				String views = StringUtils.substringBetween(viewReply, "查看：", " ");
+				String replys = StringUtils.substringAfter(viewReply, "回复：");
+				post.setViews(views);
+				post.setReplys(replys);
+			}
 
 			// title
 			Elements titleElements = doc.select("td.post_right div.post_r_tit>h1");
-			String title = titleElements.first().text();
-			post.setTitle(title);
+			if (!titleElements.isEmpty()) {
+				String title = titleElements.first().text();
+				post.setTitle(title);
+			}
 
 			// id
 			String postUrl = task.getUrl();
 			String postId = StringUtils.substringBetween(postUrl, "http://bbs.pcauto.com.cn/topic-", ".html");
 			post.setId(postId);
-			post.setAuthorId(userId);
-
+			post.setAuthorId(user.getId());
 		}
 
 		if (post != null) {
@@ -101,7 +112,7 @@ public class PacutoBBSDetailTaskFetch extends FetchTaskHandler {
 			post.setForumId(extra[0]);
 			post.setType(extra[1]);
 
-			if (user != null) {
+			if (user != null && StringUtils.isNotBlank(user.getId())) {
 				user.persistOnNotExist();
 				post.setAuthorId(user.getId());
 			}
