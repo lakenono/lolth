@@ -247,15 +247,19 @@ public class WordOfMouth
 				bean.setPublishTime(publishTime);
 
 				// 帖子内容
-				if (element.select("div.text-con.height-list div.text-cont").size() == 0)
-				{
-					bean.setText("none");
+				Elements texts = elements.select("div.text-con.height-list div.text-cont");
+				if (!texts.isEmpty())				{
+					String text = texts.first().html();
+					parseComment(text,bean);
 				}
-				else
-				{
-					String text = element.select("div.text-con.height-list div.text-cont").first().text();
-					bean.setText(text);
+				
+				//追加
+				Elements appends = element.select("dd.add-dl-text");
+				if(!appends.isEmpty()){
+					String appendText = appends.first().html();
+					parseAppendComment(appendText,bean);
 				}
+				
 
 				// 浏览次数
 				String views = element.getElementsMatchingOwnText("人看过").first().child(0).text();
@@ -274,6 +278,15 @@ public class WordOfMouth
 		}
 
 		return result;
+	}
+
+	private void parseAppendComment(String appendText, WordOfMouthBean bean) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void parseComment(String text, WordOfMouthBean bean) {
+		
 	}
 
 	private int getMaxPage() throws Exception
