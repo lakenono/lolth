@@ -58,7 +58,7 @@ public class AutoHomeBBSPostListFetch
 		List<AutoHomeBBSPostBean> autoHomeBBSBeans = new LinkedList<AutoHomeBBSPostBean>();
 
 		Document document = Jsoup.parse(html);
-		Elements elements = document.select("dl.list_dl[lang]");
+		Elements elements = document.select("div#subcontent dl.list_dl[lang]");
 
 		for (Element element : elements)
 		{
