@@ -32,7 +32,7 @@ public class AutoHomeBBSPostListFetch
 	{
 		int maxPage = this.getMaxPage();
 
-		for (int i = 0; i < maxPage; i++)
+		for (int i = 1; i <= maxPage; i++)
 		{
 			String url = this.buildUrl(id, i);
 			String html = GlobalComponents.fetcher.fetch(url);
@@ -67,6 +67,9 @@ public class AutoHomeBBSPostListFetch
 			// title
 			String title = element.select("dt a").first().text();
 			bean.setTitle(title);
+			
+			String type = element.select("dt span").first().attr("class");
+			bean.setType(type);
 
 			// url
 			String url = element.select("dt a").first().attr("href");
@@ -102,24 +105,37 @@ public class AutoHomeBBSPostListFetch
 	public String buildUrl(String id, int page)
 	{
 		String baseUrl = "http://club.autohome.com.cn/bbs/forum-c-{0}-{1}.html";
-		return MessageFormat.format(baseUrl, id, page + 1 + "");
+		return MessageFormat.format(baseUrl, id, String.valueOf(page));
 	}
 
 	public static void main(String[] args) throws Exception
 	{
-		// 东风风度MX6 3637 http://club.autohome.com.cn/bbs/forum-c-3637-1.html
-		new AutoHomeBBSPostListFetch("3637", "东风风度MX6").run();
-
-		// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
-		new AutoHomeBBSPostListFetch("2123", "哈弗H6").run();
-
-		// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
-		new AutoHomeBBSPostListFetch("3000", "奔驰C级").run();
-
-		// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
-		new AutoHomeBBSPostListFetch("3204", "长安CS75").run();
-
-		// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
-		new AutoHomeBBSPostListFetch("2560", "传祺GS5").run();
+//		// 东风风度MX6 3637 http://club.autohome.com.cn/bbs/forum-c-3637-1.html
+//		new AutoHomeBBSPostListFetch("3637", "东风风度MX6").run();
+//
+//		// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
+//		new AutoHomeBBSPostListFetch("2123", "哈弗H6").run();
+//
+//		// 奔腾X80 3000 http://club.autohome.com.cn/bbs/forum-c-3000-1.html
+//		new AutoHomeBBSPostListFetch("3000", "奔驰C级").run();
+//
+//		// 长安CS75 3204 http://club.autohome.com.cn/bbs/forum-c-3204-1.html
+//		new AutoHomeBBSPostListFetch("3204", "长安CS75").run();
+//
+//		// 传祺GS5 2560 http://club.autohome.com.cn/bbs/forum-c-2560-1.html
+//		new AutoHomeBBSPostListFetch("2560", "传祺GS5").run();
+		
+		// 创酷 http://club.autohome.com.cn/bbs/forum-c-3335-1.html
+		new AutoHomeBBSPostListFetch("3335", "创酷").run();
+		// 北京现代ix25 http://club.autohome.com.cn/bbs/forum-c-3292-1.html
+		new AutoHomeBBSPostListFetch("3292", "北京现代ix25").run();
+		// 别克昂科拉 http://club.autohome.com.cn/bbs/forum-c-2896-1.html
+		new AutoHomeBBSPostListFetch("2896", "别克昂科拉").run();
+		// 福特翼搏 http://club.autohome.com.cn/bbs/forum-c-2871-1.html
+		new AutoHomeBBSPostListFetch("2871", "福特翼搏").run();
+		// 标致2008 http://club.autohome.com.cn/bbs/forum-c-3234-1.html
+		new AutoHomeBBSPostListFetch("3234", "标致2008").run();
+		// 缤智 http://club.autohome.com.cn/bbs/forum-c-3460-1.html
+		new AutoHomeBBSPostListFetch("3460", "缤智").run();
 	}
 }

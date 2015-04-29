@@ -13,9 +13,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
-public class WordOfMouthBean extends BaseBean {
+public class AutoHomeWordOfMouthBean extends BaseBean {
 	public static void main(String[] args) throws SQLException {
-		new WordOfMouthBean().buildTable();
+		new AutoHomeWordOfMouthBean().buildTable();
 	}
 
 	// 用户名
@@ -86,50 +86,66 @@ public class WordOfMouthBean extends BaseBean {
 
 	// --------------------------口碑信息
 	// 最满意
+	@DBField(type="varchar(1000)")
 	private String satisfactoryComment;
 	
 	// 最不满意
+	@DBField(type="varchar(1000)")
 	private String unsatisfactoryComment;
 
 	// 空间
+	@DBField(type="varchar(1000)")
 	private String interspaceComment;
 
 	// 动力
+	@DBField(type="varchar(1000)")
 	private String powerComment;
 
 	// 操控
+	@DBField(type="varchar(1000)")
 	private String manipulationComment;
 
 	// 油耗
+	@DBField(type="varchar(1000)")
 	private String fuelConsumptionComment;
 
 	// 舒适性
+	@DBField(type="varchar(1000)")
 	private String comfortComment;
 
 	// 外观
+	@DBField(type="varchar(1000)")
 	private String appearanceComment;
 
 	// 内饰
+	@DBField(type="varchar(1000)")
 	private String innerDecorationComment;
 
 	// 性价比
+	@DBField(type="varchar(1000)")
 	private String performancePriceComment;
 	
 	// 其他
+	@DBField(type="varchar(1000)")
 	private String otherComment;
 	
 	//购买原因
+	@DBField(type="text")
 	private String buyReasonComment;
 	
 	//-----------------------------------追加评价
 	//油耗
+	@DBField(type="varchar(1000)")
 	private String fuelConsumptionAppend;
 	//保养
+	@DBField(type="varchar(1000)")
 	private String maintenanceAppand;
 	//故障
+	@DBField(type="varchar(1000)")
 	private String faultAppend;
 	//吐槽
-	private String toCaoAppend;
+	@DBField(type="varchar(1000)")
+	private String tuCaoAppend;
 	
 	// 帖子内容
 //	@DBField(type = "text")
