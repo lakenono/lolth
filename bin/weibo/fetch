@@ -1,0 +1,3 @@
+lolth.weibo.task.WeiboTaskRunner
+lolth.weibo.cn.WeiboUserTaskFetch
+lolth.weibo.cn.WeiboUserTagTaskFetch

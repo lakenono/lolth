@@ -36,7 +36,7 @@ public class AutoHomeBBSPostUserFetch {
 					AutoHomeBBSUserBean bean = this.parse(html);
 					bean.setAuthorUrl(url[1]);
 
-					bean.persist();
+					bean.persistOnNotExist();
 
 					updatePost(url[0], "success");
 					log.info("{} success ", bean);
@@ -55,7 +55,7 @@ public class AutoHomeBBSPostUserFetch {
 				.getRunner()
 				.query("select url,authorUrl from "
 						+ BaseBean.getTableName(AutoHomeBBSPostBean.class)
-						+ " where postTime >= '2014-12-01' and comment_status='' limit 1000",
+						+ " where postTime >= '2014-04-01' and comment_status='' limit 1000",
 						new ResultSetHandler<List<String[]>>() {
 
 							@Override

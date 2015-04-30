@@ -3,12 +3,14 @@ package lolth.autohome.bbs.bean;
 import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
+import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 
 @DBTable(name = "data_autohome_bbs_user")
 public class AutoHomeBBSUserBean extends BaseBean {
 
 	// 作者地址
+	@DBConstraintPK
 	private String authorUrl;
 	// 区域
 	private String area;
