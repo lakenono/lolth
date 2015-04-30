@@ -86,11 +86,11 @@ public class AutoHomeWordOfMouthBean extends BaseBean {
 
 	// --------------------------口碑信息
 	// 最满意
-	@DBField(type="varchar(1000)")
+	@DBField(type="varchar(1500)")
 	private String satisfactoryComment;
 	
 	// 最不满意
-	@DBField(type="varchar(1000)")
+	@DBField(type="varchar(1500)")
 	private String unsatisfactoryComment;
 
 	// 空间
