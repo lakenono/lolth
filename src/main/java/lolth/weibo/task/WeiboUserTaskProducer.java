@@ -37,7 +37,7 @@ public class WeiboUserTaskProducer extends ListFetchTaskProducer<String> {
 	}
 
 	public static void main(String[] args) throws Exception {
-		WeiboUserTaskProducer producer = new WeiboUserTaskProducer(WEIBO_USER, "oppo");
+		WeiboUserTaskProducer producer = new WeiboUserTaskProducer(WEIBO_USER, "chevrolet");
 		producer.setWaitTaskTime(60 * 60000);
 		producer.run();
 	}
@@ -93,7 +93,7 @@ public class WeiboUserTaskProducer extends ListFetchTaskProducer<String> {
 
 	@Override
 	protected List<String> getTaskArgs() throws Exception {
-		List<String> uids = GlobalComponents.db.getRunner().query("SELECT DISTINCT userid FROM " + BaseBean.getTableName(WeiboBean.class) + " WHERE keyword=? and userid NOT IN (SELECT id FROM " + BaseBean.getTableName(WeiboUserBean.class) + ")", new ColumnListHandler<String>(), keyword);
+		List<String> uids = GlobalComponents.db.getRunner().query("SELECT DISTINCT w.userid FROM " + BaseBean.getTableName(WeiboBean.class) + " w WHERE NOT EXISTS (SELECT u.id FROM " + BaseBean.getTableName(WeiboUserBean.class) + " u WHERE w.userid=u.id ) limit 1000", new ColumnListHandler<String>());
 		return uids;
 	}
 
