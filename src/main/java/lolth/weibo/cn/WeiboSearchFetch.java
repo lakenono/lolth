@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import lolth.weibo.auth.WeiboAuthManager;
+import lolth.weibo.auth.WeiboAuthManagerImpl;
 import lolth.weibo.bean.WeiboBean;
 import lolth.weibo.utils.WeiboIdUtils;
 
@@ -20,6 +22,8 @@ import org.slf4j.LoggerFactory;
 
 public class WeiboSearchFetch
 {
+	private WeiboAuthManager authManager = new WeiboAuthManagerImpl();
+	
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public void process(String keyword, String begin, String end) throws IOException, ParseException, InterruptedException, IllegalArgumentException, IllegalAccessException, InstantiationException
@@ -90,10 +94,7 @@ public class WeiboSearchFetch
 		connect.data("page", page + "");
 
 		// cookie
-		connect.cookie("_T_WM", "0f0602cfd6ce7a1ae8dd3020d31aafdc");
-		connect.cookie("SUB", "_2A254D5dsDeThGeVN7lIV9CnEzziIHXVYnK2krDV6PUJbrdAKLWHSkWpuSrt8a-1-y2RIOi8PCrqHJ_fNKw..");
-		connect.cookie("gsid_CTandWM", "4un3ca761seUts0bLF56je3BtdC");
-		connect.cookie("M_WEIBOCN_PARAMS", "rl%3D1");
+		connect.cookies(authManager.getAuthInfo());
 
 		// ua
 		connect.userAgent("Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");

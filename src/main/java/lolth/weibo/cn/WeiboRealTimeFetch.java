@@ -61,6 +61,7 @@ public class WeiboRealTimeFetch {
 		for (int i = 1; i <= pages; i++) {
 			String url = buildUrl(i);
 			try {
+				log.info("fetch {}-{}-{} {}/{} ",keyword,startTime,endTime,i,pages);
 				Document doc = WeiboFetcher.cnFetcher.fetch(url);
 				List<WeiboBean> beans = parse(doc);
 
