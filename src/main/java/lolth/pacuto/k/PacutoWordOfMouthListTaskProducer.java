@@ -95,7 +95,7 @@ public class PacutoWordOfMouthListTaskProducer extends PagingFetchTaskProducer {
 		task.setBatchName(PACUTO_K_POST_LIST);
 		task.setUrl(url);
 		task.setExtra(forumId);
-		return null;
+		return task;
 	}
 
 }
