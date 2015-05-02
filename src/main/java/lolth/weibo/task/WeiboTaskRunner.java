@@ -33,7 +33,6 @@ public class WeiboTaskRunner extends BaseLog
 				if (task == null)
 				{
 					this.log.info("队列执行完成..");
-					break;
 				}
 
 				if (!this.isFinish(task))
@@ -51,7 +50,7 @@ public class WeiboTaskRunner extends BaseLog
 
 	public WeiboTaskBean getTask()
 	{
-		String json = GlobalComponents.jedis.lpop(BaseBean.getTableName(WeiboTaskBean.class));
+		String json = GlobalComponents.jedis.rpop(BaseBean.getTableName(WeiboTaskBean.class));
 
 		if (json == null)
 		{
