@@ -80,25 +80,33 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 	@Override
 	public void run() throws IOException, InterruptedException, SQLException, Exception
 	{
-		int maxPage = this.getMaxPage();
+		try {
+			int maxPage = this.getMaxPage();
 
-		for (int i =1; i <= maxPage; i++)
-		{
-			String taskname = MessageFormat.format("weixin_user-{0}-{1}", this.username, i);
-
-			if (GlobalComponents.taskService.isCompleted(taskname))
+			for (int i =1; i <= maxPage; i++)
 			{
-				//这里应该不需要++
+				String taskname = MessageFormat.format("weixin_user-{0}-{1}", this.username, i);
+
+				if (GlobalComponents.taskService.isCompleted(taskname))
+				{
+					//这里应该不需要++
 //				i++;
-				this.log.info("task {} is completed", taskname);
-				continue;
+					this.log.info("task {} is completed", taskname);
+					continue;
+				}
+
+				this.log.info("keyword[{}] {}/{}...", this.username, i, maxPage);
+
+				try {
+					this.process(i);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				GlobalComponents.taskService.success(taskname);
 			}
-
-			this.log.info("keyword[{}] {}/{}...", this.username, i, maxPage);
-
-			this.process(i);
-
-			GlobalComponents.taskService.success(taskname);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
