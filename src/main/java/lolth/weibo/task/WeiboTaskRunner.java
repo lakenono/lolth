@@ -8,6 +8,7 @@ import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
 import lakenono.log.BaseLog;
+import lolth.weibo.cn.WeiboRealTimeFetch;
 import lolth.weibo.cn.WeiboSearchFetch;
 import lolth.weibo.task.bean.WeiboTaskBean;
 
@@ -32,12 +33,14 @@ public class WeiboTaskRunner extends BaseLog
 
 				if (task == null)
 				{
-					this.log.info("队列执行完成..");
+					this.log.info("等待新任务...");
+					Thread.sleep(10*60*1000);
 				}
 
 				if (!this.isFinish(task))
 				{
-					this.fetch.process(task.getKeyword(), task.getStarttime(), task.getEndtime());
+					WeiboRealTimeFetch fetch = new WeiboRealTimeFetch(task.getKeyword(), task.getStarttime(), task.getEndtime());
+					fetch.run();
 					this.setFinish(task);
 				}
 			}
