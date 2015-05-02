@@ -54,11 +54,21 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 				//				new WeiXinUserArticleFetch("改变自己", "oIWsFt2UezFNv7A6nD0z1PyDTO2g").run();
 				//				new WeiXinUserArticleFetch("英国那些事儿", "oIWsFtywwCsYrqK8-7vQQ_tfLphc").run();
 				//				new WeiXinUserArticleFetch("日本流行每日速报", "oIWsFt2xTJ7hmFcgEKp4Xq3GenFY").run();
-				new WeiXinUserArticleFetch("虎嗅", "oIWsFt4JYI9WZ31CSvzYlMbSJiOM").run();
+//				new WeiXinUserArticleFetch("虎嗅", "oIWsFt4JYI9WZ31CSvzYlMbSJiOM").run();new WeiXinUserArticleFetch("oIWsFt5qMK6KIy4h8uI3UWScmfkY","Autotong");
+				new WeiXinUserArticleFetch("Autotong","oIWsFt5qMK6KIy4h8uI3UWScmfkY").run();
+				new WeiXinUserArticleFetch("qiche3721","oIWsFtzzPJDIzwR-CSg2or5ssc5c").run();
+				new WeiXinUserArticleFetch("qcply-2","oIWsFt-BWDNNNKg6X_KKc-YkOmqM").run();
+				new WeiXinUserArticleFetch("Geekcar","oIWsFtwVPGYeiPcJd4yq57-5Ih7g").run();
+				new WeiXinUserArticleFetch("wenshucheyun","oIWsFt8LFQXZTcEIGXDfnwLdLBEQ").run();
+				new WeiXinUserArticleFetch("yypcar","oIWsFtyps_h7iFAuq7-L1reLisrE").run();
+				new WeiXinUserArticleFetch("zhongguoqichebao","oIWsFt1e7cSS997saZkIKTv5iohY").run();
+				new WeiXinUserArticleFetch("meiqingqinxue1981","oIWsFt0M8q8rkIK15RFZEf3fnan0").run();
+				new WeiXinUserArticleFetch("automao","oIWsFt2uHuq06TQRjBI10PfWZ3AU").run();
+				new WeiXinUserArticleFetch("auto-paiqiguan","oIWsFt3D6nzLN3_WJvIKGwXeb3UQ").run();
 			}
 			catch (Exception e)
 			{
-				System.out.println(e);
+				e.printStackTrace();
 			}
 
 		}
@@ -72,13 +82,14 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 	{
 		int maxPage = this.getMaxPage();
 
-		for (int i = 0; i < maxPage; i++)
+		for (int i =1; i <= maxPage; i++)
 		{
 			String taskname = MessageFormat.format("weixin_user-{0}-{1}", this.username, i);
 
 			if (GlobalComponents.taskService.isCompleted(taskname))
 			{
-				i++;
+				//这里应该不需要++
+//				i++;
 				this.log.info("task {} is completed", taskname);
 				continue;
 			}
@@ -142,7 +153,8 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 	@Override
 	public int getMaxPage() throws Exception
 	{
-		String html = GlobalComponents.dynamicFetch.fetch(this.buildUrl(0));
+		String url = this.buildUrl(1);
+		String html = GlobalComponents.dynamicFetch.fetch(url);
 		html = StringUtils.substringBetween(html, "totalPages\":", "}");
 		return Integer.parseInt(html);
 	}
@@ -151,7 +163,7 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 	public String buildUrl(int pageNum) throws UnsupportedEncodingException
 	{
 		String url = "http://weixin.sogou.com/gzhjs?cb=sogou.weixin.gzhcb&openid={0}&page={1}";
-		return MessageFormat.format(url, this.openid, pageNum + 1);
+		return MessageFormat.format(url, this.openid, pageNum);
 	}
 
 }
