@@ -156,7 +156,7 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 			bean.persist();
 			this.log.info(bean.toString());
 		}
-		Thread.sleep(10000);
+		Thread.sleep(15000);
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 		String url = this.buildUrl(1);
 		String html = GlobalComponents.dynamicFetch.fetch(url);
 		html = StringUtils.substringBetween(html, "totalPages\":", "}");
-		Thread.sleep(10000);
+		Thread.sleep(15000);
 		return Integer.parseInt(html);
 	}
 
