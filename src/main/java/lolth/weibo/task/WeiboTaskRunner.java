@@ -35,6 +35,7 @@ public class WeiboTaskRunner extends BaseLog
 				{
 					this.log.info("等待新任务...");
 					Thread.sleep(10*60*1000);
+					continue ;
 				}
 
 				if (!this.isFinish(task))
