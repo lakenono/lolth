@@ -115,7 +115,11 @@ public class WeiboRealTimeFetch {
 		Document doc = WeiboFetcher.cnFetcher.fetch(url);
 
 		if (doc.select("div#pagelist").size() == 0) {
-			return 0;
+			Elements elements = doc.select("div.c[id]");
+			if(elements.isEmpty()){
+				return 0;
+			}
+			return 1;
 		} else {
 			String html = doc.select("div#pagelist").first().text();
 			String page = StringUtils.substringBetween(html, "/", "页");

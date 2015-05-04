@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 @Slf4j
 public class WeiboUserMainPageTaskProducer extends PagingFetchTaskProducer {
@@ -80,7 +81,11 @@ public class WeiboUserMainPageTaskProducer extends PagingFetchTaskProducer {
 			Document doc = WeiboFetcher.cnFetcher.fetch(url);
 
 			if (doc.select("div#pagelist").size() == 0) {
-				return 0;
+				Elements elements = doc.select("div.c[id]");
+				if(elements.isEmpty()){
+					return 0;
+				}
+				return 1;
 			} else {
 				String html = doc.select("div#pagelist").first().text();
 				String page = StringUtils.substringBetween(html, "/", "页");
