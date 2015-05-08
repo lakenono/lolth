@@ -16,6 +16,7 @@ public class BaiduZhidaoQuestionBean extends BaseBean {
 	@DBConstraintPK
 	private String id;
 	private String url;
+	@DBConstraintPK
 	private String taskName;
 	private String keyword;
 
