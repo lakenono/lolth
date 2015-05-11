@@ -34,7 +34,7 @@ public class SuningSearchListTaskProducer extends PagingFetchTaskProducer {
 
 	public static void main(String[] args) throws Exception {
 		String name = "惠氏";
-		String[] keywords = { "惠氏" };
+		String[] keywords = { "惠氏启赋","wyeth启赋","雅培菁致","多美滋致粹","合生元奶粉","诺优能白金版","美赞臣亲舒"  };
 
 		for (String k : keywords) {
 			log.info("{} start! ", k);
