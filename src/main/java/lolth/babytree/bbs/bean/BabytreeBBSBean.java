@@ -1,5 +1,7 @@
 package lolth.babytree.bbs.bean;
 
+import java.sql.SQLException;
+
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
@@ -17,6 +19,10 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 public class BabytreeBBSBean extends BaseBean{
 	
+	public static void main(String[] args) throws SQLException {
+		new BabytreeBBSBean().buildTable();
+	}
+	
 	@DBConstraintPK
 	private String id;
 	//主题
@@ -26,7 +32,9 @@ public class BabytreeBBSBean extends BaseBean{
 	private String text= "";
 	//用户名称
 	private String nickName= "";
-	//用户主页
+	//帖子url
+	private String topicUrl="";
+	//用户url
 	private String userUrl= "";
 	//地域
 	private String region= "";
@@ -46,4 +54,6 @@ public class BabytreeBBSBean extends BaseBean{
 	private String babySex= "";
 	
 	private String keyword="";
+	
+	private String subjectTask="";
 }

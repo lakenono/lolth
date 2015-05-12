@@ -25,10 +25,16 @@ public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
 	private static final Pattern pattern = Pattern.compile("[^0-9]");
 	
 	private String keyword;
+	
+	private String keywordCode;
+	
+	private String subject;
 
-	public BabytreeBBSSearchList(String keyword) {
+	public BabytreeBBSSearchList(String keyword,String keywordCode,String subject) {
 		super(BABYTREE_BBS_LIST);
 		this.keyword = keyword;
+		this.keywordCode = keywordCode;
+		this.subject = subject;
 	}
 
 	@Override
@@ -57,7 +63,7 @@ public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
 
 	@Override
 	protected String buildUrl(int pageNum) {
-		return MessageFormat.format(BABYTREE_BBS_LIST_URL, keyword, String.valueOf(pageNum));
+		return MessageFormat.format(BABYTREE_BBS_LIST_URL, keywordCode, String.valueOf(pageNum));
 	}
 
 	@Override
@@ -66,17 +72,20 @@ public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
 		task.setName(keyword);
 		task.setBatchName(BABYTREE_BBS_LIST);
 		task.setUrl(url);
+		task.setExtra(subject);
 		return task;
 	}
 	
 	public static void main(String[] args) {
+		String subject = "奶粉";
 		String keyword = "惠氏启赋";
+		String keywordCode = keyword;
 		try {
-			keyword = URLEncoder.encode(keyword, "utf-8");
+			keywordCode = URLEncoder.encode(keyword, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		new BabytreeBBSSearchList(keyword).run();
+		new BabytreeBBSSearchList(keyword,keywordCode,subject).run();
 	}
 
 }
