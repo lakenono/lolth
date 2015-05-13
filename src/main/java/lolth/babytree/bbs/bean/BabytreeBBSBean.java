@@ -22,22 +22,17 @@ public class BabytreeBBSBean extends BaseBean{
 	public static void main(String[] args) throws SQLException {
 		new BabytreeBBSBean().buildTable();
 	}
-	
 	@DBConstraintPK
 	private String id;
+	//用户ID
+	private String userId;
 	//主题
 	private String banner = "";
 	//正文
 	@DBField(type = "text")
 	private String text= "";
-	//用户名称
-	private String nickName= "";
 	//帖子url
 	private String topicUrl="";
-	//用户url
-	private String userUrl= "";
-	//地域
-	private String region= "";
 	//浏览数
 	private String browseNum= "";
 	//回复数
@@ -46,12 +41,6 @@ public class BabytreeBBSBean extends BaseBean{
 	private String publishTime= "";
 	//圈子归属
 	private String circle= "";
-	//宝宝状态
-	private String babyType= "";
-	//宝宝年龄
-	private String babyAge= "";
-	//宝宝性别
-	private String babySex= "";
 	
 	private String keyword="";
 	

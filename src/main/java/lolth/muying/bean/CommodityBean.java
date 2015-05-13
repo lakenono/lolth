@@ -1,5 +1,7 @@
 package lolth.muying.bean;
 
+import java.sql.SQLException;
+
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
@@ -12,6 +14,11 @@ import lombok.ToString;
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
 public class CommodityBean extends BaseBean{
+	
+	public static void main(String[] args) throws SQLException {
+		new CommodityBean().buildTable();
+	}
+	
 	/*
 	 * 商品ID
 	 */
@@ -48,6 +55,7 @@ public class CommodityBean extends BaseBean{
 	/*
 	 * 搜索关键字
 	 */
-	private String keyword;
+	private String keyword="";
 
+	private String subjectTask="";
 }

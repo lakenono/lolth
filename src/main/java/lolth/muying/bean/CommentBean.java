@@ -1,5 +1,7 @@
 package lolth.muying.bean;
 
+import java.sql.SQLException;
+
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
@@ -12,7 +14,10 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
-public class CommentBean extends BaseBean{
+public class CommentBean extends BaseBean {
+	public static void main(String[] args) throws SQLException {
+		new CommentBean().buildTable();
+	}
 
 	/*
 	 * 评论ID
@@ -44,8 +49,4 @@ public class CommentBean extends BaseBean{
 	 */
 	@DBField(type = "text")
 	private String commentText = "";
-	/*
-	 * 
-	 */
-	private String keyword = "";
 }

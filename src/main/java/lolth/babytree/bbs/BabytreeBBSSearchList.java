@@ -17,20 +17,20 @@ import org.jsoup.select.Elements;
 
 @Slf4j
 public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
-	
+
 	public static final String BABYTREE_BBS_LIST = "babytree_bbs_list";
-	
-	private static final String BABYTREE_BBS_LIST_URL="http://www.babytree.com/s.php?q={0}&c=community&cid=0&range=&pg={1}";
-	
+
+	private static final String BABYTREE_BBS_LIST_URL = "http://www.babytree.com/s.php?q={0}&c=community&cid=0&range=&pg={1}";
+
 	private static final Pattern pattern = Pattern.compile("[^0-9]");
-	
+
 	private String keyword;
-	
+
 	private String keywordCode;
-	
+
 	private String subject;
 
-	public BabytreeBBSSearchList(String keyword,String keywordCode,String subject) {
+	public BabytreeBBSSearchList(String keyword, String keywordCode, String subject) {
 		super(BABYTREE_BBS_LIST);
 		this.keyword = keyword;
 		this.keywordCode = keywordCode;
@@ -44,13 +44,13 @@ public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
 
 			Elements pages = doc.select("#pagination1 > div > span.page-number");
 			String pageStr = pages.text();
-			if(StringUtils.isBlank(pageStr)){
+			if (StringUtils.isBlank(pageStr)) {
 				return 1;
 			}
 
 			Matcher matcher = pattern.matcher(pageStr);
 			pageStr = matcher.replaceAll("");
-			if(StringUtils.isBlank(pageStr)){
+			if (StringUtils.isBlank(pageStr)) {
 				return 1;
 			}
 			return Integer.parseInt(pageStr);
@@ -75,17 +75,19 @@ public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
 		task.setExtra(subject);
 		return task;
 	}
-	
+
 	public static void main(String[] args) {
-		String subject = "奶粉";
-		String keyword = "惠氏启赋";
-		String keywordCode = keyword;
-		try {
-			keywordCode = URLEncoder.encode(keyword, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		String subject = "惠氏";
+		String[] keywords = { "惠氏启赋", "wyeth启赋", "雅培菁致", "多美滋致粹", "合生元奶粉", "诺优能白金版", "美赞臣亲舒" };
+		for (String keyword : keywords) {
+			String keywordCode = keyword;
+			try {
+				keywordCode = URLEncoder.encode(keyword, "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			new BabytreeBBSSearchList(keyword, keywordCode, subject).run();
 		}
-		new BabytreeBBSSearchList(keyword,keywordCode,subject).run();
 	}
 
 }

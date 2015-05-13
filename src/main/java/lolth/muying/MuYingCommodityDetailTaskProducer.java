@@ -23,7 +23,6 @@ public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler
 
 	public MuYingCommodityDetailTaskProducer(String taskQueueName) {
 		super(taskQueueName);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -47,7 +46,6 @@ public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler
 		///////////////////
 		detailUrls.clear();
 		detailUrls = null;
-		postDetailProducer = null;
 		task = null;
 		doc = null;
 
@@ -57,5 +55,13 @@ public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
 		Document doc = GlobalComponents.fetcher.document(task.getUrl());
 		parsePage(doc, task);
+	}
+	
+	public static void main(String[] args) {
+		String taskQueueName = MuYingCommoditySearchList.MUYING_SHOP_LIST;
+		MuYingCommodityDetailTaskProducer detailTaskProducer = new MuYingCommodityDetailTaskProducer(taskQueueName);
+		detailTaskProducer.setSleep(5000);
+		detailTaskProducer.run();
+		
 	}
 }
