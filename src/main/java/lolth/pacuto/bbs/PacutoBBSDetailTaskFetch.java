@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
@@ -56,10 +57,15 @@ public class PacutoBBSDetailTaskFetch extends FetchTaskHandler {
 			}
 
 			// city
-			Elements areaElements = doc.select("td.post_left div.user_info a.dblue");
+			Elements areaElements = postList.select("td.post_left div.floor-userInfo div.user_info li");
 			if (!areaElements.isEmpty()) {
-				String city = areaElements.first().text();
-				user.setCity(city);
+				for (Element liElement : areaElements) {
+					String dataElement = liElement.text();
+					if (dataElement.startsWith("地区")) {
+						String dataResult = StringUtils.substringAfter(dataElement, "： ");
+						user.setCity(dataResult);
+					}
+				}
 			}
 
 			// post对象
