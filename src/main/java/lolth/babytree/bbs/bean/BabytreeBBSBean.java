@@ -43,6 +43,6 @@ public class BabytreeBBSBean extends BaseBean{
 	private String circle= "";
 	
 	private String keyword="";
-	
+	@DBConstraintPK
 	private String subjectTask="";
 }

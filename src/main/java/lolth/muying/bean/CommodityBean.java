@@ -56,6 +56,6 @@ public class CommodityBean extends BaseBean{
 	 * 搜索关键字
 	 */
 	private String keyword="";
-
+	@DBConstraintPK
 	private String subjectTask="";
 }
