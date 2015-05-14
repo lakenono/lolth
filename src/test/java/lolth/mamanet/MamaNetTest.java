@@ -18,10 +18,10 @@ public class MamaNetTest {
 
 	@Test
 	public void testFetch() throws Exception {
-		String url = "http://zhannei.baidu.com/cse/search?q=%E6%83%A0%E6%B0%8F%E5%90%AF%E8%B5%8B&click=1&s=8134803871385444951&nsid=1";
+		String url = "http://zhannei.baidu.com/cse/search?q=%E6%83%A0%E6%B0%8F%E5%90%AF%E8%B5%8B&p=9&s=8134803871385444951&nsid=1";
 		Document document = GlobalComponents.fetcher.document(url);
 		FetchTask task = new FetchTask();
-		task.setBatchName("惠氏");
+		task.setName("惠氏");
 		task.setExtra("惠氏启赋");
 		fetch.parsePage(document, task);
 	}
