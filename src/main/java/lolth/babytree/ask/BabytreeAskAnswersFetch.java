@@ -30,7 +30,9 @@ public class BabytreeAskAnswersFetch {
 				} catch (Exception e) {
 					this.log.error("", e);
 				}
+				Thread.sleep(2000);
 			}
+			Thread.sleep(3000000);
 		}
 	}
 

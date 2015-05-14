@@ -130,7 +130,7 @@ public class BabytreeAskList {
 		String[] cids = new String[] { "1", "2", "3", "4", "5", "477", "488" };
 //		String[] brands = new String[] { "美素佳儿", "惠氏", "多美滋", "雅培", "诺优能", "美赞臣", "可瑞康" };
 		// String[] brands = new String[] { "诺优能", "美赞臣", "可瑞康" };
-		String[] brands = new String[] {"惠氏启赋"};
+		String[] brands = new String[] {"惠氏启赋","wyeth启赋","雅培菁致","多美滋致粹","合生元奶粉","诺优能白金版","美赞臣亲舒"};
 		for (String brand : brands) {
 			for (String cid : cids) {
 				new BabytreeAskList(brand, cid).run();

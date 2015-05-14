@@ -20,7 +20,7 @@ public class MuYingTest {
 	
 	@Test
 	public void testShoppingDetail() throws Exception{
-		String url = "http://item.muyingzhijia.com/61073.html";
+		String url = "http://item.muyingzhijia.com/151687.html";
 		FetchTask task = new FetchTask();
 		task.setUrl(url);
 		String taskQueueName = MuYingCommodityDetailTaskProducer.MUYING_SHOP_LIST_DETAIL;
@@ -39,7 +39,7 @@ public class MuYingTest {
 	
 	@Test
 	public void testShoppingComment() throws Exception{
-		String url = "http://web.api.muyingzhijia.com/Api/GetComment?id=61073&top=10&pageNumber=3&comtype=0";
+		String url = "http://web.api.muyingzhijia.com/Api/GetComment?id=61069&top=50&pageNumber=1&comtype=0";
 		FetchTask task = new FetchTask();
 		task.setUrl(url);
 		String taskQueueName = MuYingCommodityDetailFetch.MUYING_SHOP_DETAIL_COMMENT;

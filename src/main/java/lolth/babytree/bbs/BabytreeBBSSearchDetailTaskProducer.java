@@ -58,7 +58,11 @@ public class BabytreeBBSSearchDetailTaskProducer extends PageParseFetchTaskHandl
 
 	@Override
 	public void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		Document doc = GlobalComponents.fetcher.document(task.getUrl());
+		String url = task.getUrl();
+		if (StringUtils.isBlank(url)) {
+			return;
+		}
+		Document doc = GlobalComponents.fetcher.document(url);
 		this.parsePage(doc, task);
 	}
 

@@ -18,7 +18,6 @@ public class BabytreeAskUserInfoFetch {
 	public void run() throws Exception {
 		while (true) {
 			List<String> userUrls = GlobalComponents.db.getRunner().query("select questionerUrl from data_babytree_ask where status = 'answer_success';", new ColumnListHandler<String>());
-
 			for (String userUrl : userUrls) {
 				try {
 					this.process(userUrl);
@@ -26,7 +25,9 @@ public class BabytreeAskUserInfoFetch {
 					System.out.println(e.getMessage());
 					this.log.error("", e);
 				}
+				Thread.sleep(2000);
 			}
+			Thread.sleep(3000000);
 		}
 	}
 

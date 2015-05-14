@@ -19,7 +19,7 @@ public class PacutoBBSDetailTaskFetchTest {
 
 		fetch = new PacutoBBSDetailTaskFetch();
 
-		String url = "http://bbs.pcauto.com.cn/topic-7019494.html";
+		String url = "http://bbs.pcauto.com.cn/topic-5056390.html";
 
 		FetchTask task = new FetchTask();
 		task.setUrl(url);

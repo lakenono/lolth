@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.FetchTaskProducer;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.muying.bean.CommodityBean;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 @Slf4j
 public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
@@ -30,42 +30,61 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 	@Override
 	protected void parsePage(Document doc, FetchTask task) throws Exception {
 		String url = task.getUrl();
-		if (StringUtils.isBlank(url)) {
-			return;
-		}
 		CommodityBean bean = new CommodityBean();
 		String commodityId = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".html"));
-		System.out.println("商品Id-->" + commodityId);
 		bean.setCommodityId(commodityId);
 		bean.setCommodityUrl(url);
 		bean.setKeyword(task.getName());
+		String extra = task.getExtra();
+		String[] tokens = StringUtils.splitByWholeSeparatorPreserveAllTokens(extra, ":");
+		if (tokens.length > 0) {
+			bean.setSubjectTask(tokens[0]);
+		}
+		if (tokens.length > 1) {
+			bean.setCommodityStage(parseStage(tokens[1]));
+		}
 		//
 		parseShopOrPrice(doc, bean);
 		//
 		parseShopDetail(doc, bean);
 		// 商品品牌
-		Elements elements = doc.select("body > div:nth-child(29) > div > div.conTopRightBox > div.logo_div > div > a > img");
+		Elements elements = doc.select("body  div.conTopRightBox > div.logo_div > div > a > img");
 		if (elements.size() > 0) {
 			String shopBrand = elements.attr("alt");
 			bean.setCommodityBrand(shopBrand);
 		}
 		log.debug(bean.toString());
-		System.out.println(bean.toString());
 
 		boolean exist = bean.exist();
-		if(!exist){
+		if (!exist) {
 			bean.persist();
 		}
-		
-		parseShopComment(commodityId, task);
+		//
+		 parseShopComment(commodityId, task);
 
-		// http://web.api.muyingzhijia.com/Api/GetComment?callback=jQuery18208974045545328408_1430989861441&id=61073&top=10&pageNumber=3&comtype=0&_=1430991693990
+	}
+
+	private String parseStage(String cateId) {
+
+		switch (cateId) {
+		case "39":
+			return "1段";
+		case "205":
+			return "2段";
+		case "206":
+			return "3段";
+		case "207":
+			return "4段";
+		default:
+			return "";
+		}
 	}
 
 	/*
 	 * 解析评论url 推送评论url
 	 */
 	private void parseShopComment(String commodityId, FetchTask task) throws Exception {
+		Thread.sleep(sleep);
 		String url = "http://web.api.muyingzhijia.com/Api/GetUserComment?id=" + commodityId + "&top=10&pageNumber=1&comtype=0";
 		String fetch = GlobalComponents.dynamicFetch.fetch(url);
 		String between = StringUtils.substringBetween(fetch, "ProductCommentAll\":", ",\"ProductCommentFav");
@@ -101,7 +120,6 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 		// /////////////////
 		detailUrls.clear();
 		detailUrls = null;
-		postDetailProducer = null;
 		url = null;
 		task = null;
 	}
@@ -141,7 +159,8 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 	}
 
 	private void parseShopOrPrice(Document doc, CommodityBean bean) {
-		Elements elements = doc.select("body > div:nth-child(29) > div > div.conTopConBox");
+		// #name > h1
+		Elements elements = doc.select("body div.conTopConBox");
 		if (elements.size() <= 0) {
 			return;
 		}
@@ -150,12 +169,6 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 		if (select.size() > 0) {
 			String shopName = select.text();
 			bean.setCommodityName(shopName);
-			int indexOf = shopName.indexOf("段");
-			if (indexOf > -1) {
-				String shopStage = shopName.substring(indexOf - 1, indexOf + 1);
-				bean.setCommodityStage(shopStage);
-			}
-
 		}
 		// 商品价格
 		select = elements.select("#summary-price > div.sx_dd > strong");
@@ -167,8 +180,19 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 
 	@Override
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		Document doc = GlobalComponents.dynamicFetch.document(task.getUrl());
+		String url = task.getUrl();
+		if (StringUtils.isBlank(url)) {
+			return;
+		}
+		Document doc = GlobalComponents.dynamicFetch.document(url);
 		parsePage(doc, task);
+	}
+
+	public static void main(String[] args) {
+		String taskQueueName = MuYingCommodityDetailTaskProducer.MUYING_SHOP_LIST_DETAIL;
+		MuYingCommodityDetailFetch detailFetch = new MuYingCommodityDetailFetch(taskQueueName);
+		detailFetch.setSleep(5000);
+		detailFetch.run();
 	}
 
 }
