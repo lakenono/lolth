@@ -34,7 +34,7 @@ public class BaiduZhidaoQuestionBean extends BaseBean {
 	private String views;
 
 	// 回答
-	@DBField(type="varchar(500)")
+	@DBField(type="varchar(1500)")
 	private String answerContent;
 	private String answerTime;
 	private String answererId;

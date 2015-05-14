@@ -57,9 +57,10 @@ public class BaiduZhidaoListFetch extends PageParseFetchTaskHandler {
 	}
 
 	private FetchTask buildTask(String url, FetchTask task) {
-		task.setUrl(url);
-		task.setBatchName(BAIDU_ZHIDAO_DETAIL);
-		return task;
+		FetchTask netTask = task.clone();
+		netTask.setUrl(url);
+		netTask.setBatchName(BAIDU_ZHIDAO_DETAIL);
+		return netTask;
 	}
 
 }

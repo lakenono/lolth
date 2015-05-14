@@ -218,15 +218,16 @@ public class BaiduZhidaoDetailFetch extends PageParseFetchTaskHandler {
 		return bean;
 	}
 
-	public FetchTask buildUserTask(String name, FetchTask task) {
+	public FetchTask buildUserTask(String name, FetchTask oldTask) {
 		try {
+			FetchTask task = oldTask.clone();
 			task.setBatchName(BAIDU_ZHIDAO_USER);
 			task.setUrl(MessageFormat.format(BAIDU_ZHIDAO_USER_URL_TEMPLATE, URLEncoder.encode(name, "utf-8")));
 			task.setExtra(name);
+			return task;
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
-		return task;
 	}
 
 }
