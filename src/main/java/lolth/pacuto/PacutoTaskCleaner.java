@@ -14,22 +14,19 @@ public class PacutoTaskCleaner {
 	public static void main(String[] args) throws SQLException {
 		String keyword = "chevrolet";
 
-		// String[] batchNames = {
-		// PacutoBBSListTaskProducer.PACUTO_BBS_POST_LIST,
-		// PacutoBBSDetailTaskProducer.PACUTO_BBS_POST_DETAIL,PacutoWordOfMouthListTaskProducer.PACUTO_K_POST_LIST
-		// };
-		//
-		// for (String batchName : batchNames) {
-		// try {
-		// FetchTaskProducer.cleanAllTask(batchName);
-		// FetchTaskProducer.cleanAllTaskLog(keyword, batchName);
-		// } catch (SQLException e) {
-		// log.error("{} , {} clean error : ", keyword, batchName, e);
-		// }
-		// }
-		//
-		FetchTaskProducer producer = new FetchTaskProducer(PacutoBBSDetailTaskProducer.PACUTO_BBS_POST_DETAIL);
-		producer.rePushTask(keyword);
+		String[] batchNames = { PacutoBBSListTaskProducer.PACUTO_BBS_POST_LIST, PacutoBBSDetailTaskProducer.PACUTO_BBS_POST_DETAIL, PacutoWordOfMouthListTaskProducer.PACUTO_K_POST_LIST };
+
+		for (String batchName : batchNames) {
+			try {
+				FetchTaskProducer.cleanAllTask(batchName);
+				FetchTaskProducer.cleanAllTaskLog(keyword, batchName);
+			} catch (SQLException e) {
+				log.error("{} , {} clean error : ", keyword, batchName, e);
+			}
+		}
+
+//		FetchTaskProducer producer = new FetchTaskProducer(PacutoBBSDetailTaskProducer.PACUTO_BBS_POST_DETAIL);
+//		producer.rePushTask(keyword);
 
 	}
 }
