@@ -27,6 +27,7 @@ public class MamaBean extends BaseBean {
 	//搜索关键字
 	private String keyword;
 	//主题词
+	@DBConstraintPK
 	private String name;
 	
 	public static void main(String[] args) throws Exception {
