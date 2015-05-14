@@ -30,10 +30,10 @@ public class BabytreeBBSSearchDetailFetch extends PageParseFetchTaskHandler {
 		babytreeBean.setId(id);
 		// 用户主页
 		babytreeBean.setTopicUrl(url);
-		babytreeBean.setKeyword(task.getName());
-		babytreeBean.setSubjectTask(task.getExtra());
+		babytreeBean.setKeyword(task.getExtra());
+		babytreeBean.setSubjectTask(task.getName());
 		// 宝宝圈子
-		Elements elements = doc.select("#BreadcrumbHeader > span.current");
+		Elements elements = doc.select("#BreadcrumbHeader > span:nth-child(7)");
 		if (!elements.isEmpty()) {
 			babytreeBean.setCircle(elements.text());
 		}
@@ -59,7 +59,7 @@ public class BabytreeBBSSearchDetailFetch extends PageParseFetchTaskHandler {
 			}
 		}
 		BabytreeBabyUserBean babyUserBean = null;
-		elements = doc.select("#community > div.community-body-wrapper > div.clubTopicSingle > div.clubTopicList");
+		elements = doc.select("#community > div.community-body-wrapper > div.clubTopicSingle > div.clubTopicList div.clubTopicSinglePost");
 		if (!elements.isEmpty()) {
 			Element first = elements.first();
 			//抓取宝宝信息
@@ -139,7 +139,7 @@ public class BabytreeBBSSearchDetailFetch extends PageParseFetchTaskHandler {
 				Element child = et.child(0);
 				String region = child.text();
 				String tmp = child.parent().ownText();
-				if ("来自".equals(tmp)) {
+				if (tmp.indexOf("来自")>-1) {
 					babyUserBean.setRegion(region);
 				}
 			}
@@ -171,8 +171,10 @@ public class BabytreeBBSSearchDetailFetch extends PageParseFetchTaskHandler {
 		if (StringUtils.isBlank(url)) {
 			return;
 		}
+		
+		FetchTask fetchTask = task.clone();
 		Document doc = GlobalComponents.dynamicFetch.document(url);
-		parsePage(doc, task);
+		parsePage(doc, fetchTask);
 	}
 
 	public static void main(String[] args) {

@@ -69,10 +69,10 @@ public class BabytreeBBSSearchList extends PagingFetchTaskProducer {
 	@Override
 	protected FetchTask buildTask(String url) {
 		FetchTask task = new FetchTask();
-		task.setName(keyword);
+		task.setName(subject);
 		task.setBatchName(BABYTREE_BBS_LIST);
 		task.setUrl(url);
-		task.setExtra(subject);
+		task.setExtra(keyword);
 		return task;
 	}
 

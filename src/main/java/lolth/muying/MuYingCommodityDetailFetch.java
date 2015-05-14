@@ -24,7 +24,6 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 
 	public MuYingCommodityDetailFetch(String taskQueueName) {
 		super(taskQueueName);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -34,11 +33,11 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 		String commodityId = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".html"));
 		bean.setCommodityId(commodityId);
 		bean.setCommodityUrl(url);
-		bean.setKeyword(task.getName());
+		bean.setSubjectTask(task.getName());
 		String extra = task.getExtra();
 		String[] tokens = StringUtils.splitByWholeSeparatorPreserveAllTokens(extra, ":");
 		if (tokens.length > 0) {
-			bean.setSubjectTask(tokens[0]);
+			bean.setKeyword(tokens[0]);
 		}
 		if (tokens.length > 1) {
 			bean.setCommodityStage(parseStage(tokens[1]));
@@ -60,7 +59,7 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 			bean.persist();
 		}
 		//
-		 parseShopComment(commodityId, task);
+		parseShopComment(commodityId, task);
 
 	}
 
@@ -184,8 +183,9 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 		if (StringUtils.isBlank(url)) {
 			return;
 		}
+		FetchTask fetchTask = task.clone();
 		Document doc = GlobalComponents.dynamicFetch.document(url);
-		parsePage(doc, task);
+		parsePage(doc, fetchTask);
 	}
 
 	public static void main(String[] args) {

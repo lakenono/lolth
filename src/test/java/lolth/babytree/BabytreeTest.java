@@ -36,7 +36,7 @@ public class BabytreeTest {
 			e.printStackTrace();
 		}
 		String taskQueueName = BabytreeBBSSearchDetailTaskProducer.BABYTREE_BBS_LIST_DETAIL;
-		String url = "http://www.babytree.com/community/hospital37876/topic_40202315.html";
+		String url = "http://www.babytree.com/community/club201401/topic_39721459.html";
 		FetchTask task = new FetchTask();
 		task.setName(keyword);
 		task.setUrl(url);

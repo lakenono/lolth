@@ -70,10 +70,10 @@ public class MuYingCommoditySearchList extends PagingFetchTaskProducer {
 	@Override
 	protected FetchTask buildTask(String url) {
 		FetchTask task = new FetchTask();
-		task.setName(keyword);
+		task.setName(subject);
 		task.setBatchName(MUYING_SHOP_LIST);
 		task.setUrl(url);
-		task.setExtra(subject+":"+cateId);
+		task.setExtra(keyword+":"+cateId);
 		return task;
 	}
 

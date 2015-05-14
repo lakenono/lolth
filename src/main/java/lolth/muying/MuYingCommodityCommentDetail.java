@@ -99,8 +99,13 @@ public class MuYingCommodityCommentDetail extends PageParseFetchTaskHandler {
 		if (StringUtils.isBlank(url)) {
 			return;
 		}
+		
+		FetchTask fetchTask = task.clone();
 		Document doc = GlobalComponents.fetcher.document(url);
-		parsePage(doc, task);
+		parsePage(doc, fetchTask);
+		
+		fetchTask = null;
+		task = null;
 	}
 
 	public static void main(String[] args) {

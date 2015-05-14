@@ -1,5 +1,7 @@
 package lolth.babytree.bbs.bean;
 
+import java.sql.SQLException;
+
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
@@ -12,6 +14,9 @@ import lombok.ToString;
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
 public class BabytreeBabyUserBean extends BaseBean {
+	public static void main(String[] args) throws SQLException {
+		new BabytreeBabyUserBean().buildTable();
+	}
 	//id
 	@DBConstraintPK
 	private String userId = "";

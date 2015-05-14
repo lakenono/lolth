@@ -62,8 +62,12 @@ public class BabytreeBBSSearchDetailTaskProducer extends PageParseFetchTaskHandl
 		if (StringUtils.isBlank(url)) {
 			return;
 		}
+		FetchTask fetchTask = task.clone();
 		Document doc = GlobalComponents.fetcher.document(url);
-		this.parsePage(doc, task);
+		this.parsePage(doc, fetchTask);
+		
+		fetchTask = null;
+		task = null;
 	}
 
 	public static void main(String[] args) {

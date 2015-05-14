@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 @Slf4j
 public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler {
 
@@ -43,7 +44,7 @@ public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler
 			postDetailProducer.saveAndPushTask(task);
 			log.debug(task.toString());
 		}
-		///////////////////
+		// /////////////////
 		detailUrls.clear();
 		detailUrls = null;
 		task = null;
@@ -57,15 +58,19 @@ public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler
 		if (StringUtils.isBlank(url)) {
 			return;
 		}
+		FetchTask fetchTask = task.clone();
 		Document doc = GlobalComponents.fetcher.document(url);
-		parsePage(doc, task);
+		parsePage(doc, fetchTask);
+
+		fetchTask = null;
+		task = null;
 	}
-	
+
 	public static void main(String[] args) {
 		String taskQueueName = MuYingCommoditySearchList.MUYING_SHOP_LIST;
 		MuYingCommodityDetailTaskProducer detailTaskProducer = new MuYingCommodityDetailTaskProducer(taskQueueName);
 		detailTaskProducer.setSleep(5000);
 		detailTaskProducer.run();
-		
+
 	}
 }
