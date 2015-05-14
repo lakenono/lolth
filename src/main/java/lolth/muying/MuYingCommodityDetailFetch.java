@@ -30,9 +30,6 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 	@Override
 	protected void parsePage(Document doc, FetchTask task) throws Exception {
 		String url = task.getUrl();
-		if (StringUtils.isBlank(url)) {
-			return;
-		}
 		CommodityBean bean = new CommodityBean();
 		String commodityId = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".html"));
 		bean.setCommodityId(commodityId);
@@ -50,8 +47,6 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 		parseShopOrPrice(doc, bean);
 		//
 		parseShopDetail(doc, bean);
-		// body > div:nth-child(27) > div > div.conTopRightBox > div.logo_div >
-		// div > a > img
 		// 商品品牌
 		Elements elements = doc.select("body  div.conTopRightBox > div.logo_div > div > a > img");
 		if (elements.size() > 0) {
@@ -185,7 +180,11 @@ public class MuYingCommodityDetailFetch extends PageParseFetchTaskHandler {
 
 	@Override
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		Document doc = GlobalComponents.dynamicFetch.document(task.getUrl());
+		String url = task.getUrl();
+		if (StringUtils.isBlank(url)) {
+			return;
+		}
+		Document doc = GlobalComponents.dynamicFetch.document(url);
 		parsePage(doc, task);
 	}
 

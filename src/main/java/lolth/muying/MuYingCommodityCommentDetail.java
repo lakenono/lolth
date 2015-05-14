@@ -28,10 +28,6 @@ public class MuYingCommodityCommentDetail extends PageParseFetchTaskHandler {
 
 	@Override
 	protected void parsePage(Document doc, FetchTask task) throws Exception {
-		String url = task.getUrl();
-		if (StringUtils.isBlank(url)) {
-			return;
-		}
 
 		Elements elements = doc.select("body > div");
 
@@ -39,6 +35,7 @@ public class MuYingCommodityCommentDetail extends PageParseFetchTaskHandler {
 			return;
 		}
 		String commodityId = task.getExtra();
+		
 		List<CommentBean> beans = new ArrayList<>();
 		Element element = null;
 		Elements select = null;
@@ -81,15 +78,15 @@ public class MuYingCommodityCommentDetail extends PageParseFetchTaskHandler {
 			log.debug(bean.toString());
 		}
 
-//		if (beans.isEmpty()) {
-//			return;
-//		}
-//
-//		for (CommentBean commentBean : beans) {
-//			if (!commentBean.exist()) {
-//				commentBean.persist();
-//			}
-//		}
+		if (beans.isEmpty()) {
+			return;
+		}
+
+		for (CommentBean commentBean : beans) {
+			if (!commentBean.exist()) {
+				commentBean.persist();
+			}
+		}
 		// ///////////////
 		beans.clear();
 		beans = null;
@@ -98,7 +95,11 @@ public class MuYingCommodityCommentDetail extends PageParseFetchTaskHandler {
 
 	@Override
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		Document doc = GlobalComponents.fetcher.document(task.getUrl());
+		String url = task.getUrl();
+		if (StringUtils.isBlank(url)) {
+			return;
+		}
+		Document doc = GlobalComponents.fetcher.document(url);
 		parsePage(doc, task);
 	}
 

@@ -26,9 +26,6 @@ public class BabytreeBBSSearchDetailFetch extends PageParseFetchTaskHandler {
 	protected void parsePage(Document doc, FetchTask task) throws Exception {
 		BabytreeBBSBean babytreeBean = new BabytreeBBSBean();
 		String url = task.getUrl();
-		if (StringUtils.isBlank(url)) {
-			return;
-		}
 		String id = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".html"));
 		babytreeBean.setId(id);
 		// 用户主页
@@ -170,7 +167,11 @@ public class BabytreeBBSSearchDetailFetch extends PageParseFetchTaskHandler {
 
 	@Override
 	public void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		Document doc = GlobalComponents.dynamicFetch.document(task.getUrl());
+		String url = task.getUrl();
+		if (StringUtils.isBlank(url)) {
+			return;
+		}
+		Document doc = GlobalComponents.dynamicFetch.document(url);
 		parsePage(doc, task);
 	}
 

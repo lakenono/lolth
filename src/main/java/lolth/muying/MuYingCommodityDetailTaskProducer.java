@@ -53,7 +53,11 @@ public class MuYingCommodityDetailTaskProducer extends PageParseFetchTaskHandler
 
 	@Override
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
-		Document doc = GlobalComponents.fetcher.document(task.getUrl());
+		String url = task.getUrl();
+		if (StringUtils.isBlank(url)) {
+			return;
+		}
+		Document doc = GlobalComponents.fetcher.document(url);
 		parsePage(doc, task);
 	}
 	
