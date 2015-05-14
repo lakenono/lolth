@@ -47,6 +47,6 @@ public class CommentBean extends BaseBean {
 	/*
 	 * 评论内容
 	 */
-	@DBField(type = "text")
+	@DBField(type = "varchar(504)")
 	private String commentText = "";
 }

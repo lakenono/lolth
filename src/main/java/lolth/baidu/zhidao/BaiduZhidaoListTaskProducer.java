@@ -26,7 +26,7 @@ public class BaiduZhidaoListTaskProducer extends PagingFetchTaskProducer {
 		this.keyword = keyword;
 		this.dateType = dateType;
 
-		this.keywordEncode = URLEncoder.encode(name, "gbk");
+		this.keywordEncode = URLEncoder.encode(keyword, "gbk");
 	}
 
 	private String name;

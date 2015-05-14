@@ -89,8 +89,9 @@ public class SuningItemCommentListTaskProducer extends FetchTaskHandler {
 
 		@Override
 		protected FetchTask buildTask(String url) {
-			task.setUrl(url);
-			return task;
+			FetchTask newTask = task.clone();
+			newTask.setUrl(url);
+			return newTask;
 		}
 
 	}

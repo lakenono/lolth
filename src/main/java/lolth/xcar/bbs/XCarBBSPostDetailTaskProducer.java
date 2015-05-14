@@ -52,11 +52,12 @@ public class XCarBBSPostDetailTaskProducer extends PageParseFetchTaskHandler {
 		}
 	}
 
-	private FetchTask buildTask(String url, FetchTask listTask) {
+	private FetchTask buildTask(String url, FetchTask oldListTask) {
 		if (StringUtils.isBlank(url)) {
 			return null;
 		}
 
+		FetchTask listTask = oldListTask.clone();
 		listTask.setBatchName(XCAR_BBS_POST_DETAIL);
 		listTask.setUrl(url);
 		return listTask;
