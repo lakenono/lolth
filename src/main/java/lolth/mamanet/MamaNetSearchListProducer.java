@@ -34,10 +34,10 @@ public class MamaNetSearchListProducer extends PagingFetchTaskProducer {
 
 	public MamaNetSearchListProducer(String name, String keyword) {
 		super(MAMANET_SEARCH_LIST);
-		this.keyword = keyword;
 		this.name = name;
+		this.keyword = keyword;
 		try {
-			this.keywordEncode = URLEncoder.encode(name, "utf-8");
+			this.keywordEncode = URLEncoder.encode(keyword, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
