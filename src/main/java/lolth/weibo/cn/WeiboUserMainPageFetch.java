@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
-import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.FetchTaskHandler;
 import lolth.weibo.bean.WeiboBean;
@@ -26,30 +25,19 @@ import org.jsoup.select.Elements;
 @Slf4j
 public class WeiboUserMainPageFetch extends FetchTaskHandler {
 
-	private static final String USER_NEED_FETCH_MAIN_PAGE = "user_need_fetch_main_page";
-	
-	private String timeRange = null;
-
-	public WeiboUserMainPageFetch(String taskQueueName,String timeRange) {
-		super(taskQueueName);
-		this.timeRange = timeRange;
+	public WeiboUserMainPageFetch() {
+		super( WeiboUserMainPageTaskProducer.USER_MAIN_PAGE);
 	}
 
 	public static void main(String[] args) throws Exception {
-		String taskQueueName = WeiboUserMainPageTaskProducer.USER_MAIN_PAGE;
-		WeiboUserMainPageFetch fetch = new WeiboUserMainPageFetch(taskQueueName,"2014-10-01 00:00:00");
+		WeiboUserMainPageFetch fetch = new WeiboUserMainPageFetch();
 		fetch.setSleep(15000);
 		fetch.run();
 	}
 
 	@Override
 	protected void handleTask(FetchTask task) throws Exception {
-		// 如果任务已经处理完成
-//		if (isBatchFinish(task.getExtra())) {
-//			return;
-//		}
-		
-//		Thread.sleep(15000);
+
 		Document document = WeiboFetcher.cnFetcher.fetch(task.getUrl());
 
 		List<WeiboBean> beans = parse(document, task.getExtra());
@@ -98,12 +86,6 @@ public class WeiboUserMainPageFetch extends FetchTaskHandler {
 			postTimeText = StringUtils.substringBefore(postTimeText, "来自");
 			postTimeText = StringUtils.stripEnd(postTimeText, " ");
 			postTimeText = WeiboTimeUtils.getNormalTime(postTimeText, now);
-
-			// 超过需要处理的范围
-//			if (WeiboTimeUtils.isBefore(postTimeText, timeRange)) {
-//				setBatchFinish(uid);
-//				return weiboBeans;
-//			}
 			
 			bean.setPostTime(postTimeText);
 
@@ -157,11 +139,4 @@ public class WeiboUserMainPageFetch extends FetchTaskHandler {
 		return weiboBeans;
 	}
 
-//	private boolean isBatchFinish(String uid) {
-//		return GlobalComponents.jedis.hexists(USER_NEED_FETCH_MAIN_PAGE, uid);
-//	}
-//
-//	private void setBatchFinish(String uid) {
-//		GlobalComponents.jedis.hset(USER_NEED_FETCH_MAIN_PAGE, uid, "finish");
-//	}
 }

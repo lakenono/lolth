@@ -20,6 +20,8 @@ public class WeiboUserMainPageTaskProducer extends PagingFetchTaskProducer {
 	private String keyword = null;
 
 	public static void main(String[] args) {
+		String taskname = "惠氏";
+		
 		String[] users = {
 				"iaudi"
 				,"bmwchina"
@@ -58,7 +60,7 @@ public class WeiboUserMainPageTaskProducer extends PagingFetchTaskProducer {
 		WeiboUserMainPageTaskProducer.cleanAllTask(USER_MAIN_PAGE);
 		for(String u : users){
 			try {
-				WeiboUserMainPageTaskProducer producer = new WeiboUserMainPageTaskProducer(USER_MAIN_PAGE,u,"aodi");
+				WeiboUserMainPageTaskProducer producer = new WeiboUserMainPageTaskProducer(USER_MAIN_PAGE,u,taskname);
 				producer.setSleep(15000);
 				producer.run();
 			} catch (Exception e) {
