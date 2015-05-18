@@ -94,18 +94,17 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 		post.setUrl(task.getUrl());
 		post.setKeyword(task.getName());
 
-		// 板块
-		Elements forum = doc.select("a.plat_title_h3");
+		// 板块 2015-5-18
+		Elements forum = doc.select("a.card_title_fname");
 		if (forum.size() > 0) {
 			post.setForum(forum.first().text());
 		}
 
-		// 回复数
+		// 回复数 2015-5-18
 		Elements replyLi = doc.select("div.pb_footer li.l_reply_num");
 		if (replyLi.size() > 0) {
 			String replys = replyLi.first().text();
 			replys = StringUtils.substringBefore(replys, "回复贴");
-
 			if (StringUtils.isNumeric(replys)) {
 				post.setReplys(replys);
 			}
@@ -130,11 +129,11 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 				}
 			}
 
-			// postTime
-			Elements postTimeUl = leftSection.first().select("ul.p_tail");
+			// postTime 2015-5-18
+			Elements postTimeUl = leftSection.first().select("span.j_reply_data");
 			if (postTimeUl.size() > 0) {
 				String postTime = postTimeUl.first().text();
-				postTime = StringUtils.substringAfter(postTime, "1楼");
+//				postTime = StringUtils.substringAfter(postTime, "1楼");
 				post.setPostTime(postTime);
 			}
 		}

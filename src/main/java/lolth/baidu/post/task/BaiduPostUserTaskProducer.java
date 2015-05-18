@@ -27,7 +27,7 @@ public class BaiduPostUserTaskProducer extends ListFetchTaskProducer<Object[]> {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BaiduPostUserTaskProducer taskProducer = new BaiduPostUserTaskProducer(BAIDU_POST_USER, "oppo");
+		BaiduPostUserTaskProducer taskProducer = new BaiduPostUserTaskProducer(BAIDU_POST_USER, BaiduPostListTaskProducer.BAIDU_POST_NAME);
 		taskProducer.run();
 	}
 

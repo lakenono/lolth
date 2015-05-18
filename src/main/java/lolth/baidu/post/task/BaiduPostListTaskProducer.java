@@ -20,6 +20,8 @@ import org.jsoup.select.Elements;
  */
 @Slf4j
 public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
+	
+	public static final String BAIDU_POST_NAME = "育儿";
 
 	private static final String BAIDU_POST_SEARCH_URL_TEMPLATE = "http://tieba.baidu.com/f?kw={0}&ie=utf-8&pn={1}";
 
@@ -37,7 +39,7 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		new BaiduPostListTaskProducer(BAIDU_POST_LIST, "oppo").run();
+		new BaiduPostListTaskProducer(BAIDU_POST_LIST, BAIDU_POST_NAME).run();
 	}
 
 	@Override
