@@ -35,7 +35,9 @@ public class TmallSearchListFetch {
 			try {
 				TmallSearchListTaskBean task = getTask();
 				if (task == null) {
-					break;
+					Thread.sleep(300000);
+					log.info("TmallSearchListFetch is null ! sleep ", 300000);
+					continue;
 				}
 
 				try {
@@ -72,8 +74,6 @@ public class TmallSearchListFetch {
 				}
 			}
 		}
-
-		log.info("TmallSearchListFetch task finish ! handle {} task", tasks);
 	}
 
 	private List<TmallGoodsBean> parsePage(String url) throws IOException, InterruptedException {

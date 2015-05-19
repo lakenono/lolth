@@ -28,7 +28,7 @@ public class TmallCommentTaskBuilder {
 		try {
 			log.info("TmallCommentTaskBuilder build task start!");
 			new TmallCommentTaskBuilder().run();
-//			new TmallCommentTaskBuilder().pushAll();
+			new TmallCommentTaskBuilder().pushAll();
 		} catch (Exception e) {
 			log.error("TmallCommentTaskBuilder build task error ", e);
 		}
@@ -36,9 +36,13 @@ public class TmallCommentTaskBuilder {
 
 	private void run() throws Exception {
 		cleanMQ();
-		log.info("TmallCommentTaskBuilder cleanMQ Finish!");
-		buildTask();
-		log.info("TmallCommentTaskBuilder buildDB Finish!");
+
+		while (true) {
+			log.info("TmallCommentTaskBuilder cleanMQ Finish!");
+			buildTask();
+			log.info("TmallCommentTaskBuilder buildDB Finish!");
+		}
+
 	}
 
 	private void buildTask() throws Exception {
@@ -46,6 +50,11 @@ public class TmallCommentTaskBuilder {
 		 * tasks[0] : goodsId tasks[1] : sellerId;
 		 */
 		List<String[]> tasks = getTask();
+		if (tasks.isEmpty()) {
+			Thread.sleep(300000);
+			log.info("TmallCommentTaskBean is empty sleep ", 300000);
+			return;
+		}
 
 		for (String[] t : tasks) {
 			String goodsId = t[0];
@@ -82,7 +91,7 @@ public class TmallCommentTaskBuilder {
 	}
 
 	private List<String[]> getTask() throws Exception {
-		String sql = "select id,shopId from " + BaseBean.getTableName(TmallGoodsBean.class) + " where comments is not null";
+		String sql = "select id,shopId from " + BaseBean.getTableName(TmallGoodsBean.class) + " where isComments=0";
 
 		List<String[]> todo = GlobalComponents.db.getRunner().query(sql, new ResultSetHandler<List<String[]>>() {
 
@@ -138,6 +147,8 @@ public class TmallCommentTaskBuilder {
 			log.info("push task {}", bean.toString());
 			GlobalComponents.jedis.lpush(BaseBean.getTableName(TmallCommentTaskBean.class), JSON.toJSONString(bean));
 		}
+
+		GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(TmallGoodsBean.class) + " set isComments=? where id=?", 1, goodsId);
 	}
 
 	private void cleanMQ() throws Exception {

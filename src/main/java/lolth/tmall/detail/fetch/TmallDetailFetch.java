@@ -33,7 +33,9 @@ public class TmallDetailFetch {
 			try {
 				List<String[]> tasks = getTask();
 				if (tasks.isEmpty()) {
-					break;
+					log.info("TmallDetailFetch is empty sleep ", 300000);
+					Thread.sleep(300000);
+					continue;
 				}
 
 				for (String[] t : tasks) {
@@ -41,8 +43,13 @@ public class TmallDetailFetch {
 						TmallShopBean shop = parsePage(TMALL_GOODS_DETAIL_URL_PREFIX + t[0]);
 						if(shop!=null){
 							shop.setId(t[1]);
-							shop.persist();
+						}else{
+							shop = new TmallShopBean();
+							shop.setId(t[1]);
+							shop.setUrl(TMALL_GOODS_DETAIL_URL_PREFIX+t[0]);
+							
 						}
+						shop.persist();
 						taskCount++;
 						Thread.sleep(10000);
 					} catch (Exception e) {
@@ -59,7 +66,7 @@ public class TmallDetailFetch {
 			}
 		}
 
-		log.info("TmallDetailFetch finish : {}", taskCount);
+//		log.info("TmallDetailFetch finish : {}", taskCount);
 	}
 
 	private TmallShopBean parsePage(String url) throws IOException, InterruptedException {

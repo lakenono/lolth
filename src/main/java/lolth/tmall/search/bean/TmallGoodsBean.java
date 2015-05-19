@@ -19,11 +19,11 @@ public class TmallGoodsBean extends BaseBean {
 	private String monthSales;
 	private String comments;
 	private String shopId;
-	
+
 	@Override
 	public void persist() throws IllegalArgumentException, IllegalAccessException, SQLException, InstantiationException {
 		@SuppressWarnings("unchecked")
-		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(TmallGoodsBean.class) + " where id=?", DB.scaleHandler, this.id);
+		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(TmallGoodsBean.class) + " where id=? and keyword=?", DB.scaleHandler, this.id, this.keyword);
 
 		if (count > 0) {
 			this.log.info("TmallGoodsBean is exist..");

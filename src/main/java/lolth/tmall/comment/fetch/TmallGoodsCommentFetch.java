@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 @Slf4j
 public class TmallGoodsCommentFetch {
 
+	
 	public static void main(String[] args) throws Exception {
 		new TmallGoodsCommentFetch().run();
 	}
@@ -35,7 +36,7 @@ public class TmallGoodsCommentFetch {
 			try {
 				TmallCommentTaskBean task = getTask();
 				if (task == null) {
-					Thread.sleep(60000);
+					Thread.sleep(300000);
 					continue;
 				}
 
