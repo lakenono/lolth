@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@DBTable(name="data_weibo_user_concern_ref")
+@DBTable(name="data_sina_weibo_user_concern_ref")
 @Data
 @ToString(callSuper=false)
 @EqualsAndHashCode(callSuper=false)
