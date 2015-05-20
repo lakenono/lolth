@@ -55,7 +55,7 @@ public class WeiboUserConcernListTaskProducer extends PagingFetchTaskProducer {
 
 	@Override
 	protected String buildUrl(int pageNum) {
-		return MessageFormat.format(WEIBO_USER_FOLLOWS_URL_TEMPLATE, String.valueOf(pageNum));
+		return MessageFormat.format(WEIBO_USER_FOLLOWS_URL_TEMPLATE, uid,String.valueOf(pageNum));
 	}
 
 	@Override
