@@ -1,3 +1,3 @@
-lolth.tmall.search.task.TmallGoodsCommentFetch
+lolth.tmall.search.task.TmallSearchListTaskBuilder
 lolth.tmall.detail.fetch.TmallDetailFetch
 lolth.tmall.comment.task.TmallCommentTaskBuilder
