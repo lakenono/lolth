@@ -66,7 +66,7 @@ public class WeiboContentSpliter {
 		if (StringUtils.isBlank(text)) {
 			return null;
 		}
-		String[] strs = new String[4];
+		String[] strs ={"","","",""};
 		StringBuffer at = new StringBuffer();
 		StringBuffer topic = new StringBuffer();
 		StringBuffer mainText = new StringBuffer();
