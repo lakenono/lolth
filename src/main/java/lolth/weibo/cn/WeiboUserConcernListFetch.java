@@ -20,6 +20,12 @@ public class WeiboUserConcernListFetch extends PageParseFetchTaskHandler {
 		super(WeiboUserConcernListTaskProducer.WEIBO_USER_CONCERN_LIST);
 		userTaskProducer = new WeiboUserTaskProducer();
 	}
+	
+	public static void main(String[] args) {
+		WeiboUserConcernListFetch fetch = new WeiboUserConcernListFetch();
+		fetch.setSleep(15000);
+		fetch.run();
+	}
 
 	@Override
 	protected void parsePage(Document doc, FetchTask task) throws Exception {
