@@ -1,30 +1,31 @@
 package lolth.weibo.cn;
 
 import java.sql.SQLException;
-
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import java.text.MessageFormat;
 
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.task.FetchTask;
 import lakenono.task.FetchTaskHandler;
+import lakenono.task.FetchTaskProducer;
 import lolth.weibo.bean.WeiboUserBean;
 import lolth.weibo.fetcher.WeiboFetcher;
-import lolth.weibo.task.WeiboUserTagTaskProducer;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 @Slf4j
 public class WeiboUserTagTaskFetch extends FetchTaskHandler {
 
-	public WeiboUserTagTaskFetch(String taskQueueName) {
-		super(taskQueueName);
+	public WeiboUserTagTaskFetch() {
+		super(WeiboUserTagTaskProducer.WEIBO_USER_TAG);
 	}
 
 	public static void main(String[] args) {
-		String taskQueueName = WeiboUserTagTaskProducer.WEIBO_USER_TAG;
-		WeiboUserTagTaskFetch fetch = new WeiboUserTagTaskFetch(taskQueueName);
+		WeiboUserTagTaskFetch fetch = new WeiboUserTagTaskFetch();
 		fetch.setSleep(15000);
 		fetch.run();
 	}
@@ -47,12 +48,44 @@ public class WeiboUserTagTaskFetch extends FetchTaskHandler {
 				tags.deleteCharAt(tags.length() - 1);
 			}
 
-			update(task.getExtra(), tags.toString());
+			String tagStr = tags.toString();
+			if (StringUtils.isNoneBlank(tagStr)) {
+				update(task.getExtra(), tags.toString());
+			}else{
+				log.debug("{} no tags ! ", task.getExtra());
+			}
 		}
 	}
 
 	private void update(String uid, String tags) throws SQLException {
 		GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(WeiboUserBean.class) + " set tags=? where uid=?", tags, uid);
 		log.debug("{} : {}", uid, tags);
+	}
+
+	public static class WeiboUserTagTaskProducer extends FetchTaskProducer {
+		public WeiboUserTagTaskProducer() {
+			super(WEIBO_USER_TAG);
+		}
+
+		public static final String WEIBO_USER_TAG = "cn_weibo_user_tag";
+		private static final String WEIBO_USER_TAG_URL_TEMPLATE = "http://weibo.cn/account/privacy/tags/?uid={0}";
+
+		public void push(String uid, FetchTask frontTask) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
+			FetchTask task = buildTask(uid, frontTask);
+			saveAndPushTask(task);
+		}
+
+		protected FetchTask buildTask(String uid, FetchTask frontTask) {
+			FetchTask task = new FetchTask();
+			task.setName(frontTask.getName());
+			task.setBatchName(WEIBO_USER_TAG);
+			task.setUrl(buildUrl(uid));
+			task.setExtra(uid);
+			return task;
+		}
+
+		private String buildUrl(String uid) {
+			return MessageFormat.format(WEIBO_USER_TAG_URL_TEMPLATE, uid);
+		}
 	}
 }

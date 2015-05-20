@@ -1,4 +1,4 @@
-package lolth.weibo.cn;
+package lolth.weibo.cn.old;
 
 import java.io.IOException;
 import java.sql.SQLException;

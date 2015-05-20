@@ -10,6 +10,7 @@ import java.util.List;
 import lakenono.task.FetchTask;
 import lakenono.task.FetchTaskHandler;
 import lolth.weibo.bean.WeiboBean;
+import lolth.weibo.cn.WeiboUserTaskFetch.WeiboUserTaskProducer;
 import lolth.weibo.fetcher.WeiboFetcher;
 import lolth.weibo.task.WeiboUserMainPageTaskProducer;
 import lolth.weibo.utils.WeiboContentSpliter;
@@ -25,8 +26,11 @@ import org.jsoup.select.Elements;
 @Slf4j
 public class WeiboUserMainPageFetch extends FetchTaskHandler {
 
+	private WeiboUserTaskProducer userTaskProducer = null;
+
 	public WeiboUserMainPageFetch() {
-		super( WeiboUserMainPageTaskProducer.USER_MAIN_PAGE);
+		super(WeiboUserMainPageTaskProducer.USER_MAIN_PAGE);
+		userTaskProducer = new WeiboUserTaskProducer();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -47,6 +51,8 @@ public class WeiboUserMainPageFetch extends FetchTaskHandler {
 				b.setUserurl(StringUtils.substringBefore(task.getUrl(), "?"));
 				b.setKeyword(task.getName());
 				b.persistOnNotExist();
+
+				userTaskProducer.push(b.getUserid(), task.getName());
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
@@ -55,7 +61,7 @@ public class WeiboUserMainPageFetch extends FetchTaskHandler {
 
 	public List<WeiboBean> parse(Document document, String uid) throws IOException, ParseException {
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
-		
+
 		String username = "";
 		Elements user = document.select("div.ut");
 		if (user.size() > 0) {
@@ -86,7 +92,7 @@ public class WeiboUserMainPageFetch extends FetchTaskHandler {
 			postTimeText = StringUtils.substringBefore(postTimeText, "来自");
 			postTimeText = StringUtils.stripEnd(postTimeText, " ");
 			postTimeText = WeiboTimeUtils.getNormalTime(postTimeText, now);
-			
+
 			bean.setPostTime(postTimeText);
 
 			// weibourl

@@ -8,7 +8,7 @@ import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
 import lakenono.log.BaseLog;
-import lolth.weibo.cn.WeiboRealTimeFetch;
+import lolth.weibo.cn.WeiboSearchFetch;
 import lolth.weibo.task.bean.WeiboTaskBean;
 
 import com.alibaba.fastjson.JSON;
@@ -37,7 +37,7 @@ public class RealTimeWeiboTaskRunner extends BaseLog
 
 				if (!this.isFinish(task))
 				{
-					WeiboRealTimeFetch fetch = new WeiboRealTimeFetch(task.getKeyword(), task.getStarttime(), task.getEndtime());
+					WeiboSearchFetch fetch = new WeiboSearchFetch(task.getKeyword(), task.getStarttime(), task.getEndtime());
 					fetch.run();
 					this.setFinish(task);
 				}

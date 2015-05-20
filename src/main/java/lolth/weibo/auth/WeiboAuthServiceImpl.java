@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.transport.TTransportException;
 
 @Slf4j
-public class WeiboAuthServiceImpl implements WeiboAuthManager {
+public class WeiboAuthServiceImpl {
 	private String ip;
 	private AuthServiceClient authService;
 
@@ -26,7 +26,6 @@ public class WeiboAuthServiceImpl implements WeiboAuthManager {
 		return addr.getHostAddress().toString();
 	}
 
-	@Override
 	public Map<String, String> getAuthInfo() {
 		try {
 			return authService.getAuthData("weibo.cn", ip);

@@ -1,4 +1,4 @@
-package lolth.weibo.task;
+package lolth.weibo.task.old;
 
 import java.util.List;
 

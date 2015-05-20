@@ -1,139 +1,153 @@
 package lolth.weibo.cn;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import lolth.weibo.auth.WeiboAuthManager;
-import lolth.weibo.auth.WeiboAuthManagerImpl;
 import lolth.weibo.bean.WeiboBean;
+import lolth.weibo.cn.WeiboUserTaskFetch.WeiboUserTaskProducer;
+import lolth.weibo.fetcher.WeiboFetcher;
+import lolth.weibo.utils.WeiboContentSpliter;
 import lolth.weibo.utils.WeiboIdUtils;
+import lolth.weibo.utils.WeiboTimeUtils;
+import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang.StringUtils;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class WeiboSearchFetch
-{
-	private WeiboAuthManager authManager = new WeiboAuthManagerImpl();
+/**
+ * oppo 实时抓取
+ * 
+ * @author shi.lei
+ *
+ */
+@Slf4j
+public class WeiboSearchFetch {
 	
-	protected final Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final String CN_WEIBO_SEARCH_URL_TEMPLATE = "http://weibo.cn/search/mblog?hideSearchFrame=&keyword={0}&advancedfilter=1&starttime={1}&endtime={2}&sort=time&page={3}";
+	private WeiboUserTaskProducer userTaskProducer = null;
+	
+	private String keyword;
+	private String startTime;
+	private String endTime;
 
-	public void process(String keyword, String begin, String end) throws IOException, ParseException, InterruptedException, IllegalArgumentException, IllegalAccessException, InstantiationException
-	{
-		int maxPage = this.getMaxPage(keyword, begin, end);
-		
-		this.log.info("begin {} 0/{} ...", keyword, maxPage);
-		
-		for (int i = 1; i <= maxPage; i++)
-		{
-			this.log.info("begin {} {}/{} ...", keyword, i, maxPage);
-
-			Document document = this.fetch(keyword, begin, end, i);
-
-			List<WeiboBean> beans = this.parse(document);
-
-			for (WeiboBean bean : beans)
-			{
-				bean.setKeyword(keyword);
-				try
-				{
-					bean.persist();
-				}
-				catch (SQLException e)
-				{
-					if (StringUtils.contains(e.getMessage(), "for key 'PRIMARY'"))
-					{
-						this.log.info("重复数据");
-					}
-					else
-					{
-						this.log.error("", e);
-					}
-				}
+	public static void main(String[] args) throws Exception {
+		long sleep = 10 * 60 * 1000;
+		String keyword = "oppo";
+		while (true) {
+			try {
+				new WeiboSearchFetch(keyword).run();
+				log.info("Wait for next batch fetch ... ");
+				Thread.sleep(sleep);
+			} catch (Exception e) {
+				log.error("Weibo fetch fail ! ", e);
 			}
 		}
 	}
 
-	private int getMaxPage(String keyword, String begin, String end) throws IOException, InterruptedException
-	{
-		Document document = this.fetch(keyword, begin, end, 1);
-
-		if (document.select("div#pagelist").size() == 0)
-		{
-			return 0;
+	public void run() throws Exception {
+		int pages = getMaxPage();
+		Thread.sleep(15000);
+		if (pages == 0) {
+			throw new RuntimeException("Get max page fail : " + keyword + " | " + startTime + " | " + endTime);
 		}
-		else
-		{
-			String html = document.select("div#pagelist").first().text();
+
+		for (int i = 1; i <= pages; i++) {
+			String url = buildUrl(i);
+			try {
+				log.info("fetch {}-{}-{} {}/{} ",keyword,startTime,endTime,i,pages);
+				Document doc = WeiboFetcher.cnFetcher.fetch(url);
+				List<WeiboBean> beans = parse(doc);
+
+				for (WeiboBean b : beans) {
+					try {
+						
+						b.persistOnNotExist();
+						
+						userTaskProducer.push(b.getUserid(), keyword);
+					} catch (Exception e) {
+						log.error("{} persist error ", b, e);
+					}
+				}
+				Thread.sleep(15000);
+			} catch (Exception e) {
+				log.error("{} download or parse error : ", url, e);
+			}
+		}
+	}
+
+	public WeiboSearchFetch(String keyword) throws ParseException {
+		this(keyword, "", "");
+	}
+
+	public WeiboSearchFetch(String keyword, String startTime, String endTime) throws ParseException {
+		this.keyword = keyword;
+		handleTime(startTime, endTime);
+		
+		userTaskProducer = new WeiboUserTaskProducer();
+	}
+
+	private void handleTime(String startTime, String endTime) throws ParseException {
+		Date startDate, endDate;
+
+		if (StringUtils.isNotBlank(endTime)) {
+			endDate = DateUtils.parseDate(endTime, new String[] { "yyyyMMdd" });
+		} else {
+			endDate = new Date();
+		}
+
+		if (StringUtils.isNotBlank(startTime)) {
+			startDate = DateUtils.parseDate(startTime, new String[] { "yyyyMMdd" });
+		} else {
+			startDate = DateUtils.addDays(endDate, -1);
+
+		}
+
+		this.startTime = DateFormatUtils.format(startDate, "yyyyMMdd");
+		this.endTime = DateFormatUtils.format(endDate, "yyyyMMdd");
+
+		log.debug("startTime : {} | endTime : {} ", this.startTime, this.endTime);
+	}
+
+	protected int getMaxPage() throws IOException, InterruptedException {
+		String url = buildUrl(1);
+		Document doc = WeiboFetcher.cnFetcher.fetch(url);
+
+		if (doc.select("div#pagelist").size() == 0) {
+			Elements elements = doc.select("div.c[id]");
+			if(elements.isEmpty()){
+				return 0;
+			}
+			return 1;
+		} else {
+			String html = doc.select("div#pagelist").first().text();
 			String page = StringUtils.substringBetween(html, "/", "页");
 			return Integer.parseInt(page);
 		}
 	}
 
-	// TODO 需要COOKIE池
-	public Document fetch(String keyword, String beginDate, String endDate, int page) throws IOException, InterruptedException
-	{
-		Connection connect = Jsoup.connect("http://weibo.cn/search/");
-
-		// post 
-		connect.data("vt", "1");
-		connect.data("advancedfilter", "1");
-		connect.data("starttime", beginDate);
-		connect.data("endtime", endDate);
-		connect.data("keyword", keyword);
-		connect.data("smblog", "搜索");
-		connect.data("sort", "time");
-		connect.data("page", page + "");
-
-		// cookie
-		connect.cookies(authManager.getAuthInfo());
-
-		// ua
-		connect.userAgent("Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
-		connect.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		connect.timeout(1000 * 5);
-
-		int retry = 5;
-
-		for (int i = 1; i <= retry; i++)
-		{
-			try
-			{
-				// 休眠时间
-				Thread.sleep(15 * 1000);
-				return connect.post();
-			}
-			catch (java.net.SocketTimeoutException e)
-			{
-				log.error("SocketTimeoutException [1]秒后重试第[{}]次..", i);
-				Thread.sleep(1000);
-			}
-			catch (java.net.ConnectException e)
-			{
-				log.error("SocketTimeoutException [1]秒后重试第[{}]次..", i);
-				Thread.sleep(1000);
-			}
-
-		}
-		throw new RuntimeException("fetcher重试[" + retry + "]次后无法成功.");
+	protected String buildUrl(int pageNum) {
+		return MessageFormat.format(CN_WEIBO_SEARCH_URL_TEMPLATE, keyword, startTime, endTime, String.valueOf(pageNum));
 	}
 
-	public List<WeiboBean> parse(Document document) throws IOException, ParseException
-	{
+	public List<WeiboBean> parse(Document document) throws IOException, ParseException {
 		Elements elements = document.select("div.c[id]");
+
+		LocalDateTime now = LocalDateTime.now();
+		String fetchTime = now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
 
-		for (Element element : elements)
-		{
+		for (Element element : elements) {
 			String html = element.html();
 
 			WeiboBean bean = new WeiboBean();
@@ -148,6 +162,7 @@ public class WeiboSearchFetch
 			// 发布时间
 			String postTimeText = element.select("span.ct").text();
 			postTimeText = StringUtils.substringBefore(postTimeText, "来自");
+			postTimeText = WeiboTimeUtils.getNormalTime(postTimeText, now);
 			bean.setPostTime(postTimeText);
 
 			// username
@@ -184,14 +199,11 @@ public class WeiboSearchFetch
 			bean.setComments(comments);
 
 			// 原创
-			if (!StringUtils.contains(html, "原文转发"))
-			{
+			if (!StringUtils.contains(html, "原文转发")) {
 				// text
 				String text = element.select("span.ctt").text();
 				bean.setText(StringUtils.substringAfter(text, ":"));
-			}
-			else
-			{
+			} else {
 				String pweibourl = element.select("a.cc").first().attr("href");
 				bean.setPweibourl(pweibourl);
 
@@ -205,19 +217,15 @@ public class WeiboSearchFetch
 				bean.setText(text);
 			}
 
+			WeiboContentSpliter.spliteContent(bean);
+
+			bean.setFetchTime(fetchTime);
+			bean.setKeyword(keyword);
 			weiboBeans.add(bean);
-			this.log.info(bean.toString());
+
+			log.debug(bean.toString());
 		}
 		return weiboBeans;
 	}
 
-	public static void main(String[] args) throws IOException, ParseException, InterruptedException, IllegalArgumentException, IllegalAccessException, InstantiationException
-	{
-		String[] brands = new String[] { "美素佳儿" };
-
-		for (String keyword : brands)
-		{
-			new WeiboSearchFetch().process(keyword, "20141228", "20141228");
-		}
-	}
 }
