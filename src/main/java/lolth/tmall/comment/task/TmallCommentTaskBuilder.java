@@ -91,7 +91,7 @@ public class TmallCommentTaskBuilder {
 	}
 
 	private List<String[]> getTask() throws Exception {
-		String sql = "select id,shopId from " + BaseBean.getTableName(TmallGoodsBean.class) + " where isComments=0";
+		String sql = "select id,shopId from " + BaseBean.getTableName(TmallGoodsBean.class) + " where isComments=0 and comments is not null";
 
 		List<String[]> todo = GlobalComponents.db.getRunner().query(sql, new ResultSetHandler<List<String[]>>() {
 
