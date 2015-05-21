@@ -1,0 +1,6 @@
+lolth.weibo.com.fetch.comment.CommentFetch
+lolth.weibo.com.fetch.repost.CommentRepostFetch
+lolth.weibo.cn.WeiboUserTaskFetch
+lolth.weibo.cn.WeiboUserTagTaskFetch
+lolth.weibo.cn.WeiboUserConcernListFetch
+lolth.weibo.cn.WeiboUserMainPageFetch

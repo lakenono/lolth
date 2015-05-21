@@ -1,2 +1,2 @@
-lolth.weibo.com.fetch.comment.FetchTaskProducer
-lolth.weibo.com.fetch.comment.PageParseFetchTaskHandler
+lolth.weibo.com.fetch.comment.CommentTask
+lolth.weibo.com.fetch.repost.CommentRepostTask
