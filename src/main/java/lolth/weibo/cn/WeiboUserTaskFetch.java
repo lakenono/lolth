@@ -90,7 +90,7 @@ public class WeiboUserTaskFetch extends FetchTaskHandler {
 	}
 
 	@Slf4j
-	static class WeiboUserTaskProducer extends FetchTaskProducer {
+	public static class WeiboUserTaskProducer extends FetchTaskProducer {
 
 		public static final String WEIBO_USER = "cn_weibo_user";
 
