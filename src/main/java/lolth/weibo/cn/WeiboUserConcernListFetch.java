@@ -1,10 +1,13 @@
 package lolth.weibo.cn;
 
+import java.io.IOException;
+
 import lakenono.fetch.adv.utils.HttpURLUtils;
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.weibo.bean.WeiboUserConcernRefBean;
 import lolth.weibo.cn.WeiboUserTaskFetch.WeiboUserTaskProducer;
+import lolth.weibo.fetcher.WeiboFetcher;
 import lolth.weibo.task.WeiboUserConcernListTaskProducer;
 
 import org.apache.commons.lang.StringUtils;
@@ -44,5 +47,13 @@ public class WeiboUserConcernListFetch extends PageParseFetchTaskHandler {
 			}
 		}
 	}
+
+	@Override
+	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
+		Document doc = WeiboFetcher.cnFetcher.fetch(task.getUrl());
+		parsePage(doc, task);
+	}
+	
+	
 
 }
