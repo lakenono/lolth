@@ -40,20 +40,6 @@ public class WeiboSearchFetch {
 	private String startTime;
 	private String endTime;
 
-	public static void main(String[] args) throws Exception {
-		long sleep = 10 * 60 * 1000;
-		String keyword = "oppo";
-		while (true) {
-			try {
-				new WeiboSearchFetch(keyword).run();
-				log.info("Wait for next batch fetch ... ");
-				Thread.sleep(sleep);
-			} catch (Exception e) {
-				log.error("Weibo fetch fail ! ", e);
-			}
-		}
-	}
-
 	public void run() throws Exception {
 		int pages = getMaxPage();
 		Thread.sleep(15000);
