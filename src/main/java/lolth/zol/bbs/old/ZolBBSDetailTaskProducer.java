@@ -1,4 +1,4 @@
-package lolth.zol.bbs;
+package lolth.zol.bbs.old;
 
 import java.sql.SQLException;
 import java.util.List;

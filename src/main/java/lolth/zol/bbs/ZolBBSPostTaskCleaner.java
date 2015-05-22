@@ -3,6 +3,8 @@ package lolth.zol.bbs;
 import java.sql.SQLException;
 
 import lakenono.task.FetchTaskProducer;
+import lolth.zol.bbs.old.ZolBBSDetailTaskProducer;
+import lolth.zol.bbs.old.ZolBBSUserTaskProducer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

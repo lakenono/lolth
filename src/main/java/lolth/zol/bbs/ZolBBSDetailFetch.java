@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.task.FetchTask;
+import lakenono.task.FetchTaskProducer;
 import lakenono.task.PageParseFetchTaskHandler;
+import lolth.zol.bbs.ZolBBSUserFetch.ZolBBSUserTaskProducer;
 import lolth.zol.bbs.bean.ZolBBSPostBean;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,14 +17,15 @@ import org.jsoup.select.Elements;
 
 @Slf4j
 public class ZolBBSDetailFetch extends PageParseFetchTaskHandler {
+	private ZolBBSUserTaskProducer producer = null;
 
-	public ZolBBSDetailFetch(String taskQueueName) {
-		super(taskQueueName);
+	public ZolBBSDetailFetch() {
+		super(ZolBBSDetailTaskProducer.ZOL_DETAIL_PAGE);
+		producer = new ZolBBSUserTaskProducer();
 	}
 
 	public static void main(String[] args) throws Exception {
-		String queueName = ZolBBSDetailTaskProducer.ZOL_DETAIL_PAGE;
-		ZolBBSDetailFetch fetch = new ZolBBSDetailFetch(queueName);
+		ZolBBSDetailFetch fetch = new ZolBBSDetailFetch();
 		fetch.setSleep(2000);
 		fetch.run();
 	}
@@ -54,12 +57,40 @@ public class ZolBBSDetailFetch extends PageParseFetchTaskHandler {
 			post.setUrl(task.getUrl());
 
 			updatePostBean(post);
+			
+			try {
+				producer.push(post.getUserId(), task);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	private void updatePostBean(ZolBBSPostBean post) throws SQLException {
-		log.debug("Update userId={},postTime={}",post.getUserId(),post.getPostTime());
+		log.debug("Update userId={},postTime={}", post.getUserId(), post.getPostTime());
 		GlobalComponents.db.getRunner().update("UPDATE " + BaseBean.getTableName(ZolBBSPostBean.class) + " SET userId=? , content = ? , postTime = ? where url=? ", post.getUserId(), post.getContent(), post.getPostTime(), post.getUrl());
+	}
+
+	public static class ZolBBSDetailTaskProducer extends FetchTaskProducer {
+
+		public static final String ZOL_DETAIL_PAGE = "zol_bbs_post_detail";
+
+		public ZolBBSDetailTaskProducer() {
+			super(ZOL_DETAIL_PAGE);
+		}
+
+		protected FetchTask buildTask(String url, FetchTask frontTask) {
+			FetchTask fetchTask = new FetchTask();
+			fetchTask.setName(frontTask.getName());
+			fetchTask.setBatchName(ZOL_DETAIL_PAGE);
+			fetchTask.setUrl(url);
+
+			return fetchTask;
+		}
+
+		public void push(String url, FetchTask frontTask) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
+			saveAndPushTask(buildTask(url, frontTask));
+		}
 	}
 
 }

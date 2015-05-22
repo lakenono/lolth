@@ -2,6 +2,7 @@ package lolth.zol.bbs;
 
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
+import lolth.zol.bbs.ZolBBSDetailFetch.ZolBBSDetailTaskProducer;
 import lolth.zol.bbs.bean.ZolBBSPostBean;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,9 +11,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ZolBBSListFetch extends PageParseFetchTaskHandler {
-
+	private ZolBBSDetailTaskProducer producer;
+	
 	public ZolBBSListFetch(String taskQueueName) {
 		super(taskQueueName);
+		
+		producer = new ZolBBSDetailTaskProducer();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -79,8 +83,15 @@ public class ZolBBSListFetch extends PageParseFetchTaskHandler {
 			}
 
 			post.setKeyword(task.getName());
+			post.setBbsName(task.getExtra());
 			// 持久化
 			post.persistOnNotExist();
+			
+			try {
+				producer.push(post.getUrl(), task);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

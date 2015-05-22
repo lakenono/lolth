@@ -1,10 +1,14 @@
 package lolth.zol.bbs;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.PagingFetchTaskProducer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,32 +23,44 @@ public class ZolBBSListTaskProducer extends PagingFetchTaskProducer {
 
 	private String keyword = null;
 	private String bbsType = null;
+	private String bbsId = null;
 	private String bbsName = null;
 
 	public static void main(String[] args) {
 		// http://bbs.zol.com.cn/sjbbs/d1673_p0.html
 		String keyword = "oppo";
-		String bbsType = "sjbbs";
-		String bbsName = "d1673";
 
-		ZolBBSListTaskProducer producer = new ZolBBSListTaskProducer(keyword,bbsType, bbsName, ZOL_POST_LIST);
-		producer.setSleep(1000);
-		producer.run();
+		List<BBSInfoBean> infos = new ArrayList<BBSInfoBean>();
+		infos.add(new BBSInfoBean("sjbbs", "x392008", "X5Max"));
+		infos.add(new BBSInfoBean("sjbbs", "x376453", "Xshot"));
+		infos.add(new BBSInfoBean("sjbbs", "x399773", "P8"));
+		infos.add(new BBSInfoBean("sjbbs", "x367005", "Note4"));
+
+
+		for (BBSInfoBean info : infos) {
+			log.info("{} start ! ", info);
+			ZolBBSListTaskProducer producer = new ZolBBSListTaskProducer(keyword, info.getBbsType(), info.getBbsId(), info.getBbsName(), ZOL_POST_LIST);
+			producer.setSleep(1000);
+			producer.run();
+			log.info("{} finish ! ", info);
+		}
+
 	}
 
-	public ZolBBSListTaskProducer(String keyword,String bbsType, String bbsName, String taskQueueName) {
+	public ZolBBSListTaskProducer(String keyword, String bbsType, String bbsId, String bbsName, String taskQueueName) {
 		super(taskQueueName);
 		if (StringUtils.isBlank(bbsType) && StringUtils.isBlank(bbsName)) {
 			throw new IllegalArgumentException("bbsType,bbsName can not be null!");
 		}
 		this.keyword = keyword;
 		this.bbsType = bbsType;
+		this.bbsId = bbsId;
 		this.bbsName = bbsName;
 	}
 
 	@Override
 	protected String buildUrl(int pageNum) {
-		return MessageFormat.format(ZOL_POST_LIST_URL_TEMPLATE, bbsType, bbsName, String.valueOf(pageNum));
+		return MessageFormat.format(ZOL_POST_LIST_URL_TEMPLATE, bbsType, bbsId, String.valueOf(pageNum));
 	}
 
 	@Override
@@ -82,8 +98,17 @@ public class ZolBBSListTaskProducer extends PagingFetchTaskProducer {
 		fetchTask.setName(keyword);
 		fetchTask.setBatchName(ZOL_POST_LIST);
 		fetchTask.setUrl(url);
-		
+		fetchTask.setExtra(bbsName);
+
 		return fetchTask;
+	}
+
+	@Data
+	@AllArgsConstructor
+	static class BBSInfoBean {
+		private String bbsType;
+		private String bbsId;
+		private String bbsName;
 	}
 
 }

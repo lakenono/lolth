@@ -38,6 +38,8 @@ public class ZolBBSPostBean extends BaseBean {
 	private String hasImage;
 
 	private String keyword;
+	
+	private String bbsName;
 
 	public static void main(String[] args) throws Exception {
 		new ZolBBSPostBean().buildTable();

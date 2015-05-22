@@ -1,6 +1,10 @@
 package lolth.zol.bbs;
 
+import java.sql.SQLException;
+import java.text.MessageFormat;
+
 import lakenono.task.FetchTask;
+import lakenono.task.FetchTaskProducer;
 import lakenono.task.PageParseFetchTaskHandler;
 import lolth.zol.bbs.bean.ZolBBSUserBean;
 
@@ -10,13 +14,12 @@ import org.jsoup.select.Elements;
 
 public class ZolBBSUserFetch extends PageParseFetchTaskHandler {
 
-	public ZolBBSUserFetch(String taskQueueName) {
-		super(taskQueueName);
+	public ZolBBSUserFetch() {
+		super(ZolBBSUserTaskProducer.ZOL_BBS_POST_USER);
 	}
 
-	public static void main(String[] args) throws Exception{
-		String taskQueueName = ZolBBSUserTaskProducer.ZOL_BBS_POST_USER;
-		ZolBBSUserFetch fetch = new ZolBBSUserFetch(taskQueueName);
+	public static void main(String[] args) throws Exception {
+		ZolBBSUserFetch fetch = new ZolBBSUserFetch();
 		fetch.setSleep(3000);
 		fetch.run();
 	}
@@ -71,6 +74,33 @@ public class ZolBBSUserFetch extends PageParseFetchTaskHandler {
 
 			userBean.persistOnNotExist();
 		}
+	}
+
+	public static class ZolBBSUserTaskProducer extends FetchTaskProducer {
+		private static final String ZOL_BBS_USER_URL_TEMPLATE = "http://my.zol.com.cn/{0}/settings/";
+		public static final String ZOL_BBS_POST_USER = "zol_bbs_post_user";
+
+		public ZolBBSUserTaskProducer() {
+			super(ZOL_BBS_POST_USER);
+		}
+
+		protected FetchTask buildTask(String user, FetchTask frontTask) {
+			FetchTask task = new FetchTask();
+			task.setName(frontTask.getName());
+			task.setBatchName(ZOL_BBS_POST_USER);
+			task.setUrl(buildUrl(user));
+			task.setExtra(user);
+			return task;
+		}
+
+		private String buildUrl(String user) {
+			return MessageFormat.format(ZOL_BBS_USER_URL_TEMPLATE, user);
+		}
+
+		public void push(String userId, FetchTask frontTask) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
+			saveAndPushTask(buildTask(userId, frontTask));
+		}
+
 	}
 
 }
