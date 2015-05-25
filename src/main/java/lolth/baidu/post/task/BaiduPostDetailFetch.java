@@ -41,9 +41,8 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 			postBean.persistOnNotExist();
 			log.debug("Save BaiduPostUserBean {}", postBean);
 
-			if (userBean != null) {
+			if (userBean != null && StringUtils.isNotBlank(userBean.getName())) {
 				userBean.persistOnNotExist();
-
 				log.debug("Save BaiduPostUserBean {}", userBean);
 			}
 
@@ -56,7 +55,7 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 
 		BaiduPostUserBean userBean = null;
 
-		Elements userDiv = doc.select("div.l_post.l_post_bright.noborder");
+		Elements userDiv = doc.select("div.l_post");
 
 		if (userDiv.size() > 0) {
 
@@ -67,19 +66,23 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 
 			JSONObject user = json.getJSONObject("author");
 			userBean.setId(user.getString("user_id"));
-			userBean.setUrl("http://tieba.baidu.com/home/main?un=" + user.getString("name_u"));
-
-			String sex = user.getString("user_sex");
-			if ("0".equals(sex) || "1".equals(sex)) {
-				userBean.setSex("男");
-			} else if ("2".equals(sex)) {
-				userBean.setSex("女");
+			String user_name = user.getString("user_name");
+			if(StringUtils.isNotBlank(user_name)){
+				userBean.setUrl("http://tieba.baidu.com/home/main?un=" + user_name +"&ie=utf-8&fr=pb");
+				userBean.setName(user_name);
 			}
 
-			JSONObject content = json.getJSONObject("content");
-			String postTime = content.getString("date");
-
-			postBean.setPostTime(postTime);
+//			String sex = user.getString("user_sex");
+//			if ("0".equals(sex) || "1".equals(sex)) {
+//				userBean.setSex("男");
+//			} else if ("2".equals(sex)) {
+//				userBean.setSex("女");
+//			}
+			if(StringUtils.isBlank(postBean.getPostTime())){
+				JSONObject content = json.getJSONObject("content");
+				String postTime = content.getString("date");
+				postBean.setPostTime(postTime);
+			}
 			postBean.setUserId(userBean.getId());
 		}
 		return userBean;
@@ -115,7 +118,7 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 
 		if (leftSection.size() > 0) {
 			// title
-			Elements title = leftSection.select("h1.core_title_txt");
+			Elements title = leftSection.select(".core_title_txt");
 			if (title.size() > 0) {
 				post.setTitle(title.first().text());
 			}
@@ -130,10 +133,10 @@ public class BaiduPostDetailFetch extends PageParseFetchTaskHandler {
 			}
 
 			// postTime 2015-5-18
-			Elements postTimeUl = leftSection.first().select("span.j_reply_data");
+			Elements postTimeUl = leftSection.first().select("div.post-tail-wrap");
 			if (postTimeUl.size() > 0) {
 				String postTime = postTimeUl.first().text();
-//				postTime = StringUtils.substringAfter(postTime, "1楼");
+				postTime = StringUtils.substringAfter(postTime, "楼");
 				post.setPostTime(postTime);
 			}
 		}

@@ -20,8 +20,6 @@ import org.jsoup.select.Elements;
  */
 @Slf4j
 public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
-	
-	public static final String BAIDU_POST_NAME = "育儿";
 
 	private static final String BAIDU_POST_SEARCH_URL_TEMPLATE = "http://tieba.baidu.com/f?kw={0}&ie=utf-8&pn={1}";
 
@@ -39,7 +37,13 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		new BaiduPostListTaskProducer(BAIDU_POST_LIST, BAIDU_POST_NAME).run();
+		String[] keywords = { "X5max", "Xshot", "华为P8", "三星NOTE4" };
+		for (String key : keywords) {
+			log.info("{} start!", key);
+			BaiduPostListTaskProducer producer = new BaiduPostListTaskProducer(BAIDU_POST_LIST, key);
+			producer.run();
+			log.info("{} finish!", key);
+		}
 	}
 
 	@Override
@@ -70,13 +74,13 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 			String pageSize = div.first().text();
 			pageSize = StringUtils.substringBetween(pageSize, "共有主题数", "个");
 
-			log.info("getMapPage: {}",pageSize);
+			log.info("getMapPage: {}", pageSize);
 
 			if (!StringUtils.isNumeric(pageSize)) {
 				return 0;
 			}
 
-			return Integer.parseInt(pageSize) / PAGE_SIZE;
+			return Integer.parseInt(pageSize) / PAGE_SIZE + 1;
 		} catch (Exception e) {
 			log.error("Get Max Page Error : {}", url, e);
 		}
