@@ -73,7 +73,9 @@ public class XCarBBSPostDetailFetch extends PageParseFetchTaskHandler {
 			if (!mainContent.isEmpty()) {
 				// 发表时间
 				String postTimeStr = mainContent.first().text();
-				postTimeStr = StringUtils.substringAfter(postTimeStr, "发表于");
+//				postTimeStr = StringUtils.substringAfter(postTimeStr, "发表于");
+				//修复发表时间
+				StringUtils.substringBetween(postTimeStr, "发表于","|");
 				postTimeStr = StringUtils.normalizeSpace(postTimeStr);
 				postTimeStr = StringUtils.trim(postTimeStr);
 				post.setPostTime(postTimeStr);
