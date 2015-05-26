@@ -1,2 +1,4 @@
-lolth.autohome.buy.AutohomeBuyInfoListTaskProuducer
+lolth.autohome.bbs.AutoHomeBBSPostListFetch
 lolth.autohome.bbs.AutoHomeBBSPostUserFetch
+lolth.autohome.bbs.AutoHomeBBSPostTextFetch
+lolth.autohome.k.AutoHomeWordOfMouthFetch
