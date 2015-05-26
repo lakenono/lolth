@@ -15,11 +15,7 @@ public class WeiboAuthManagerImpl implements WeiboAuthManager {
 	public WeiboAuthManagerImpl() {
 
 		List<String> cookieList = new ArrayList<>();
-		cookieList.add("SUB=_2A254WEGMDeSRGeNL7FUR-C7NyjqIHXVbo2_ErDV6PUJbrdAKLULskW0_SH9YmtXknJfDsykoTfSRvc4DqQ..; expires=Fri, 19-Jun-2015 07:03:56 GMT; path=/; domain=.weibo.cn; httponly gsid_CTandWM=4uHd655b1Kr8JKHGOBzBDnoQU1S; expires=Fri, 19-Jun-2015 07:03:56 GMT; path=/; domain=.weibo.cn; httponly PHPSESSID=c7cfa7548293cf273a28713391ff9cd3; path=/");
-		
-		cookieList.add("SUB=_2A254WF2ZDeSRGeNL7FQS9inIyj-IHXVbo2PRrDV6PUJbrdANLWPtkW0NtzNwJKak7E8bBgIfzq3l2yDnJQ..; expires=Fri, 19-Jun-2015 06:46:33 GMT; path=/; domain=.weibo.cn; httponly gsid_CTandWM=4u5Q655b1rpBKincYqiuRnoFp6F; expires=Fri, 19-Jun-2015 06:46:33 GMT; path=/; domain=.weibo.cn; httponly PHPSESSID=68b135dd3dadf39587c1b9c9abc0610f; path=/");
-		
-		cookieList.add("SUB=_2A254WEJHDeSRGeNL7FQW8CnIyjqIHXVbo24PrDV6PUJbrdAKLWvTkW2IV6IULxpe-gGQsRgQ5xuAO636Qg..; expires=Fri, 19-Jun-2015 07:04:55 GMT; path=/; domain=.weibo.cn; httponly gsid_CTandWM=4uOi655b1lXV1viJVMwzAnoKT6I; expires=Fri, 19-Jun-2015 07:04:55 GMT; path=/; domain=.weibo.cn; httponly PHPSESSID=1520653da0274719f80e24b270cb6f94; path=/");
+		cookieList.add("_T_WM=d3cbcc7112f1fe3327d7cfdbce31eb7b; SUB=_2A254ZroHDeTxGeVG6lUQ9y7MzD-IHXVbqMZPrDV6PUJbrdAKLWSlkW0n9faS04DbtFHoO_n8HN-udeawQg..; gsid_CTandWM=4u3X80661PUBPZJSpBayAg11g1b");
 		
 		for (String cookieStr : cookieList) {
 			Map<String, String> cookieMap = parseCookieStr(cookieStr);
