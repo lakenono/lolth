@@ -36,8 +36,8 @@ public class BaiduPostUserFetch extends PageParseFetchTaskHandler {
 
 		user.setId(task.getExtra());
 		updateUserBean(user);
-		
-		log.info("{} update !",user);
+
+		log.info("{} update !", user);
 	}
 
 	private BaiduPostUserBean parseUserBean(Document doc) {
@@ -69,8 +69,17 @@ public class BaiduPostUserFetch extends PageParseFetchTaskHandler {
 		if (StringUtils.isBlank(name) && StringUtils.isBlank(postAge) && StringUtils.isBlank(posts)) {
 			return null;
 		}
-
 		BaiduPostUserBean user = new BaiduPostUserBean();
+		// 性别
+		Elements sex = doc.select("span.userinfo_sex");
+		if (sex.size() > 0) {
+			String attr = sex.first().attr("class");
+			if (StringUtils.endsWith(attr, "sex_male")) {
+				user.setSex("男");
+			} else {
+				user.setSex("女");
+			}
+		}
 		user.setName(name);
 		user.setPostAge(postAge);
 		user.setPosts(posts);
@@ -79,7 +88,7 @@ public class BaiduPostUserFetch extends PageParseFetchTaskHandler {
 	}
 
 	private void updateUserBean(BaiduPostUserBean user) throws SQLException {
-		GlobalComponents.db.getRunner().update("UPDATE " + BaseBean.getTableName(BaiduPostUserBean.class) + " SET name=? , posts=? , postAge=? WHERE id=?", user.getName(), user.getPosts(), user.getPostAge(), user.getId());
+		GlobalComponents.db.getRunner().update("UPDATE " + BaseBean.getTableName(BaiduPostUserBean.class) + " SET sex=?, posts=?, postAge=? WHERE id=?", user.getSex(), user.getPosts(), user.getPostAge(), user.getId());
 	}
 
 }

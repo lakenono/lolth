@@ -7,6 +7,7 @@ import lakenono.db.BaseBean;
 import lakenono.task.FetchTask;
 import lakenono.task.ListFetchTaskProducer;
 import lolth.baidu.post.bean.BaiduPostUserBean;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
@@ -16,6 +17,7 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
  * @author shi.lei
  *
  */
+@Slf4j
 public class BaiduPostUserTaskProducer extends ListFetchTaskProducer<Object[]> {
 	public static final String BAIDU_POST_USER = "baidu_post_user";
 
@@ -27,8 +29,11 @@ public class BaiduPostUserTaskProducer extends ListFetchTaskProducer<Object[]> {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BaiduPostUserTaskProducer taskProducer = new BaiduPostUserTaskProducer(BAIDU_POST_USER, BaiduPostListTaskProducer.BAIDU_POST_NAME);
-		taskProducer.run();
+		String keyword = "OPPO";
+			log.info("{} start!", keyword);
+			BaiduPostUserTaskProducer taskProducer = new BaiduPostUserTaskProducer(BAIDU_POST_USER, keyword);
+			taskProducer.run();
+			log.info("{} finish!", keyword);
 	}
 
 	@Override
@@ -43,7 +48,7 @@ public class BaiduPostUserTaskProducer extends ListFetchTaskProducer<Object[]> {
 
 	@Override
 	protected List<Object[]> getTaskArgs() throws Exception {
-		List<Object[]> query = GlobalComponents.db.getRunner().query("select id,url from " + BaseBean.getTableName(BaiduPostUserBean.class) + " where name is null", new ArrayListHandler());
+		List<Object[]> query = GlobalComponents.db.getRunner().query("select id,url from " + BaseBean.getTableName(BaiduPostUserBean.class) + " where postAge is null", new ArrayListHandler());
 		return query;
 	}
 }
