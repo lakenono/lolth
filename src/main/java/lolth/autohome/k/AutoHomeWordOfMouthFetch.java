@@ -67,7 +67,7 @@ public class AutoHomeWordOfMouthFetch {
 			String url = this.buildUrl(this.id, i);
 
 			try {
-				this.parse(url);			
+				this.parse(url);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -368,41 +368,40 @@ public class AutoHomeWordOfMouthFetch {
 	}
 
 	public static void main(String[] args) throws Exception {
-		while (true) {
-			try {
-				// 东风风度MX6 3637 -- 目前没有口碑
-				// new WordOfMouth("3637").run();
+		try {
+			// 东风风度MX6 3637 -- 目前没有口碑
+			// new WordOfMouth("3637").run();
 
-				// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
-				// new AutoHomeWordOfMouthFetch("2123", "哈弗H6").run();
-				//
-				// // 奔腾X80 3000
-				// // http://club.autohome.com.cn/bbs/forum-c-3000-1.html
-				// new AutoHomeWordOfMouthFetch("3000", "奔腾X80").run();
-				//
-				// // 长安CS75 3204
-				// // http://club.autohome.com.cn/bbs/forum-c-3204-1.html
-				// new AutoHomeWordOfMouthFetch("3204", "长安CS75").run();
-				//
-				// // 传祺GS5 2560
-				// // http://club.autohome.com.cn/bbs/forum-c-2560-1.html
-				// new AutoHomeWordOfMouthFetch("2560", "传祺GS5").run();
+			// 哈弗H6 2123 http://club.autohome.com.cn/bbs/forum-c-2123-1.html
+			// new AutoHomeWordOfMouthFetch("2123", "哈弗H6").run();
+			//
+			// // 奔腾X80 3000
+			// // http://club.autohome.com.cn/bbs/forum-c-3000-1.html
+			// new AutoHomeWordOfMouthFetch("3000", "奔腾X80").run();
+			//
+			// // 长安CS75 3204
+			// // http://club.autohome.com.cn/bbs/forum-c-3204-1.html
+			// new AutoHomeWordOfMouthFetch("3204", "长安CS75").run();
+			//
+			// // 传祺GS5 2560
+			// // http://club.autohome.com.cn/bbs/forum-c-2560-1.html
+			// new AutoHomeWordOfMouthFetch("2560", "传祺GS5").run();
 
-				// 创酷 http://club.autohome.com.cn/bbs/forum-c-3335-1.html
-				new AutoHomeWordOfMouthFetch("3335", "创酷").run();
-				// 北京现代ix25 http://club.autohome.com.cn/bbs/forum-c-3292-1.html
-				new AutoHomeWordOfMouthFetch("3292", "北京现代ix25").run();
-				// 别克昂科拉 http://club.autohome.com.cn/bbs/forum-c-2896-1.html
-				new AutoHomeWordOfMouthFetch("2896", "别克昂科拉").run();
-				// 福特翼搏 http://club.autohome.com.cn/bbs/forum-c-2871-1.html
-				new AutoHomeWordOfMouthFetch("2871", "福特翼搏").run();
-				// 标致2008 http://club.autohome.com.cn/bbs/forum-c-3234-1.html
-				new AutoHomeWordOfMouthFetch("3234", "标致2008").run();
-				// 缤智 http://club.autohome.com.cn/bbs/forum-c-3460-1.html
-				new AutoHomeWordOfMouthFetch("3460", "缤智").run();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			// 创酷 http://club.autohome.com.cn/bbs/forum-c-3335-1.html
+			new AutoHomeWordOfMouthFetch("3335", "创酷").run();
+			// 北京现代ix25 http://club.autohome.com.cn/bbs/forum-c-3292-1.html
+			new AutoHomeWordOfMouthFetch("3292", "北京现代ix25").run();
+			// 别克昂科拉 http://club.autohome.com.cn/bbs/forum-c-2896-1.html
+			new AutoHomeWordOfMouthFetch("2896", "别克昂科拉").run();
+			// 福特翼搏 http://club.autohome.com.cn/bbs/forum-c-2871-1.html
+			new AutoHomeWordOfMouthFetch("2871", "福特翼搏").run();
+			// 标致2008 http://club.autohome.com.cn/bbs/forum-c-3234-1.html
+			new AutoHomeWordOfMouthFetch("3234", "标致2008").run();
+			// 缤智 http://club.autohome.com.cn/bbs/forum-c-3460-1.html
+			new AutoHomeWordOfMouthFetch("3460", "缤智").run();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 }
