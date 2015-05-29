@@ -53,9 +53,9 @@ public class AutoHomeBBSPostUserFetch {
 	private List<String[]> getTodoList() throws Exception {
 		List<String[]> todo = GlobalComponents.db
 				.getRunner()
-				.query("select url,authorUrl from "
+				.query("select distinct url,authorUrl from "
 						+ BaseBean.getTableName(AutoHomeBBSPostBean.class)
-						+ " where postTime >= '2014-04-01' and comment_status='' limit 1000",
+						+ " where postTime >= '2014-05-20' and comment_status='' limit 1000",
 						new ResultSetHandler<List<String[]>>() {
 
 							@Override

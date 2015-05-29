@@ -22,7 +22,7 @@ public class AutoHomeBBSPostTextFetch
 	{
 		while (true)
 		{
-			List<String> todo = GlobalComponents.db.getRunner().query("select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where jobId in ('速腾','凌渡','威朗') and postTime >= '2014-05-20' and views is null limit 1000", new ColumnListHandler<String>());
+			List<String> todo = GlobalComponents.db.getRunner().query("select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-05-20' and views is null limit 1000", new ColumnListHandler<String>());
 
 			for (String url : todo)
 			{

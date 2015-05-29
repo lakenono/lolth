@@ -26,7 +26,7 @@ public class AutoHomeBBSCommentFetch
 	{
 		while (true)
 		{
-			String todoSql = "select url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-12-01' and views is not null and comment_status is null limit 1000";
+			String todoSql = "select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-5-20' and views is not null and comment_status is null limit 1000";
 			this.log.info(todoSql);
 			List<String> todo = GlobalComponents.db.getRunner().query(todoSql, new ColumnListHandler<String>());
 
