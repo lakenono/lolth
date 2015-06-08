@@ -8,6 +8,7 @@ import lakenono.base.DistributedParser;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 import lolth.yhd.bean.YhdFreshBean;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
@@ -17,7 +18,7 @@ import org.jsoup.select.Elements;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
+@Slf4j
 public class YhdFreshFetch extends DistributedParser{
 	
 	private final String JSONURL = "http://list.yhd.com/searchPage/c20947-0-81806/b/a-s1-v0-p{0}-price-d0-f0-m1-rt0-pid-mid0-k/?isGetMoreProducts=1&moreProductsDefaultTemplate=0&isLargeImg=0";
@@ -73,7 +74,7 @@ public class YhdFreshFetch extends DistributedParser{
 			bean.setName(name);
 			beans.add(bean);
 		}
-		
+		log.info("fetch page:"+num+",fetch list:"+beans.size());
 		if(!beans.isEmpty()){
 			for (YhdFreshBean bean : beans) {
 				if(!bean.exist()){
