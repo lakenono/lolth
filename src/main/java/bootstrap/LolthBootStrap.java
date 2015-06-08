@@ -5,7 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import lolth.toutiao.news.NewsSearchListFetch;
+import lolth.yhd.YhdFreshFetch;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -30,8 +30,7 @@ public class LolthBootStrap {
 		service.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				new NewsSearchListFetch().run();
-				
+				new YhdFreshFetch().run();
 				
 			}
 		}, 0, 10, TimeUnit.SECONDS);
