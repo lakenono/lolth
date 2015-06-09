@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import lakenono.base.Queue;
+import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lolth.babytree.bbs.BabytreeBBSSearchDetailFetch;
 import lolth.babytree.bbs.BabytreeBBSSearchDetailTaskProducer;
 import lolth.babytree.bbs.BabytreeBBSSearchList;
+import lolth.jd.search.bean.CommodityBean;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
@@ -57,20 +62,70 @@ public class BabytreeTest {
 	}
 
 	@Test
-	public void testJson() throws IOException, InterruptedException {
-		String url = "http://rate.tmall.com/list_detail_rate.htm?itemId=41323042631&sellerId=2196546755&currentPage=1";
-		// String content = GlobalComponents.fetcher.document(url).text();
-		String content = "\"rateDetail\":{\"paginator\":{\"items\":5,\"lastPage\":1,\"page\":1},\"rateCount\":{\"picNum\":0,\"shop\":0,\"total\":7,\"used\":0},\"rateDanceInfo\":{\"currentMilles\":1431939597848,\"intervalMilles\":90936872240,\"showChooseTopic\":false,\"storeType\":4},\"rateList\":["
-				+ "{\"aliMallSeller\":false,\"anony\":true,\"appendComment\":\"\",\"attributes\":\"\",\"auctionSku\":\"\",\"buyCount\":0,\"carServiceLocation\":\"\",\"cmsSource\":\"天猫\",\"displayRatePic\":\"b_blue_1.gif\",\"displayRateSum\":350,\"displayUserLink\":\"\",\"displayUserNick\":\"走***8\",\"displayUserNumId\":\"\",\"displayUserRateLink\":\"\",\"dsr\":0.0,\"fromMall\":true,\"fromMemory\":0,\"id\":230425519046,\"pics\":\"\",\"position\":\"\",\"rateContent\":\"还行吧\",\"rateDate\":\"2014-12-10 17:53:12\",\"reply\":\"\"感谢您对\"\",\"serviceRateContent\":\"\",\"tamllSweetLevel\":2,\"tmallSweetPic\":\"tmall-grade-t2-18.png\",\"useful\":true,\"userIdEncryption\":\"\",\"userInfo\":\"\",\"userVipLevel\":0,\"userVipPic\":\"\"},"
-				+ "{\"aliMallSeller\":false,\"anony\":true,\"appendComment\":\"\",\"attributes\":\"\",\"auctionSku\":\"\",\"buyCount\":0,\"carServiceLocation\":\"\",\"cmsSource\":\"天猫\",\"displayRatePic\":\"b_red_5.gif\",\"displayRateSum\":210,\"displayUserLink\":\"\",\"displayUserNick\":\"纹***4\",\"displayUserNumId\":\"\",\"displayUserRateLink\":\"\",\"dsr\":0.0,\"fromMall\":true,\"fromMemory\":0,\"id\":224571199751,\"pics\":\"\",\"position\":\"\",\"rateContent\":\"假期原！\",\"rateDate\":\"2014-10-08 16:28:57\",\"reply\":\"\",\"serviceRateContent\":\"\",\"tamllSweetLevel\":2,\"tmallSweetPic\":\"tmall-grade-t2-18.png\",\"useful\":true,\"userIdEncryption\":\"\",\"userInfo\":\"\",\"userVipLevel\":0,\"userVipPic\":\"\"},"
-
-				+ "{\"aliMallSeller\":false,\"anony\":true,\"appendComment\":\"\",\"attributes\":\"\",\"auctionSku\":\"\",\"buyCount\":0,\"carServiceLocation\":\"\",\"cmsSource\":\"天猫\",\"displayRatePic\":\"b_blue_2.gif\",\"displayRateSum\":692,\"displayUserLink\":\"\",\"displayUserNick\":\"e***n\",\"displayUserNumId\":\"\",\"displayUserRateLink\":\"\",\"dsr\":0.0,\"fromMall\":true,\"fromMemory\":0,\"id\":224306169887,\"pics\":\"\",\"position\":\"\",\"rateContent\":\"很不错的哦，必须给五分\",\"rateDate\":\"2014-10-03 16:59:14\",\"reply\":\"\",\"serviceRateContent\":\"\",\"tamllSweetLevel\":3,\"tmallSweetPic\":\"tmall-grade-t3-18.png\",\"useful\":true,\"userIdEncryption\":\"\",\"userInfo\":\"\",\"userVipLevel\":0,\"userVipPic\":\"\"}" + "],\"tags\":\"\"}";
-		if (content.indexOf("reply\":\"\"") > -1) {
-			content.replaceFirst("reply\":\"\"", "reply\":\"").replaceFirst("\"\"", "\"");
+	public void testDD() throws Exception {
+		String url = "http://item.jd.com/1070843.html";
+		String id = StringUtils.substringBetween(url, "com/", ".html");
+		Document doc = GlobalComponents.dynamicFetch.document(url);
+		CommodityBean commodityBean = new CommodityBean();
+		commodityBean.setId(id);
+		commodityBean.setUrl(url);
+		Elements elements = doc.select("#name");
+		if (!elements.isEmpty()) {
+			String title = elements.text();
+			commodityBean.setTitle(title);
 		}
-		String json = "{" + content + "}";
-		// JSONArray parseArray = JSON.parseArray(json);
-		JSONObject parseObject = JSON.parseObject(json);
-		System.out.println(parseObject);
+
+		elements = doc.select("#comment-count > a");
+		if (!elements.isEmpty()) {
+			String reply = elements.text();
+			commodityBean.setReply(reply);
+		}
+
+		elements = doc.select("#product-detail-2 > table tr");
+		System.out.println(elements);
+		if (!elements.isEmpty()) {
+			String value;
+			for (Element element : elements) {
+				value = element.text();
+				System.out.println(value);
+				if (value.indexOf("类别") > -1) {
+					commodityBean.setCategory(StringUtils.substring(value, 3));
+				} else if (value.indexOf("特性") > -1) {
+					commodityBean.setFeatures(StringUtils.substring(value, 3));
+				}
+			}
+		}else{
+			//#parameter2
+			elements = doc.select("#parameter2 > li");
+			if (!elements.isEmpty()) {
+				String value;
+				for (Element element : elements) {
+					value = element.text();
+					System.out.println(value);
+					if (value.indexOf("类别") > -1) {
+						commodityBean.setCategory(StringUtils.substring(value, 3));
+					} else if (value.indexOf("特性") > -1) {
+						commodityBean.setFeatures(StringUtils.substring(value, 3));
+					}
+				}
+			}
+		}
+		System.out.println(commodityBean.toString());
+	}
+
+	@Test
+	public void te() throws IOException, InterruptedException{
+		String url = "http://search.jd.com/s.php?keyword=%E5%AE%89%E4%BD%B3&enc=utf-8&qrst=1&rt=1&cid2=1585&click=2-1585&cs=y&vt=2";
+		Document doc = GlobalComponents.fetcher.document(url);
+		Elements links = doc.select("div.lh-wrap>div.p-name a");
+		for(Element link:links){
+			System.out.println(link.attr("href"));
+			Task newTask = new Task();
+			newTask.setUrl(link.attr("href"));
+			newTask.setProjectName("威仕高");
+			newTask.setQueueName("jd_commodity");
+			newTask.setExtra("安佳");
+			Queue.push(newTask);
+		}
 	}
 }

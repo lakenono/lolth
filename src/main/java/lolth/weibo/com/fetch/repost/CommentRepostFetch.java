@@ -131,7 +131,7 @@ public class CommentRepostFetch extends PageParseFetchTaskHandler {
 			}
 			// 表情
 			tmp = selects.select("img");
-			if (!selects.isEmpty()) {
+			if (!tmp.isEmpty()) {
 				String img = selects.attr("alt");
 				repostBean.setFeelings(img);
 			}
@@ -146,7 +146,7 @@ public class CommentRepostFetch extends PageParseFetchTaskHandler {
 			return;
 		}
 		FetchTask fetchTask = task.clone();
-		parsePage(fetchTask);
+		parsePage(fetchTask); 
 		fetchTask = null;
 		task = null;
 	}
@@ -158,7 +158,7 @@ public class CommentRepostFetch extends PageParseFetchTaskHandler {
 		req.setCookies(CookiesUtils.getCookies(CommentRepostTask.COOKIS));
 		String json;
 		try {
-			json = new String(fetcher.run(req).getContent());
+			json = new String( );
 		} catch (Exception e) {
 			log.error("解析json出错了！", e);
 			return;

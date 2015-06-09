@@ -1,5 +1,7 @@
 package lolth.pcbaby.bbs.Bean;
 
+import java.sql.SQLException;
+
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
@@ -10,6 +12,10 @@ import lombok.Data;
 @Data
 public class UserInfoBean extends BaseBean{
 
+	public static void main(String[] args) throws SQLException {
+		new UserInfoBean().buildTable();
+	}
+	
 	@DBConstraintPK
 	@DBField(type = "varchar(32)")
 	private String id;

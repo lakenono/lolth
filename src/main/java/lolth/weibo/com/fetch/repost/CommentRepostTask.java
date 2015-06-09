@@ -74,6 +74,7 @@ public class CommentRepostTask extends FetchTaskProducer{
 			log.error("解析最大页数出错了！",e);
 			return 1;
 		}
+		System.out.println(json);
 		Object obj = JSON.parseObject(json).getJSONObject("data").getJSONObject("page").get("totalpage");
 		String page = obj.toString();
 		if(StringUtils.isNumeric(page)){

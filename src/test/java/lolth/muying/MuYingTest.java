@@ -45,6 +45,6 @@ public class MuYingTest {
 		String taskQueueName = MuYingCommodityDetailFetch.MUYING_SHOP_DETAIL_COMMENT;
 		MuYingCommodityCommentDetail detail = new MuYingCommodityCommentDetail(taskQueueName);
 		detail.handleTask(task);
-		
 	}
+	
 }

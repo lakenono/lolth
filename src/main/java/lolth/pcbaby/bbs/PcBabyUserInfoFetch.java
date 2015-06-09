@@ -26,7 +26,7 @@ public class PcBabyUserInfoFetch extends DistributedParser {
 		}
 		String url = task.getUrl();
 		UserInfoBean infoBean = new UserInfoBean();
-		String id = StringUtils.substringBetween(url, "id/", "/bbs");
+		String id = StringUtils.substringBetween(url, "cn/", "/home");
 		infoBean.setId(id);
 		infoBean.setUrl(url);
 		Document doc = Jsoup.parse(result);
@@ -34,8 +34,8 @@ public class PcBabyUserInfoFetch extends DistributedParser {
 		parseUser(elements, infoBean);
 		elements = doc.select("div#myBaby");
 		parseUserBaby(elements, infoBean);
-
 		log.debug(infoBean.toString());
+		infoBean.persistOnNotExist();
 	}
 
 	// 用户宝宝信息
@@ -49,19 +49,19 @@ public class PcBabyUserInfoFetch extends DistributedParser {
 			String value;
 			for (Element element : tmp) {
 				str = element.text();
-				value = element.select("span").text();
+				value = element.select("span").first().text();
 				if (str.indexOf("姓名") > -1) {
 					infoBean.setBabyName(infoBean.getBabyName() == null ? value : infoBean.getBabyName() + "|" + value);
 				} else if (str.indexOf("性别") > -1) {
 					infoBean.setBabySex(infoBean.getBabySex() == null ? value : infoBean.getBabySex() + "|" + value);
 				} else if (str.indexOf("年龄") > -1) {
-					infoBean.setBabySex(infoBean.getBabyAge() == null ? value : infoBean.getBabyAge() + "|" + value);
+					infoBean.setAge(infoBean.getBabyAge() == null ? value : infoBean.getBabyAge() + "|" + value);
 				} else if (str.indexOf("生日") > -1) {
 					infoBean.setBabyBirthday(value);
 				} else if (str.indexOf("生肖") > -1) {
 					infoBean.setBabyZodiac(value);
 				} else if (str.indexOf("星座") > -1) {
-					infoBean.setBabyConstellation(value);
+					infoBean.setBabyConstellation(StringUtils.substring(value, 0, 3));
 				}
 			}
 		}
@@ -82,7 +82,7 @@ public class PcBabyUserInfoFetch extends DistributedParser {
 				String value;
 				if (e.isEmpty()) {
 					str = element.text();
-					value = element.select("span").text();
+					value = element.select("span").first().text();
 					if (str.indexOf("来自") > -1) {
 						infoBean.setAddress(value);
 					} else if (str.indexOf("性别") > -1) {

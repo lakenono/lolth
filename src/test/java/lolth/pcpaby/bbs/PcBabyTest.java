@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import lakenono.core.GlobalComponents;
 import lolth.pcbaby.bbs.Bean.TopicBean;
+import lolth.pcbaby.bbs.Bean.TopicReplyBean;
 import lolth.pcbaby.bbs.Bean.UserInfoBean;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,8 +39,8 @@ public class PcBabyTest {
 	}
 
 	@Test
-	public void testFetchList() throws IOException, InterruptedException {
-		String url = "http://ks.pcbaby.com.cn/kids_bbs.shtml?q=%BB%DD%CA%CF&pageNo=5";
+	public void testFetchList() throws Exception {
+		String url = "http://ks.pcbaby.com.cn/kids_bbs.shtml?q=%B6%E0%C3%C0%D7%CC%D6%C2%B4%E2&menu&pageNo=1";
 		Document doc = GlobalComponents.fetcher.document(url);
 		Elements elements = doc.select("ul#JaList > li");
 		if (elements.isEmpty()) {
@@ -120,7 +121,7 @@ public class PcBabyTest {
 
 	@Test
 	public void fetchUserInfo() throws Exception {
-		String url = "http://my.pcbaby.com.cn/31354349/home/";
+		String url = "http://my.pcbaby.com.cn/36215673/home/";
 		// Document doc = GlobalComponents.dynamicFetch.document(url);
 		Document doc = GlobalComponents.fetcher.document(url);
 		// System.out.println(doc);
@@ -166,14 +167,58 @@ public class PcBabyTest {
 				} else if (str.indexOf("生肖") > -1) {
 					infoBean.setBabyZodiac(value);
 				} else if (str.indexOf("星座") > -1) {
-					infoBean.setBabyConstellation(value);
+					infoBean.setBabyConstellation(StringUtils.substring(value, 0, 3));
 				}
 			}
 		}
 		System.out.println(infoBean.toString());
 
 	}
+	@Test
+	public void fetchReply() throws IOException, InterruptedException{
+		String url = "http://bbs.pcbaby.com.cn/topic-1926367-1.html";
+		Document doc = GlobalComponents.fetcher.document(url);
+		
+		Elements elements = doc.select("div#post_list div[class^=\"post_wrap\"]");
+		if(elements.isEmpty()){
+			return;
+		}
+		TopicReplyBean replyBean = null;
+		for(Element element:elements){
+			replyBean = new TopicReplyBean();
+			replyBean.setUrl(url);
+			String id = element.attr("id");
+			replyBean.setId(id);
+			Elements select = element.select("td.post_right");
+			if (!select.isEmpty()) {
+				if(select.select("div.post_info").text().indexOf("楼主")>-1){
+					continue;
+				};
+				// 回复
+				replyBean.setText(select.select("div.replyBody").text());
+			}
+			select = element.select("th.post_left");
+			parseLeft(select,replyBean);
+			System.out.println(replyBean.toString());
+			System.out.println("-------------------");
+		}
+	}
 
+	private void parseLeft(Elements select, TopicReplyBean replyBean) {
+		if (select.isEmpty()) {
+			return;
+		}
+		// 用户昵称和id
+		Elements tmp = select.select("dt.fb a");
+		if (!tmp.isEmpty()) {
+			replyBean.setNickName(tmp.text());
+			String tm = tmp.attr("href");
+			String id = StringUtils.substringBetween(tm, "id/", "/bbs");
+			replyBean.setUserId(id);
+		}
+		
+	}
+	
 	@Test
 	public void sss() {
 		String url = "http://bbs.pcbaby.com.cn/topic-1926367.html";
@@ -187,6 +232,10 @@ public class PcBabyTest {
 		ss = "来自：sff";
 		String ff = StringUtils.substringAfter(ss, "：");
 		System.out.println(ff);
+		url = "http://bbs.pcbaby.com.cn/topic-1926367-1.html";
+		id = StringUtils.substringBetween(url, "cn/", ".html");
+		System.out.println(id);
+		System.out.println(StringUtils.substringBeforeLast(id, "-"));
 		// String ss = "发表于 2015-06-04 11:22 | 只看楼主 | 申请精华";
 		// Pattern p =
 		// Pattern.compile("[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}[ ][0-9]{1,2}[:][0-9]{1,2}");

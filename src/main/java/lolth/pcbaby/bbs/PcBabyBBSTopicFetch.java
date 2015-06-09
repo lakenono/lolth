@@ -41,7 +41,8 @@ public class PcBabyBBSTopicFetch extends DistributedPageParser {
 		}
 		task.setQueueName("pcbaby_bbs_topic_reply");
 		String pageStr = elements.first().text();
-		return Integer.parseInt(pageStr);
+		String page = StringUtils.substringBetween(pageStr, "/", "页");
+		return Integer.parseInt(page);
 	}
 
 	@Override
@@ -54,6 +55,9 @@ public class PcBabyBBSTopicFetch extends DistributedPageParser {
 		if (StringUtils.isBlank(result)) {
 			return;
 		}
+		
+		Document doc = Jsoup.parse(result);
+		
 		TopicBean topicBean = new TopicBean();
 		String url = task.getUrl();
 		baseUrl = StringUtils.substringBeforeLast(url, ".html") + "-{0}.html";
@@ -62,8 +66,7 @@ public class PcBabyBBSTopicFetch extends DistributedPageParser {
 		topicBean.setUrl(url);
 		topicBean.setKeyword(task.getExtra());
 		topicBean.setProjectName(task.getProjectName());
-
-		Document doc = Jsoup.parse(result);
+		
 		// 头部信息
 		Elements elements = doc.select("div.post_list_top");
 		parseHead(elements, topicBean);
@@ -131,7 +134,7 @@ public class PcBabyBBSTopicFetch extends DistributedPageParser {
 				}
 			}
 		}
-		// 正文
+		//标题
 		tmp = elements.select("h1");
 		if (!tmp.isEmpty()) {
 			topicBean.setTitle(tmp.text());

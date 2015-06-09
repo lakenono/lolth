@@ -47,7 +47,7 @@ public class PcBabyBBSSearchList extends Producer {
 
 	@Override
 	protected String buildUrl(int pageNum) throws Exception {
-		return MessageFormat.format(PCBABY_BBS_URL, UrlUtils.encode(keyword), String.valueOf(pageNum));
+		return MessageFormat.format(PCBABY_BBS_URL, UrlUtils.encode(keyword,"gbk"), String.valueOf(pageNum));
 	}
 
 	@Override
@@ -55,6 +55,17 @@ public class PcBabyBBSSearchList extends Producer {
 		Task buildTask = super.buildTask(url);
 		buildTask.setExtra(keyword);
 		return buildTask;
+	}
+	
+	public static void main(String[] args) {
+		String projectName = "测试奶粉";
+		String keyword = "多美滋致粹";
+		
+		try {
+			new PcBabyBBSSearchList(projectName,keyword).run();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

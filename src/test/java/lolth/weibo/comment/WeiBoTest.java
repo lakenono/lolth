@@ -2,10 +2,12 @@ package lolth.weibo.comment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import lakenono.task.FetchTaskProducer;
 import lolth.weibo.com.fetch.comment.bean.CommentBean;
 import lolth.weibo.com.fetch.repost.bean.RepostBean;
 import lolth.weibo.utils.WeiboContentSpliter;
@@ -101,15 +103,16 @@ public class WeiBoTest {
 
 	@Test
 	public void testWeiBoReposts() throws IOException {
-		String resp = ioToHtml();
-		System.out.println(resp);
-		JSONObject parseObject = JSON.parseObject(resp);
-		parseObject = parseObject.getJSONObject("data");
+		String json = ioToHtml();
+		System.out.println(json);
+		// JSONObject parseObject = JSON.parseObject(resp);
+		// parseObject = parseObject.getJSONObject("data");
 
 		// Object object2 = parseObject.getJSONObject("page").get("totalpage");
 		// System.out.println(object2);
 
-		Object object = parseObject.get("html");
+		// Object object = parseObject.get("html");
+		Object object = JSON.parseObject(json).getJSONObject("data").get("html");
 		String html = object.toString();
 		// System.out.println(html);
 		Document doc = Jsoup.parse(html);
@@ -171,6 +174,14 @@ public class WeiBoTest {
 			System.out.println("------------------------------------");
 		}
 
+	}
+	@Test
+	public void puth() throws SQLException {
+//		FetchTaskProducer producer = new FetchTaskProducer("weibo_text_comment_repost");
+//		
+//		batchName like 'weibo_text_comment_repost'
+//		
+//		producer.rePushTask("cmcc");
 	}
 
 	private String ioToHtml() throws IOException {
