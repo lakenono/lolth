@@ -30,7 +30,9 @@ public class LolthBootStrap {
 		service.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				new YhdFreshFetch().run();
+				YhdFreshFetch yhd = new YhdFreshFetch();
+				yhd.userJsonFetch();
+				yhd.run();
 				
 			}
 		}, 0, 10, TimeUnit.SECONDS);
