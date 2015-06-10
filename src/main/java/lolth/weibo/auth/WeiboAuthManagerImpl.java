@@ -15,7 +15,9 @@ public class WeiboAuthManagerImpl implements WeiboAuthManager {
 	public WeiboAuthManagerImpl() {
 
 		List<String> cookieList = new ArrayList<>();
-		cookieList.add("_T_WM=d3cbcc7112f1fe3327d7cfdbce31eb7b; SUB=_2A254ZroHDeTxGeVG6lUQ9y7MzD-IHXVbqMZPrDV6PUJbrdAKLWSlkW0n9faS04DbtFHoO_n8HN-udeawQg..; gsid_CTandWM=4u3X80661PUBPZJSpBayAg11g1b");
+		cookieList.add("_T_WM=4c8673afeeaf7be5e7dd78359b66a34b; SUB=_2A254c9tfDeTxGedH7VQS9irNwjmIHXVbn-UXrDV6PUJbrdANLVnWkW1BbC5-YMwGqGyxytEHaNTnjyUY8Q..");
+		cookieList.add("_T_WM=ac0612a664838b72b7d8662f0df280c1; SUB=_2A254c90BDeTxGeRP6VQV8CvLzD2IHXVbn-NJrDV6PUJbrdAKLVDtkW2eswvsU-yAXQyByi6neN9OZ0yNVQ..; gsid_CTandWM=4uPte42b1SJdUV3UAjo528VaRcr");
+		cookieList.add("_T_WM=9fd33549a75d82ecd51a238f80937e18; SUB=_2A254c90ADeTxGeNI61cW8S7FyTmIHXVbn-NIrDV6PUJbrdAKLW_ykW2IZiTXzAsI3ego2c6Fs41DeHOuVA..; gsid_CTandWM=4u4Ndbd01GuCtKJJxIUsSnwiGeV");
 		
 		for (String cookieStr : cookieList) {
 			Map<String, String> cookieMap = parseCookieStr(cookieStr);
