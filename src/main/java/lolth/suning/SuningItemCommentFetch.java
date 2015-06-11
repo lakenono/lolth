@@ -32,17 +32,18 @@ public class SuningItemCommentFetch extends FetchTaskHandler {
 			return;
 		}
 
-		json = StringUtils.removeStart(json, "getItem(");
+//		json = StringUtils.removeStart(json, "getItem(");
+		json = StringUtils.removeStart(json, "reviewList(");
 		json = StringUtils.removeEnd(json, ")");
 
 		JSONObject jsonObj = JSON.parseObject(json);
-		if (!jsonObj.getBoolean("success")) {
-			return;
-		}
+//		if (!jsonObj.getBoolean("success")) {
+//			return;
+//		}
 
 		// 解析数据
-		JSONArray commentList = jsonObj.getJSONObject("data").getJSONArray("reviews");
-
+//		JSONArray commentList = jsonObj.getJSONObject("data").getJSONArray("reviews");
+		JSONArray commentList = jsonObj.getJSONArray("commodityReviews");
 		for (int i = 0; i < commentList.size(); i++) {
 			SuningItemCommentBean comment = new SuningItemCommentBean();
 
@@ -51,22 +52,23 @@ public class SuningItemCommentFetch extends FetchTaskHandler {
 			comment.setId(commentObj.getString("id"));
 			comment.setContent(commentObj.getString("content"));
 			comment.setPublishTime(commentObj.getString("publishTime"));
-			comment.setScore(commentObj.getString("score"));
+			comment.setScore(commentObj.getString("qualityStar"));
 
-			StringBuffer labels = new StringBuffer();
+//			StringBuffer labels = new StringBuffer();
 
 			// 标签
-			JSONArray labelList = commentObj.getJSONArray("labels");
-
-			for (int j = 0; j < labelList.size(); j++) {
-				labels.append(labelList.getJSONObject(j).getString("name")).append(",");
-			}
-
-			if (labels.length() != 0) {
-				labels.deleteCharAt(labels.length() - 1);
-				comment.setLabels(labels.toString());
-			}
-
+//			JSONArray labelList = commentObj.getJSONArray("labels");
+//
+//			for (int j = 0; j < labelList.size(); j++) {
+//				labels.append(labelList.getJSONObject(j).getString("name")).append(",");
+//			}
+//
+//			if (labels.length() != 0) {
+//				labels.deleteCharAt(labels.length() - 1);
+//				comment.setLabels(labels.toString());
+//			}
+			//好 good 坏 bad 中 nomole
+			comment.setLabels(task.getName());
 			// 其他
 			comment.setPublisherId(commentObj.getString("userId"));
 
@@ -76,21 +78,21 @@ public class SuningItemCommentFetch extends FetchTaskHandler {
 			comment.setUsefulVoteCount(commentObj.getString("usefulVoteCount"));
 
 			// 用户
-			try {
-				JSONObject userObj = commentObj.getJSONObject("user");
-				SuningUserBean user = new SuningUserBean();
-				user.setId(userObj.getString("id"));
-				user.setNickName(userObj.getString("nickName"));
-				user.setProvince(userObj.getString("province"));
-				user.setBirthday(userObj.getString("birthday"));
-				user.setGender(userObj.getString("gender"));
-				user.setLevelId(userObj.getString("levelId"));
-				user.setLevelName(userObj.getString("levelName"));
-
-				user.persistOnNotExist();
-			} catch (Exception e) {
-			}
-
+//			try {
+//				JSONObject userObj = commentObj.getJSONObject("user");
+//				SuningUserBean user = new SuningUserBean();
+//				user.setId(userObj.getString("id"));
+//				user.setNickName(userObj.getString("nickName"));
+//				user.setProvince(userObj.getString("province"));
+//				user.setBirthday(userObj.getString("birthday"));
+//				user.setGender(userObj.getString("gender"));
+//				user.setLevelId(userObj.getString("levelId"));
+//				user.setLevelName(userObj.getString("levelName"));
+//
+//				user.persistOnNotExist();
+//			} catch (Exception e) {
+//			}
+//			task.getName()
 			comment.setItemId(task.getExtra());
 			comment.persistOnNotExist();
 		}
