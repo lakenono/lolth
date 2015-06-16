@@ -1,3 +1,4 @@
-lolth.weibo.task.WeiboTaskBuilder
-lolth.weibo.task.WeiboUserTaskProducer
-lolth.weibo.task.WeiboUserTagTaskProducer
+##lolth.weibo.task.WeiboTaskBuilder
+##lolth.weibo.task.WeiboUserTaskProducer
+##lolth.weibo.task.WeiboUserTagTaskProducer
+lolth.weibo.task.WeiboUserMainPageTaskProducer
