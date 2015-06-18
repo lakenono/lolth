@@ -5,6 +5,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import lolth.hupu.bbs.HupuBBSListTask;
+import lolth.hupu.bbs.HupuBBSTopicFetch;
+import lolth.hupu.bbs.HupuBBSUserFetch;
 import lolth.yhd.YhdFreshFetch;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -30,11 +33,10 @@ public class LolthBootStrap {
 		service.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				YhdFreshFetch yhd = new YhdFreshFetch();
-				yhd.userJsonFetch();
-				yhd.run();
-				
+				new HupuBBSListTask().run();
+				new HupuBBSTopicFetch().run();
+				new HupuBBSUserFetch().run();
 			}
-		}, 0, 10, TimeUnit.SECONDS);
+		}, 0, 3, TimeUnit.SECONDS);
 	}
 }
