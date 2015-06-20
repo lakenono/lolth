@@ -8,7 +8,12 @@ import java.util.concurrent.TimeUnit;
 import lolth.hupu.bbs.HupuBBSListTask;
 import lolth.hupu.bbs.HupuBBSTopicFetch;
 import lolth.hupu.bbs.HupuBBSUserFetch;
+import lolth.pptv.cba.PptyCbaCommentFetch;
+import lolth.pptv.cba.PptyCbaFetch;
 import lolth.yhd.YhdFreshFetch;
+import lolth.zhaopin.BaiduBBSCascadeListTask;
+import lolth.zhaopin.BaiduBBSSearchListTask;
+import lolth.zhaopin.BaiduBBSSearchTopicFetch;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -33,10 +38,17 @@ public class LolthBootStrap {
 		service.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				new HupuBBSListTask().run();
-				new HupuBBSTopicFetch().run();
-				new HupuBBSUserFetch().run();
+//				new HupuBBSListTask().run();
+//				new HupuBBSTopicFetch().run();
+//				new HupuBBSUserFetch().run();
+//				new PptyCbaFetch().run();
+//				PptyCbaCommentFetch commentFetch = new PptyCbaCommentFetch();
+//				commentFetch.userJsonFetch();
+//				commentFetch.run();
+				new BaiduBBSSearchListTask().run();
+				new BaiduBBSCascadeListTask().run();
+				new BaiduBBSSearchTopicFetch().run();
 			}
-		}, 0, 3, TimeUnit.SECONDS);
+		}, 0, 30, TimeUnit.SECONDS);
 	}
 }
