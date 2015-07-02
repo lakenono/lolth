@@ -31,6 +31,7 @@ public class PacutoBBSPostBean extends BaseBean {
 	private String postTime;
 	
 	private String forumId;
+	@DBConstraintPK
 	private String keyword;
 
 	public static void main(String[] args) throws Exception {
