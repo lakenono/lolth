@@ -14,35 +14,30 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AutoHomeBBSPostTextFetch
-{
+public class AutoHomeBBSPostTextFetch {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	public void run() throws Exception
-	{
-		while (true)
-		{
-			List<String> todo = GlobalComponents.db.getRunner().query("select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-05-20' and views is null limit 1000", new ColumnListHandler<String>());
+	public void run() throws Exception {
+		while (true) {
+			List<String> todo = GlobalComponents.db.getRunner().query("select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where postTime >= '2014-05-00' and views is null limit 1000", new ColumnListHandler<String>());
 
-			for (String url : todo)
-			{
-				try
-				{
+			for (String url : todo) {
+				try {
 					String html = GlobalComponents.fetcher.fetch(url);
 					AutoHomeBBSPostBean bean = this.parse(html);
 					bean.setUrl(url);
 					bean.update();
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					this.log.error("", e);
+
+					int updateResult = GlobalComponents.db.getRunner().update("update " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " set views=? where url=?","",url);
+					this.log.info("update {},{}",url,updateResult);
 				}
 			}
 		}
 	}
 
-	public AutoHomeBBSPostBean parse(String html)
-	{
+	public AutoHomeBBSPostBean parse(String html) {
 		Document document = Jsoup.parse(html);
 
 		AutoHomeBBSPostBean bean = new AutoHomeBBSPostBean();
@@ -59,23 +54,20 @@ public class AutoHomeBBSPostTextFetch
 		String text = document.select("div.rconten div.conttxt").first().text();
 		{
 			Elements elements = document.select("div.rconten div.conttxt img");
-			for (Element element : elements)
-			{
+			for (Element element : elements) {
 				String attr = element.attr("src");
 				text = text + " " + attr;
 			}
 		}
-		
+
 		// 车主信息
-		
-		
+
 		bean.setText(text);
 
 		return bean;
 	}
 
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		new AutoHomeBBSPostTextFetch().run();
 	}
 }
