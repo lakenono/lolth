@@ -25,7 +25,7 @@ public class AutoHomeBBSPostTextFetch {
 
 	public void run() throws Exception {
 		while (true) {
-			List<String> todo = GlobalComponents.db.getRunner().query("select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where jobId=? and views is null limit 1000", new ColumnListHandler<String>(), this.jobId);
+			List<String> todo = GlobalComponents.db.getRunner().query("select distinct url from " + BaseBean.getTableName(AutoHomeBBSPostBean.class) + " where jobId=? and views is null and postTime > '2014-07-14' and postTime < '2015-07-14' limit 1000", new ColumnListHandler<String>(), this.jobId);
 
 			for (String url : todo) {
 				try {
