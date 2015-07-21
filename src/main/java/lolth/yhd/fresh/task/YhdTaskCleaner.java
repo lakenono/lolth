@@ -1,4 +1,4 @@
-package lolth.yhd;
+package lolth.yhd.fresh.task;
 
 import lakenono.base.Queue;
 

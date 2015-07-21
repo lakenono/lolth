@@ -1,4 +1,4 @@
-package lolth.yhd;
+package lolth.yhd.fresh.task;
 
 import java.text.MessageFormat;
 
@@ -10,7 +10,8 @@ import lakenono.core.GlobalComponents;
 /**
  * 1号店任务生成类
  * 跑两次任务，一个页面两次请求
- * url1=http://list.yhd.com/searchPage/c20947-0-81806/b/a-s1-v0-p13-price-d0-f0-m1-rt0-pid-mid0-k/?isLargeImg=0
+ * url1=http://list.yhd.com/searchPage/c20947-0-81806/b/a-s1-v0-p11-price-d0-f0-m1-rt0-pid-mid0-k/?isLargeImg=0
+ * http://search.yhd.com/c0-0-0/b/a-s1-v0-p2-price-d0-f0-m1-rt0-pid-mid0-k%E6%B4%97%E5%8F%91%E9%9C%B2/
  * url2=http://list.yhd.com/searchPage/c20947-0-81806/b/a-s1-v0-p{0}-price-d0-f0-m1-rt0-pid-mid0-k/?isGetMoreProducts=1&moreProductsDefaultTemplate=0&isLargeImg=0";
  * @author hepeng.yang
  *
