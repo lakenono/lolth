@@ -29,7 +29,7 @@ public class AutoHomeBBSTopicFetch extends DistributedParser {
 		Document doc = Jsoup.parse(result);
 
 		AutoHomeBBSBean bean = new AutoHomeBBSBean();
-		String id = StringUtils.substringBetween(task.getUrl(), "bbs", ".html");
+		String id = StringUtils.substringBetween(task.getUrl(), "bbs/", ".html");
 		bean.setId(id);
 		// views
 		String views = doc.select("font#x-views").first().text();
