@@ -1,4 +1,4 @@
-package lolth.yhd.search.task;
+package lolthx.yhd.search.task;
 
 import java.text.MessageFormat;
 

@@ -1,11 +1,11 @@
-package lolth.yhd.fresh.fetch;
+package lolthx.yhd.fresh.fetch;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
-import lolth.yhd.fresh.bean.YhdFreshBean;
+import lolthx.yhd.fresh.bean.YhdFreshBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.jsoup.Jsoup;

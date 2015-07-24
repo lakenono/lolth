@@ -1,4 +1,4 @@
-package lolth.yhd.search.fetch;
+package lolthx.yhd.search.fetch;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -7,8 +7,8 @@ import java.util.List;
 import lakenono.base.DistributedParser;
 import lakenono.base.Queue;
 import lakenono.base.Task;
-import lolth.yhd.search.bean.GoodsBean;
-import lolth.yhd.search.task.YhdSearchProduce;
+import lolthx.yhd.search.bean.GoodsBean;
+import lolthx.yhd.search.task.YhdSearchProduce;
 import lombok.extern.slf4j.Slf4j;
 
 import org.jsoup.Jsoup;

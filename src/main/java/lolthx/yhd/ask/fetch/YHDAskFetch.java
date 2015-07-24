@@ -1,10 +1,10 @@
-package lolth.yhd.ask.fetch;
+package lolthx.yhd.ask.fetch;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lolth.yhd.ask.bean.YHDAskBean;
-import lolth.yhd.search.fetch.YHDGoodsFetch;
+import lolthx.yhd.ask.bean.YHDAskBean;
+import lolthx.yhd.search.fetch.YHDGoodsFetch;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;

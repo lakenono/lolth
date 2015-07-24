@@ -1,4 +1,4 @@
-package lolth.yhd.comment.bean;
+package lolthx.yhd.comment.bean;
 
 import java.sql.SQLException;
 
