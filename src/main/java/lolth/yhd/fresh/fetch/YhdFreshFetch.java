@@ -52,5 +52,4 @@ public class YhdFreshFetch extends DistributedParser{
 		}
 		beans.clear();
 	}
-
 }

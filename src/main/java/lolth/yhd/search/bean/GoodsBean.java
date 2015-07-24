@@ -30,6 +30,11 @@ public class GoodsBean extends BaseBean{
 	private String strong;
 	//搜索关键字
 	private String keyword;
+	//评论id
+	private String parentId;
+	private String productid;
+	//评论个数
+	private String commments;
 	public static void main(String[] args) throws SQLException {
 		new GoodsBean().buildTable();
 	}

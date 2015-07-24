@@ -2,11 +2,7 @@ package lolth.yhd.fresh.task;
 
 import java.text.MessageFormat;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import lakenono.base.Producer;
-import lakenono.core.GlobalComponents;
 /**
  * 1号店任务生成类
  * 跑两次任务，一个页面两次请求
