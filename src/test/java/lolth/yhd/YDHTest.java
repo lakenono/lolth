@@ -2,7 +2,7 @@ package lolth.yhd;
 
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lolth.yhd.ask.fetch.YHDAskFetch;
+import lolthx.yhd.ask.fetch.YHDAskFetch;
 
 public class YDHTest {
 	public static void main(String[] args) throws Exception {
