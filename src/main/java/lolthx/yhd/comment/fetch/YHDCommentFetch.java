@@ -64,5 +64,4 @@ public class YHDCommentFetch extends DistributedParser{
 			list.clear();
 		}
 	}
-	
 }

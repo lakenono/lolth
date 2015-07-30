@@ -121,10 +121,4 @@ public class YHDGoodsFetch extends DistributedParser {
 
 	}
 
-	public static void main(String[] args) {
-		YHDGoodsFetch yhd = new YHDGoodsFetch();
-		yhd.userJsonFetch();
-		yhd.run();
-
-	}
 }

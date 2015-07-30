@@ -25,9 +25,9 @@ public class YHDCommentBean extends BaseBean{
 	@DBConstraintPK
 	private String commentId;
 	private String score;
-	@DBField(type="text")
+	@DBField(type="varchar(500)")
 	private String content;
-	@DBField(type="text")
+	@DBField(type="varchar(500)")
 	private String repley;
 	private String date;
 	

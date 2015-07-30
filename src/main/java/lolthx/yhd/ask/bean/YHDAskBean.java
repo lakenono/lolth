@@ -19,9 +19,9 @@ public class YHDAskBean extends BaseBean{
 	//评论id
 	@DBConstraintPK
 	private String askId;
-	@DBField(type="text")
+	@DBField(type="varchar(500)")
 	private String question;
-	@DBField(type="text")
+	@DBField(type="varchar(500)")
 	private String answer;
 	private String date;
 	
