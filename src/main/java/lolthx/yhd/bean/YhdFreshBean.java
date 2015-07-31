@@ -1,4 +1,4 @@
-package lolthx.yhd.fresh.bean;
+package lolthx.yhd.bean;
 
 import java.sql.SQLException;
 
