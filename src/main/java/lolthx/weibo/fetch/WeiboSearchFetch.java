@@ -39,7 +39,7 @@ public class WeiboSearchFetch extends DistributedParser {
 	private int sleep = 15000;
 	private final String WEIBO_USER_URL_TEMPLATE = "http://weibo.cn/{0}";
 	private final String WEIBO_USER_INFO_URL_TEMPLAGE = "http://weibo.cn/{0}/info";
-	private String user_queue_name = "user_queue_name";
+	public static final String USER_QUEUE_NAME = "weibo_user_queue_name";
 
 	@Override
 	public String getQueueName() {
@@ -67,7 +67,7 @@ public class WeiboSearchFetch extends DistributedParser {
 	}
 	
 
-	private void bulidWeiboUserTask(String id, String keyword) {
+	public void bulidWeiboUserTask(String id, String keyword) {
 		try {
 			String uid = id;
 			if (!StringUtils.isNumeric(uid)) {
@@ -79,7 +79,7 @@ public class WeiboSearchFetch extends DistributedParser {
 			}
 
 			Task t = new Task();
-			t.setQueueName(user_queue_name);
+			t.setQueueName(USER_QUEUE_NAME);
 			t.setUrl(buildUserInfoUrl(uid));
 			t.setExtra(id+","+uid);
 			Queue.push(t);
