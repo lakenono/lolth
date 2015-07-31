@@ -46,7 +46,7 @@ public class WeiboTaskBuilder extends BaseLog
 		// 清空
 		GlobalComponents.jedis.del(BaseBean.getTableName(WeiboTaskBean.class));
 
-		List<WeiboTaskBean> tasks = GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(WeiboTaskBean.class) + " where status='todo'", new BeanListHandler<WeiboTaskBean>(WeiboTaskBean.class));
+		List<WeiboTaskBean> tasks = GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(WeiboTaskBean.class) + " where status='todo' order by starttime desc", new BeanListHandler<WeiboTaskBean>(WeiboTaskBean.class));
 
 		for (WeiboTaskBean bean : tasks)
 		{
