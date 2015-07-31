@@ -1,4 +1,4 @@
-package lolthx.weibo.search.task;
+package lolthx.weibo.task;
 
 import java.text.MessageFormat;
 import java.text.ParseException;
