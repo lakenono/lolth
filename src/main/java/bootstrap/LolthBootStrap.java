@@ -5,11 +5,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import lolth.autohome.newbbs.AutoHomeBBSListFetch;
-import lolth.autohome.newbbs.AutoHomeBBSTopicFetch;
-import lolth.zhaopin.BaiduBBSCascadeListTask;
-import lolth.zhaopin.BaiduBBSSearchListTask;
-import lolth.zhaopin.BaiduBBSSearchTopicFetch;
+import lolthx.yhd.ask.fetch.YHDAskFetch;
+import lolthx.yhd.comment.fetch.YHDCommentFetch;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -34,7 +31,7 @@ public class LolthBootStrap {
 		service.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				new AutoHomeBBSListFetch().run();
+				new YHDCommentFetch().run();
 			}
 		}, 0, 5, TimeUnit.SECONDS);
 		
@@ -43,7 +40,10 @@ public class LolthBootStrap {
 		service2.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				new AutoHomeBBSTopicFetch().run();
+//				new AutoHomeBBSTopicFetch().run();
+				YHDAskFetch yhd = new YHDAskFetch();
+//				yhd.userJsonFetch();
+				yhd.run();
 			}
 		}, 0, 5, TimeUnit.SECONDS);
 	}
