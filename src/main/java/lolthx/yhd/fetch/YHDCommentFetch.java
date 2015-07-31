@@ -1,12 +1,11 @@
-package lolthx.yhd.comment.fetch;
+package lolthx.yhd.fetch;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
-import lolthx.yhd.comment.bean.YHDCommentBean;
-import lolthx.yhd.search.fetch.YHDGoodsFetch;
+import lolthx.yhd.bean.YHDCommentBean;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;

@@ -1,4 +1,4 @@
-package lolthx.yhd.ask.bean;
+package lolthx.yhd.bean;
 
 import java.sql.SQLException;
 
@@ -9,24 +9,29 @@ import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-@DBTable(name = "data_yhd_ask_bean")
+/**
+ * 一号店商品评论
+ * @author yanghp
+ *
+ */
+@DBTable(name = "data_yhd_comment_bean")
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
-public class YHDAskBean extends BaseBean{
+public class YHDCommentBean extends BaseBean{
 	//商品id
 	private String goodsId;
 	//评论id
 	@DBConstraintPK
-	private String askId;
+	private String commentId;
+	private String score;
 	@DBField(type="varchar(500)")
-	private String question;
+	private String content;
 	@DBField(type="varchar(500)")
-	private String answer;
+	private String repley;
 	private String date;
 	
 	public static void main(String[] args) throws SQLException {
-		new YHDAskBean().buildTable();
+		new YHDCommentBean().buildTable();
 	}
-	
 }
