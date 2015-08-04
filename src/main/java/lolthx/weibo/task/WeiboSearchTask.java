@@ -74,7 +74,7 @@ public class WeiboSearchTask {
 				startTime, endTime, String.valueOf(pageNum));
 	}
 
-	private void run() throws InterruptedException, TException {
+	private void run() throws TException, InterruptedException {
 
 		log.info("{} sina_weibo search task startTime {} - {}", this.keyword,this.startTime,this.endTime);
 		int pagenum = getMaxPage();
@@ -95,8 +95,8 @@ public class WeiboSearchTask {
 
 	private int getMaxPage() throws TException, InterruptedException {
 		String url = buildUrl(1);
-//		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
-		String cookies = "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
+		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
+//		String cookies = "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
 		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies);
 		Document doc = Jsoup.parse(html);
 
@@ -119,9 +119,5 @@ public class WeiboSearchTask {
 		task.setQueueName(WEIBO_SEARCH_QUEUE);
 		task.setUrl(url);
 		return task;
-	}
-	public static void main(String[] args) throws ParseException, InterruptedException, TException {
-		WeiboSearchTask weibo = new WeiboSearchTask("瑞纳");
-		weibo.run();
 	}
 }

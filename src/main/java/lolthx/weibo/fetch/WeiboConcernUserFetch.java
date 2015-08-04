@@ -48,4 +48,9 @@ public class WeiboConcernUserFetch extends DistributedParser {
 		}
 	}
 	
+	@Override
+	public String getCookieDomain() {
+		return "weibo.cn";
+	}
+	
 }

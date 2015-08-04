@@ -12,7 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 /**
- * 微博用户主页任务
+ * 微博用户主页任务，最多获取前3页
  * @author yanghp
  *
  */
@@ -84,5 +84,4 @@ public class WeiboMainPageTask extends Producer {
 		task.setExtra(user);
 		return task;
 	}
-
 }

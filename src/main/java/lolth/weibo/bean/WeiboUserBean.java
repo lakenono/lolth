@@ -2,6 +2,7 @@ package lolth.weibo.bean;
 
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
+import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class WeiboUserBean extends BaseBean {
 	private String birthday;
 	private String auth;
 	private String bloodType;
-
+	@DBField(type="varchar(500)")
 	private String summery;
 
 	private String tags;

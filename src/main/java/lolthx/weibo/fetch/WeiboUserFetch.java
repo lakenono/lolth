@@ -86,14 +86,18 @@ public class WeiboUserFetch extends DistributedParser{
 					buildUserTagTask(user.getUid(), task);
 				}
 			}
+		}else{
+			log.error("cookies is lose efficacy !");
 		}
+		
 	}
 	private void buildUserTagTask(String uid, Task task) {
-		//用不用克隆一个新对象 //TODO
-		task.setQueueName(WEIBO_USER_TAG);
-		task.setUrl(buildUrl(uid));
-		task.setExtra(uid);
-		Queue.push(task);
+		Task t = new Task();
+		t.setQueueName(WEIBO_USER_TAG);
+		t.setUrl(buildUrl(uid));
+		t.setExtra(uid);
+		t.setProjectName(task.getProjectName());
+		Queue.push(t);
 	}
 	private String buildUrl(String uid) {
 		return MessageFormat.format(WEIBO_USER_TAG_URL_TEMPLATE, uid);

@@ -42,7 +42,7 @@ public class WeiboMainPageFetch extends DistributedParser{
 			return;
 		}
 		Document doc = Jsoup.parse(result);
-		List<WeiboBean> beans = parse(doc, task.getExtra());
+		List<WeiboBean> beans = parseBean(doc, task.getExtra());
 
 		for (WeiboBean b : beans) {
 			try {
@@ -55,7 +55,7 @@ public class WeiboMainPageFetch extends DistributedParser{
 			}
 		}
 	}
-	public List<WeiboBean> parse(Document document, String uid) throws IOException, ParseException {
+	public List<WeiboBean> parseBean(Document document, String uid) throws IOException, ParseException {
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
 
 		String username = "";
@@ -139,5 +139,9 @@ public class WeiboMainPageFetch extends DistributedParser{
 			log.debug(bean.toString());
 		}
 		return weiboBeans;
+	}
+	@Override
+	public String getCookieDomain() {
+		return "weibo.cn";
 	}
 }

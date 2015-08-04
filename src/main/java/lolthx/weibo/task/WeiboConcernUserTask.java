@@ -11,7 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 /**
- * 微博关联用户task
+ * 微博关注用户列表
  * @author yanghp
  *
  */
@@ -22,10 +22,10 @@ public class WeiboConcernUserTask extends Producer {
 	private String taskName;
 	private String uid;
 
-	public WeiboConcernUserTask(String taskName, String uid) {
+	public WeiboConcernUserTask(String uid, String taskName) {
 		super(taskName);
-		this.taskName = taskName;
 		this.uid = uid;
+		this.taskName = taskName;
 	}
 
 	@Override
