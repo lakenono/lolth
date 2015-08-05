@@ -214,7 +214,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 		}
 		try {
 			bean.saveOnNotExist();
-		} catch (IllegalArgumentException | IllegalAccessException  | SQLException e) {
+		} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
 			e.printStackTrace();
 		}
 	}

@@ -5,11 +5,9 @@ import java.text.MessageFormat;
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lolth.autohome.newbbs.AutoHomeBBSListProducer;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
-import org.junit.Test;
 
 public class AutoHomeWordOfMouthProducer extends Producer {
 	
