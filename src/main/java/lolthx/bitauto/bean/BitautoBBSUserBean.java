@@ -17,15 +17,24 @@ public class BitautoBBSUserBean extends BaseBean {
 
 	@DBConstraintPK
 	private String id;
-	
 	private String name;
+	private String url;
 
-	// 作者地址
-	private String authorUrl;
-	// 区域
-	private String area;
-
+	// 省
+	private String province;
+	// 市
+	private String city;
+	
+	//注册时间
+	private String regTime;
+	
+	//-------------可变数据-----------------
+	//等级
+	private String level;
+	//帖子数
+	private String posts;
+	//精华数
+	private String elites;
+	//车型
 	private String car;
-	// 关注
-	private String concern;
 }
