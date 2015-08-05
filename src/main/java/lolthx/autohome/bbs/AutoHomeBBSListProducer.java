@@ -22,14 +22,13 @@ public class AutoHomeBBSListProducer extends Producer {
 		this.id = id;
 		this.keyword = keyword;
 	}
-
-	// 推送队列的名字
+	//推送队列的名字
 	@Override
 	public String getQueueName() {
 		return "autohome_bbs_list";
 	}
 
-	// 解析最大页
+	//解析最大页
 	@Override
 	protected int parse() throws Exception {
 		Document document = GlobalComponents.fetcher.document(buildUrl(1));
@@ -38,7 +37,7 @@ public class AutoHomeBBSListProducer extends Producer {
 		return Integer.parseInt(page);
 	}
 
-	// 拼接url
+	//拼接url
 	@Override
 	protected String buildUrl(int pageNum) throws Exception {
 		return MessageFormat.format(AUTOHOME_BBS_URL, id, String.valueOf(pageNum));
@@ -53,10 +52,8 @@ public class AutoHomeBBSListProducer extends Producer {
 
 	public static void main(String[] args) throws Exception {
 		String projectName = "迈锐宝A20150721";
-		// "78", "110", "634", "117", "50", "496", "164", "834", "2313" || "雅阁",
-		// "凯美瑞", "天籁", "蒙迪欧", "索纳塔", "迈腾", "君威", "君越", "迈锐宝"
-		String[] ids = { "78" };
-		String[] keywords = { "雅阁" };
+		String[] ids = {"78","110","634","117","50","496","164","834","2313"};
+		String[] keywords = {"雅阁","凯美瑞","天籁","蒙迪欧","索纳塔","迈腾","君威","君越","迈锐宝"};
 		for (int i = 0; i < ids.length; i++) {
 			new AutoHomeBBSListProducer(projectName, ids[i], keywords[i]).run();
 		}
