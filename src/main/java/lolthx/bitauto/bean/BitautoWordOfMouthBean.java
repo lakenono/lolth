@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
-public class BitautoWordOfMouthBean extends BaseBean {
+public class BitautoWordOfMouthBean extends DBBean {
 	//------------------------------------同 BitautoBBSPostBean
 	@DBConstraintPK
 	private String id;
@@ -83,7 +84,7 @@ public class BitautoWordOfMouthBean extends BaseBean {
 	
 	
 	public static void main(String[] args) throws Exception {
-		new BitautoWordOfMouthBean().buildTable();
+		DBBean.createTable(BitautoWordOfMouthBean.class);
 	}
 	
 	public void update() throws SQLException{

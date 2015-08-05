@@ -204,7 +204,7 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 				String likes = element.getElementsMatchingOwnText("人支持该口碑").first().child(0).text();
 				bean.setLikes(likes);
 
-				bean.persistOnNotExist();
+				bean.saveOnNotExist();
 		}	
 	}
 	

@@ -4,17 +4,18 @@ import java.sql.SQLException;
 
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 
-@DBTable(name = "data_autohome_bbs")
+@DBTable(name = "data_autohome_bbs_test")
 @Data
-public class AutoHomeBBSBean extends BaseBean{
+public class AutoHomeBBSBean extends DBBean{
 
 	public static void main(String[] args) throws SQLException {
-		new AutoHomeBBSBean().buildTable();
+		DBBean.createTable(AutoHomeBBSBean.class);
 	}
 	
 	@DBConstraintPK

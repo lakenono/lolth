@@ -69,7 +69,7 @@ public class BitautoBBSCommentFetch extends DistributedParser {
 			bean.setUrl(task.getUrl());
 			bean.setTitle(title);
 
-			bean.persistOnNotExist();
+			bean.saveOnNotExist();
 
 			// parseUser(left,userBean);
 		}
@@ -107,8 +107,8 @@ public class BitautoBBSCommentFetch extends DistributedParser {
 		}
 
 		try {
-			bean.persistOnNotExist();
-		} catch (IllegalArgumentException | IllegalAccessException | InstantiationException | SQLException e) {
+			bean.saveOnNotExist();
+		} catch (IllegalArgumentException | IllegalAccessException  | SQLException e) {
 			e.printStackTrace();
 		}
 

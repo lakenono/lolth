@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
@@ -11,10 +12,10 @@ import lombok.Data;
 
 @DBTable(name = "data_bitauto_bbs")
 @Data
-public class BitautoBBSBean extends BaseBean{
+public class BitautoBBSBean extends DBBean{
 
 	public static void main(String[] args) throws SQLException {
-		new BitautoBBSBean().buildTable();
+		DBBean.createTable(BitautoBBSBean.class);
 	}
 	
 	@DBConstraintPK

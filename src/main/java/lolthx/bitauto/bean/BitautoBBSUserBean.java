@@ -3,16 +3,17 @@ package lolthx.bitauto.bean;
 import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 
 @DBTable(name = "data_bitauto_user")
 @Data
-public class BitautoBBSUserBean extends BaseBean {
+public class BitautoBBSUserBean extends DBBean {
 
 	public static void main(String[] args) throws SQLException {
-		new BitautoBBSUserBean().buildTable();
+		DBBean.createTable(BitautoBBSUserBean.class);
 	}
 
 	@DBConstraintPK

@@ -127,7 +127,7 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 			parseKoubeComment(postRight, bean);
 			
 			try {
-				bean.persistOnNotExist();
+				bean.saveOnNotExist();
 			} catch (Exception e) {
 				System.out.println("有问题-O(∩_∩)O~");
 			}	

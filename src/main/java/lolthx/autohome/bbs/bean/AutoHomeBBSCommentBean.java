@@ -3,13 +3,14 @@ package lolthx.autohome.bbs.bean;
 import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 
 @DBTable(name = "data_autohome_bbs_comt")
 @Data
-public class AutoHomeBBSCommentBean extends BaseBean{
+public class AutoHomeBBSCommentBean extends DBBean{
 	
 		//主键ID
 		private String id;
@@ -37,7 +38,7 @@ public class AutoHomeBBSCommentBean extends BaseBean{
 		private String title;
 		
 		public static void main(String[] args) throws SQLException{
-			new AutoHomeBBSCommentBean().buildTable();
+			DBBean.createTable(AutoHomeBBSCommentBean.class);
 		}
 
 

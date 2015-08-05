@@ -1,6 +1,7 @@
 package lolthx.autohome.buy.bean;
 
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lolthx.autohome.buy.bean.AutohomePriceInfoBean;
@@ -12,7 +13,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper=false)
 @EqualsAndHashCode(callSuper=false)
-public class AutohomePriceInfoBean extends BaseBean {
+public class AutohomePriceInfoBean extends DBBean {
 	@DBConstraintPK
 	private String id;
 	private String url;
@@ -62,6 +63,6 @@ public class AutohomePriceInfoBean extends BaseBean {
 	private String buyFeeling;
 	
 	public static void main(String[] args) throws Exception{
-		new AutohomePriceInfoBean().buildTable();
+		DBBean.createTable(AutohomePriceInfoBean.class);
 	}
 }

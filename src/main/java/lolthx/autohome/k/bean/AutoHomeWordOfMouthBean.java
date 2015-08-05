@@ -3,6 +3,7 @@ package lolthx.autohome.k.bean;
 import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
@@ -13,9 +14,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
-public class AutoHomeWordOfMouthBean extends BaseBean {
+public class AutoHomeWordOfMouthBean extends DBBean {
 	public static void main(String[] args) throws SQLException {
-		new AutoHomeWordOfMouthBean().buildTable();
+		DBBean.createTable(AutoHomeWordOfMouthBean.class);
 	}
 
 	// 用户名

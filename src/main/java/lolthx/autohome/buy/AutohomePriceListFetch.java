@@ -178,7 +178,7 @@ public class AutohomePriceListFetch extends DistributedParser  {
 					bean.setBuyFeeling(StringUtils.trim(StringUtils.substringAfter(data, "：")));
 				}
 			}
-			bean.persistOnNotExist();
+			bean.saveOnNotExist();
 		}
 	}
 

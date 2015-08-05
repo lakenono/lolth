@@ -124,14 +124,13 @@ public class BitautoBBSListFetch extends DistributedParser {
 			bean.setText(text);
 
 			try {
-				if (bean.persistOnNotExist()) {
-					String sendurl = StringUtils.replace(bean.getUrl(), ".html", "-{0}.html");
-					int maxpage = this.getMaxPage(docDetail);//执行页面用户评论推送
-					for(int pagenum = 1 ; pagenum<= maxpage ;pagenum++ ){
-						String seUrl = buildUrl(sendurl,pagenum);
-						Task newTask = buildTask(seUrl, "bitauto_bbs_comment", task);
-						Queue.push(newTask);
-					}
+				bean.saveOnNotExist();
+				String sendurl = StringUtils.replace(bean.getUrl(), ".html", "-{0}.html");
+				int maxpage = this.getMaxPage(docDetail);//执行页面用户评论推送
+				for(int pagenum = 1 ; pagenum<= maxpage ;pagenum++ ){
+					String seUrl = buildUrl(sendurl,pagenum);
+					Task newTask = buildTask(seUrl, "bitauto_bbs_comment", task);
+					Queue.push(newTask);
 				}
 			} catch (Exception e) {
 
@@ -214,8 +213,8 @@ public class BitautoBBSListFetch extends DistributedParser {
 			}
 		}
 		try {
-			bean.persistOnNotExist();
-		} catch (IllegalArgumentException | IllegalAccessException | InstantiationException | SQLException e) {
+			bean.saveOnNotExist();
+		} catch (IllegalArgumentException | IllegalAccessException  | SQLException e) {
 			e.printStackTrace();
 		}
 	}

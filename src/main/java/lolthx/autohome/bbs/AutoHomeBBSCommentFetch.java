@@ -54,9 +54,9 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 			
 			parseComment(conright, commentBean);
 
-			userBean.persistOnNotExist();
+			userBean.saveOnNotExist();
 
-			commentBean.persistOnNotExist();
+			commentBean.saveOnNotExist();
 			
 			
 		}
