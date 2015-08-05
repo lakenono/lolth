@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@DBTable(name = "data_autohome_kb")
+@DBTable(name = "data_autohome_koubei")
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
