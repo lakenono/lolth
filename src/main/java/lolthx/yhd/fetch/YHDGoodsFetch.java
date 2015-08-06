@@ -61,7 +61,8 @@ public class YHDGoodsFetch extends DistributedParser {
 			// 评论个数，如果不为0则发送task抓取商品评论，商品评论页数根据评论数定
 			String commments = comment.first().attr("experiencecount");
 			// 评分
-			String strong = comment.first().select("span").text().substring(1);
+//			String strong = comment.first().select("span").text().substring(1);
+			String strong = element.select("span.positiveRatio").attr("title");
 			String shop = element.select("div.owner").text();
 
 			bean.setGoodsId(id);
