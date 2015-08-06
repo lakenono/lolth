@@ -26,6 +26,8 @@ public class WeiboUserBean extends BaseBean {
 	private String summery;
 
 	private String tags;
+	@DBConstraintPK
+	private String projectName;
 
 	public WeiboUserBean(String id) {
 		this.id = id;

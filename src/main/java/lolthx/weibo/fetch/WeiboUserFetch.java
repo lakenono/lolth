@@ -48,7 +48,7 @@ public class WeiboUserFetch extends DistributedParser{
 				String[] ids = StringUtils.split(task.getExtra(), ',');
 				user.setId(ids[0]);
 				user.setUid(ids[1]);
-
+				user.setProjectName(task.getProjectName());
 				for (String f : fields) {
 					if (StringUtils.startsWith(f, "昵称:")) {
 						user.setName(StringUtils.substringAfter(f, ":"));

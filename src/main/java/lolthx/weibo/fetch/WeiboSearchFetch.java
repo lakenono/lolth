@@ -206,7 +206,8 @@ public class WeiboSearchFetch extends DistributedParser {
 			WeiboContentSpliter.spliteContent(bean);
 
 			bean.setFetchTime(fetchTime);
-			bean.setKeyword(task.getProjectName());
+			bean.setKeyword(task.getExtra());
+			bean.setProjectName(task.getProjectName());
 			weiboBeans.add(bean);
 
 			log.debug(bean.toString());
