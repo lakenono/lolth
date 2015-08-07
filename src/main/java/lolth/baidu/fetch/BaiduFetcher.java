@@ -18,10 +18,10 @@ public class BaiduFetcher {
 
 	private static List<Map<String, String>> cookiesCache = new ArrayList<>();
 
-	public static final String[] cookies = { "BAIDUID=CE512F8A7E449498E7983F5160DDC0EF:FG=1; BDUSS=21wV2RGS1Z1TnZHb0JMQmk1ZFhUZlVCaG4zd1czZkJOazM4Q2Z4MWdINzlXbkpWQUFBQUFBJCQAAAAAAAAAAAEAAACIjIxhz9S640hlcnJ5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP3NSlX9zUpVZ; Hm_lvt_6859ce5aaf00fb00387e6434e4fcc925=1430965798; Hm_lpvt_6859ce5aaf00fb00387e6434e4fcc925=1430966341; PMS_JT=%28%7B%22s%22%3A1430966344027%2C%22r%22%3A%22http%3A//zhidao.baidu.com/search%3Fword%3D%25BB%25DD%25CA%25CF%25C6%25F4%25B8%25B3%26lm%3D0%26site%3D-1%26sites%3D0%26date%3D4%26ie%3Dgbk%22%7D%29" };
+	public static final String[] cookies = { "BAIDUID=575159E9FE4DE038C9BA741AABD935CA:FG=1; TIEBAUID=cb23caae14130a0d384a57f1; TIEBA_USERTYPE=8cff9d75047f0efb1413514a; BDUSS=0tQWEZsZTFYaFhoNUFidHhQcVhjWX5OcEFybGR-enhFQmlpVFRlQ1JVQlY3T3RWQVFBQUFBJCQAAAAAAAAAAAEAAACIjIxhz9S640hlcnJ5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFVfxFVVX8RVQ" };
 
 	static {
-		
+
 		for (String c : cookies) {
 			Map<String, String> cookie = CookiesUtils.getCookies(c);
 			if (cookie != null) {
@@ -68,5 +68,10 @@ public class BaiduFetcher {
 
 		}
 		throw new RuntimeException("fetcher重试[" + retry + "]次后无法成功.");
+	}
+
+	public static void main(String[] args) throws Exception {
+		String url = "http://tieba.baidu.com/f?kw=%E7%94%B5%E5%8A%A8%E8%BD%A6&ie=utf-8&pn=54750";
+		System.out.println(BaiduFetcher.fetcher.document(url));
 	}
 }

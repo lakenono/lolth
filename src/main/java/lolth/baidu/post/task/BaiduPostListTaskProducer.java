@@ -37,7 +37,7 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		String[] keywords = { "X5max", "Xshot", "华为P8", "三星NOTE4" };
+		String[] keywords = { "英大泰和财产","英大车险","英大财险","平安车险","平安财险","阳光车险","阳光财险","大地车险","大地财险","电动车","电动汽车"};
 		for (String key : keywords) {
 			log.info("{} start!", key);
 			BaiduPostListTaskProducer producer = new BaiduPostListTaskProducer(BAIDU_POST_LIST, key);
@@ -80,7 +80,11 @@ public class BaiduPostListTaskProducer extends PagingFetchTaskProducer {
 				return 0;
 			}
 
-			return Integer.parseInt(pageSize) / PAGE_SIZE + 1;
+			int maxpage = Integer.parseInt(pageSize) / PAGE_SIZE + 1;
+			if(maxpage>500){
+				maxpage = 500;
+			}
+			return maxpage;
 		} catch (Exception e) {
 			log.error("Get Max Page Error : {}", url, e);
 		}
