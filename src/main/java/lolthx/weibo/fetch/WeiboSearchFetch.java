@@ -58,7 +58,7 @@ public class WeiboSearchFetch extends DistributedParser {
 			try {
 				b.persistOnNotExist();
 				//发送微博id爬取任务
-				bulidWeiboUserTask(b.getUserid(),task.getProjectName());
+//				bulidWeiboUserTask(b.getUserid(),task.getProjectName());
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
