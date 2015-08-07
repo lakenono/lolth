@@ -11,33 +11,40 @@ import lakenono.core.GlobalComponents;
 
 public class AutoHomeBBSListProducer extends Producer {
 
-	private static final String AUTOHOME_BBS_URL = "http://club.autohome.com.cn/bbs/forum-c-{0}-{1}.html";
+	private static final String AUTOHOME_BBS_URL = "http://club.autohome.com.cn/bbs/forum-c-{0}-{1}.html?orderby=dateline&qaType=-1";
 
 	private String id;
 
 	private String keyword;
 
-	public AutoHomeBBSListProducer(String projectName, String id, String keyword) {
+	private int pageInt;
+
+	public AutoHomeBBSListProducer(String projectName, String id, String keyword, int pageInt) {
 		super(projectName);
 		this.id = id;
 		this.keyword = keyword;
+		this.pageInt = pageInt;
 	}
-	//推送队列的名字
+
+	// 推送队列的名字
 	@Override
 	public String getQueueName() {
 		return "autohome_bbs_list";
 	}
 
-	//解析最大页
+	// 解析最大页
 	@Override
 	protected int parse() throws Exception {
+		if (pageInt != 0) {
+			return pageInt;
+		}
 		Document document = GlobalComponents.fetcher.document(buildUrl(1));
 		String text = document.select("div.pagearea span.fr").text();
 		String page = StringUtils.substringBetween(text, "共", "页");
 		return Integer.parseInt(page);
 	}
 
-	//拼接url
+	// 拼接url
 	@Override
 	protected String buildUrl(int pageNum) throws Exception {
 		return MessageFormat.format(AUTOHOME_BBS_URL, id, String.valueOf(pageNum));
@@ -51,11 +58,12 @@ public class AutoHomeBBSListProducer extends Producer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String projectName = "迈锐宝A20150721";
-		String[] ids = {"78","110","634","117","50","496","164","834","2313"};
-		String[] keywords = {"雅阁","凯美瑞","天籁","蒙迪欧","索纳塔","迈腾","君威","君越","迈锐宝"};
+		String projectName = "英大财险A20150806";
+		String[] ids = { "596", "3575", "3497", "3827", "2429", "2779", "537", "3648", "3395", "2141", "3119", "2761", "3430", "3533", "2357" };
+		String[] keywords = { "力帆620", "云100", "知豆", "知豆D2", "逸动", "荣威E50", "荣威550", "奇瑞eQ", "江淮iEV", "传祺GA5", "东风风神E30", "秦", "唐", "EV系列", "MODEL S" };
+		int[] pages = { 3, 3, 5, 3, 440, 1, 61, 20, 18, 12, 1, 157, 190, 40, 25 };
 		for (int i = 0; i < ids.length; i++) {
-			new AutoHomeBBSListProducer(projectName, ids[i], keywords[i]).run();
+			new AutoHomeBBSListProducer(projectName, ids[i], keywords[i], pages[i]).run();
 		}
 	}
 
