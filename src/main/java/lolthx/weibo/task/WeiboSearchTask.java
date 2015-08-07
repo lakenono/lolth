@@ -32,7 +32,7 @@ public class WeiboSearchTask {
 	private String keyword;// 搜索关键字
 	private String startTime;// 开始时间
 	private String endTime;// 结束时间
-//	private int sleep = 15000;// 休眠15秒
+	// private int sleep = 15000;// 休眠15秒
 
 	public WeiboSearchTask(String keyword) throws ParseException {
 		this(keyword, "", "");
@@ -76,11 +76,12 @@ public class WeiboSearchTask {
 
 	private void run() throws TException, InterruptedException {
 
-		log.info("{} sina_weibo search task startTime {} - {}", this.keyword,this.startTime,this.endTime);
+		log.info("{} sina_weibo search task startTime {} - {}", this.keyword,
+				this.startTime, this.endTime);
 		int pagenum = getMaxPage();
 		log.info("{} sina_weibo search Get max page : {}", this.keyword,
 				pagenum);
-//		Thread.sleep(sleep);
+		// Thread.sleep(sleep);
 		// 发送第两个任务
 		for (int i = 1; i <= pagenum; i++) {
 			// 创建url
@@ -96,7 +97,8 @@ public class WeiboSearchTask {
 	private int getMaxPage() throws TException, InterruptedException {
 		String url = buildUrl(1);
 		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
-//		String cookies = "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
+		// String cookies =
+		// "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
 		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies);
 		Document doc = Jsoup.parse(html);
 
@@ -119,5 +121,17 @@ public class WeiboSearchTask {
 		task.setQueueName(WEIBO_SEARCH_QUEUE);
 		task.setUrl(url);
 		return task;
+	}
+
+	public static void main(String[] args) throws ParseException, TException,
+			InterruptedException {
+		String[] keys = { "电动汽车", "电动车", "英大泰和财产", "英大财险", "英大车险", "平安车险",
+				"平安财险", "阳光车险", "阳光财险", "大地车险", "大地财险" };
+		for (String key : keys) {
+			WeiboSearchTask weibo = new WeiboSearchTask(key, "20150101",
+					"20150630");
+			weibo.run();
+			Thread.sleep(15000);
+		}
 	}
 }

@@ -319,7 +319,7 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 	public static void main(String args[]){
 		//for(int i =0;i<5;i++){
 		AutoHomeWordOfMouthFetch fetch = new AutoHomeWordOfMouthFetch();
-		fetch.useDynamicFetch();
+		//fetch.useDynamicFetch();
 		fetch.run();
 		//}
 	}

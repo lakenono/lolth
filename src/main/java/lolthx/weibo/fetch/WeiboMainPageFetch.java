@@ -49,7 +49,7 @@ public class WeiboMainPageFetch extends DistributedParser{
 				b.setUserurl(StringUtils.substringBefore(task.getUrl(), "?"));
 				b.setKeyword(task.getProjectName());
 				b.persistOnNotExist();
-				weibo.bulidWeiboUserTask(b.getUserid(), task.getProjectName());
+//				weibo.bulidWeiboUserTask(b.getUserid(), task.getProjectName());
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}

@@ -8,7 +8,7 @@ import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 
-@DBTable(name = "data_bitauto_bbs_comt")
+@DBTable(name = "data_bitauto_bbs_comment")
 @Data
 public class BitautoBBSCommentBean extends DBBean {
 

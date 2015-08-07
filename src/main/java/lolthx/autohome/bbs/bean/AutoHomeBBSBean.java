@@ -10,7 +10,7 @@ import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 
-@DBTable(name = "data_autohome_bbs_test")
+@DBTable(name = "data_autohome_bbs")
 @Data
 public class AutoHomeBBSBean extends DBBean{
 

@@ -37,8 +37,10 @@ public class WeiboBean extends BaseBean
 	private String pmid;
 	private String pweibourl;
 	
-	@DBConstraintPK
 	private String keyword;
+	
+	@DBConstraintPK
+	private String projectName;
 	
 	private String fetchTime;
 	

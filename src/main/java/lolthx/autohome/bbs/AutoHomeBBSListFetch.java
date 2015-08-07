@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 import lakenono.base.DistributedParser;
-import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 import lolthx.autohome.bbs.bean.AutoHomeBBSBean;
@@ -26,12 +25,12 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 
 	static {
 		try {
-			start = DateUtils.parseDate("2014-07-22", "yyyy-MM-dd");
+			start = DateUtils.parseDate("2014-12-30", "yyyy-MM-dd");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		try {
-			end = DateUtils.parseDate("2015-07-21", "yyyy-MM-dd");
+			end = DateUtils.parseDate("2015-07-01", "yyyy-MM-dd");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -113,13 +112,13 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 				bean.saveOnNotExist();
 				parseUser(docDetail);
 					
-				String sendurl = StringUtils.replace(bean.getUrl(), "-1.html", "-{0}.html");
-				int maxpage = this.getMaxPage(docDetail);//执行页面用户评论推送
-				for(int pagenum = 1 ; pagenum<= maxpage ;pagenum++ ){
-					String seUrl = buildUrl(sendurl,pagenum);
-					Task newTask = buildTask(seUrl, "autohome_bbs_comment", task);
-					Queue.push(newTask);
-				}
+//				String sendurl = StringUtils.replace(bean.getUrl(), "-1.html", "-{0}.html");
+//				int maxpage = this.getMaxPage(docDetail);//执行页面用户评论推送
+//				for(int pagenum = 1 ; pagenum<= maxpage ;pagenum++ ){
+//					String seUrl = buildUrl(sendurl,pagenum);
+//					Task newTask = buildTask(seUrl, "autohome_bbs_comment", task);
+//					Queue.push(newTask);
+//				}
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
