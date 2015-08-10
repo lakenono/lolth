@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
 import lakenono.db.DBBean;
+import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
@@ -12,32 +13,43 @@ import lombok.Data;
 @Data
 public class BitautoBBSCommentBean extends DBBean {
 
-	//主键ID
+	// 主键ID
+	@DBConstraintPK
 	private String id;
 
 	// 楼层
 	private String floor;
 
-	// text 
+	// text
 	@DBField(type = "text")
 	private String text;
 
 	// 作者
 	private String author;
 
-	//作者ID
+	// 作者ID
 	private String authorId;
-	
+
 	// 发布时间
 	private String postTime;
 
 	// 帖子
 	private String url;
-	
-	//帖子名称
+
+	// 帖子名称
 	private String title;
-	
-	public static void main(String[] args) throws SQLException{
+
+	@DBConstraintPK
+	private String forumId;
+
+	@DBConstraintPK
+	@DBField(type = "varchar(32)")
+	private String projectName;
+
+	@DBField(type = "varchar(32)")
+	private String keyword;
+
+	public static void main(String[] args) throws SQLException {
 		DBBean.createTable(BitautoBBSCommentBean.class);
 	}
 }

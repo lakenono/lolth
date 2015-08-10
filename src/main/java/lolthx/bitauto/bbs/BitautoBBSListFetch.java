@@ -56,91 +56,94 @@ public class BitautoBBSListFetch extends DistributedParser {
 
 		// 循环列表元素
 		for (Element element : elements) {
-			// 发帖时间
-			String postTime = element.select("li.zhhf").first().text();
-
-			if (!isTime(postTime)) {
-				continue;
-			}
-
-			bean = new BitautoBBSBean();
-			bean.setPostTime(postTime);
-
-			// url
-			String url = element.select("li.bt a").attr("href");
-			bean.setUrl(url);
-
-			// title
-			String title = element.select("li.bt a span").text().trim();
-			bean.setTitle(title);
-
-			// 类型，是否为精品帖子 等
-			String type = element.select("li.tu a").attr("class");
-			bean.setType(type);
-
-			// 是否必须带thread？主ID StringUtils.substringBefore(task.getExtra(), ":")
-			String id = StringUtils.substringBetween(url, "-", ".html");
-			bean.setId(id);
-
-			// 作者
-			String author = element.select("li.zz a").text().trim();
-			bean.setAuthor(author);
-
-			// 作者url
-			String authorUrl = element.select("li.zz a").attr("href");
-			String authorId = StringUtils.substringBetween(authorUrl, "http://i.yiche.com/", "/");
-
-			bean.setAuthorId(authorId);
-			bean.setProjectName(task.getProjectName());
-			bean.setKeyword(task.getExtra());
-
-			String html = GlobalComponents.fetcher.fetch(url);
-			Document docDetail = Jsoup.parse(html);
-
-			// views 点击 and 回复
-			String views_replys = docDetail.select("div.title_box span").text();
-
-			// 点击率
-			String views = StringUtils.substringAfter(views_replys, "/");
-			bean.setViews(views);
-
-			// 回复率
-			String replys = StringUtils.substringBefore(views_replys, "/");
-			bean.setReplys(replys);
-
-			// System.out.println();
-
-			String text = docDetail.select("div.post_text_sl div.post_width").first().text();
-
-			{
-				Elements detailEls = docDetail.select("div.post_text_sl div.post_width img");
-				for (Element detailEl : detailEls) {
-					String attr = detailEl.attr("src");
-					text = text + " " + attr;
-				}
-			}
-
-			// 车主信息
-			bean.setText(text);
-
 			try {
+				// 发帖时间
+				String postTime = element.select("li.zhhf").first().text();
+
+				if (!isTime(postTime)) {
+					continue;
+				}
+
+				bean = new BitautoBBSBean();
+				bean.setPostTime(postTime);
+
+				// url
+				String url = element.select("li.bt a").attr("href");
+				bean.setUrl(url);
+
+				// title
+				String title = element.select("li.bt a span").text().trim();
+				bean.setTitle(title);
+
+				// 类型，是否为精品帖子 等
+				String type = element.select("li.tu a").attr("class");
+				bean.setType(type);
+
+				// 是否必须带thread？主ID StringUtils.substringBefore(task.getExtra(),
+				// ":")
+				String id = StringUtils.substringBetween(url, "-", ".html");
+				bean.setId(id);
+
+				// 作者
+				String author = element.select("li.zz a").text().trim();
+				bean.setAuthor(author);
+
+				// 作者url
+				String authorUrl = element.select("li.zz a").attr("href");
+				String authorId = StringUtils.substringBetween(authorUrl, "http://i.yiche.com/", "/");
+
+				bean.setAuthorId(authorId);
+				bean.setProjectName(task.getProjectName());
+				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
+				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+
+				String html = GlobalComponents.fetcher.fetch(url);
+				Document docDetail = Jsoup.parse(html);
+
+				// views 点击 and 回复
+				String views_replys = docDetail.select("div.title_box span").text();
+
+				// 点击率
+				String views = StringUtils.substringAfter(views_replys, "/");
+				bean.setViews(views);
+
+				// 回复率
+				String replys = StringUtils.substringBefore(views_replys, "/");
+				bean.setReplys(replys);
+
+				// System.out.println();
+
+				String text = docDetail.select("div.post_text_sl div.post_width").first().text();
+
+				{
+					Elements detailEls = docDetail.select("div.post_text_sl div.post_width img");
+					for (Element detailEl : detailEls) {
+						String attr = detailEl.attr("src");
+						text = text + " " + attr;
+					}
+				}
+
+				// 车主信息
+				bean.setText(text);
+
 				bean.saveOnNotExist();
 				String sendurl = StringUtils.replace(bean.getUrl(), ".html", "-{0}.html");
-				int maxpage = this.getMaxPage(docDetail);//执行页面用户评论推送
-				for(int pagenum = 1 ; pagenum<= maxpage ;pagenum++ ){
-					String seUrl = buildUrl(sendurl,pagenum);
+				int maxpage = this.getMaxPage(docDetail);// 执行页面用户评论推送
+				for (int pagenum = 1; pagenum <= maxpage; pagenum++) {
+					String seUrl = buildUrl(sendurl, pagenum);
 					Task newTask = buildTask(seUrl, "bitauto_bbs_comment", task);
 					Queue.push(newTask);
 				}
-			} catch (Exception e) {
 
+				parseUser(docDetail);
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
-			
-			parseUser(docDetail);
+
 		}
 
 	}
-
 
 	private boolean isTime(String time) {
 		try {
@@ -194,7 +197,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 				String dataResult = StringUtils.trim(StringUtils.substringAfter(data, "："));
 				bean.setRegTime(dataResult);
 			}
-			
+
 			if (StringUtils.startsWith(data, "地 区")) {
 				String dataResult = StringUtils.substringAfter(data, "：");
 				String city = StringUtils.trim(StringUtils.substringAfter(dataResult, " "));
@@ -206,8 +209,8 @@ public class BitautoBBSListFetch extends DistributedParser {
 				} else {
 					bean.setProvince(city);
 				}
-				
-			} 
+
+			}
 			if (StringUtils.startsWith(data, "车 型")) {
 				bean.setCar(StringUtils.trim(StringUtils.substringAfter(data, "：")));
 			}
@@ -218,14 +221,14 @@ public class BitautoBBSListFetch extends DistributedParser {
 			e.printStackTrace();
 		}
 	}
-	
-	private int getMaxPage(Document doc) throws Exception{
+
+	private int getMaxPage(Document doc) throws Exception {
 		Elements pageEs = doc.select("div.the_pages a");
 		// 没有分页标签
-		if (pageEs.isEmpty() || pageEs.size() <=2 ) {
-				return 1;
+		if (pageEs.isEmpty() || pageEs.size() <= 2) {
+			return 1;
 		}
-		
+
 		// 有分页标签
 		if (pageEs.size() >= 3) {
 			String pages = pageEs.get(pageEs.size() - 2).text();
@@ -235,15 +238,13 @@ public class BitautoBBSListFetch extends DistributedParser {
 		}
 		return 0;
 	}
-	
-	public String buildUrl(String url,int pageNum){
+
+	public String buildUrl(String url, int pageNum) {
 		return MessageFormat.format(url, String.valueOf(pageNum));
 	}
-	
-	
+
 	public static void main(String[] args) throws Exception {
 		new BitautoBBSListFetch().run();
 	}
-	
-	
+
 }

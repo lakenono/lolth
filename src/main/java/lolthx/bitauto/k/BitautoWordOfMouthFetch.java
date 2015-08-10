@@ -17,7 +17,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class BitautoWordOfMouthFetch extends DistributedParser {
-	
+
 	private static Date start = null;
 	private static Date end = null;
 
@@ -39,103 +39,101 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 		return "bitauto_kb_list";
 	}
 
-	@Override 
+	@Override
 	public void parse(String result, Task task) throws Exception {
 		if (StringUtils.isBlank(result)) {
 			return;
 		}
-			
+
 		Document doc = Jsoup.parse(result);
-		BitautoWordOfMouthBean bean  = null;
+		BitautoWordOfMouthBean bean = null;
 		Elements elements = doc.select("div.postscontent div.postslist_xh");
-			
-		//循环列表元素 循环数据 根据elements先存储一部分数据到数据库
+
+		// 循环列表元素 循环数据 根据elements先存储一部分数据到数据库
 		for (Element element : elements) {
-			String postTime = element.select("li.zhhf").first().text();
-			if (!isTime(postTime)) {
-				continue;
-			}
-			
-			bean = new BitautoWordOfMouthBean();
-			bean.setPostTime(postTime);
-			
-			// title
-			String title = element.select("li.bt a span").text().trim();
-			bean.setTitle(title);
-						
-			//类型，是否为精品帖子 等 
-			String type = element.select("li.tu a").attr("class");
-			bean.setType(type);
-
-			// url
-			String url = element.select("li.bt a").attr("href");
-			bean.setUrl(url);
-						
-			//是否必须带thread？主ID
-			String id = StringUtils.substringBetween(url, "-", ".html");
-			bean.setId(id);
-						
-			// 作者
-			String author = element.select("li.zz a").text().trim();
-			bean.setAuthor(author);
-
-			// 作者url
-			String authorUrl = element.select("li.zz a").attr("href");
-			String authorId = StringUtils.substringBetween(authorUrl, "http://i.yiche.com/", "/");
-						
-			bean.setAuthorId(authorId);
-			bean.setProjectName(task.getProjectName());
-			bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
-			bean.setKeyword(StringUtils.substringAfter(task.getExtra(),":"));
-			
-			
-			String html = GlobalComponents.fetcher.fetch(bean.getUrl());
-			if (StringUtils.isBlank(html)) {
-				return;
-			}
-			Document docDetail = Jsoup.parse(html);
-			
-
-			Elements postRights = docDetail.select("div.post_fist div.postright");
-			if (postRights.isEmpty()) {
-				return;
-			}
-			Element postRight = postRights.first();
-			
-			BitautoWordOfMouthBean mouthBean  = new BitautoWordOfMouthBean();
-			
-			// views 点击 and 回复
-			String views_replys = docDetail.select("div.title_box span").text();
-			
-			//点击率
-			String views = StringUtils.substringAfter(views_replys, "/").trim();
-			bean.setViews(views);
-					
-			//回复率
-			String replys = StringUtils.substringBefore(views_replys, "/").trim();
-			bean.setReplys(replys);
-			
-			Elements content = postRight.select("div.post_width");
-			if (!content.isEmpty()) {
-				bean.setContent(content.first().text());
-			}
-			
-			carDescription(postRight, bean);
-			
-			parseKoubeiScore(postRight, bean);
-
-			parseKoubeComment(postRight, bean);
-			
 			try {
+				String postTime = element.select("li.zhhf").first().text();
+				if (!isTime(postTime)) {
+					continue;
+				}
+
+				bean = new BitautoWordOfMouthBean();
+				bean.setPostTime(postTime);
+
+				// title
+				String title = element.select("li.bt a span").text().trim();
+				bean.setTitle(title);
+
+				// 类型，是否为精品帖子 等
+				String type = element.select("li.tu a").attr("class");
+				bean.setType(type);
+
+				// url
+				String url = element.select("li.bt a").attr("href");
+				bean.setUrl(url);
+
+				// 是否必须带thread？主ID
+				String id = StringUtils.substringBetween(url, "-", ".html");
+				bean.setId(id);
+
+				// 作者
+				String author = element.select("li.zz a").text().trim();
+				bean.setAuthor(author);
+
+				// 作者url
+				String authorUrl = element.select("li.zz a").attr("href");
+				String authorId = StringUtils.substringBetween(authorUrl, "http://i.yiche.com/", "/");
+
+				bean.setAuthorId(authorId);
+				bean.setProjectName(task.getProjectName());
+				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
+				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+
+				String html = GlobalComponents.fetcher.fetch(bean.getUrl());
+				if (StringUtils.isBlank(html)) {
+					return;
+				}
+				Document docDetail = Jsoup.parse(html);
+
+				Elements postRights = docDetail.select("div.post_fist div.postright");
+				if (postRights.isEmpty()) {
+					return;
+				}
+				Element postRight = postRights.first();
+
+				BitautoWordOfMouthBean mouthBean = new BitautoWordOfMouthBean();
+
+				// views 点击 and 回复
+				String views_replys = docDetail.select("div.title_box span").text();
+
+				// 点击率
+				String views = StringUtils.substringAfter(views_replys, "/").trim();
+				bean.setViews(views);
+
+				// 回复率
+				String replys = StringUtils.substringBefore(views_replys, "/").trim();
+				bean.setReplys(replys);
+
+				Elements content = postRight.select("div.post_width");
+				if (!content.isEmpty()) {
+					bean.setContent(content.first().text());
+				}
+
+				carDescription(postRight, bean);
+
+				parseKoubeiScore(postRight, bean);
+
+				parseKoubeComment(postRight, bean);
+
 				bean.saveOnNotExist();
 			} catch (Exception e) {
-				System.out.println("有问题-O(∩_∩)O~");
-			}	
+				e.printStackTrace();
+				continue;
+			}
 		}
-		
+
 	}
 
-	
 	private boolean isTime(String time) {
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
@@ -145,31 +143,29 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 		}
 		return false;
 	}
-	
+
 	private boolean between(Date beginDate, Date endDate, Date src) {
 		return beginDate.before(src) && endDate.after(src);
 	}
 
-	
-	public void carDescription(Element postRight,BitautoWordOfMouthBean post){
+	public void carDescription(Element postRight, BitautoWordOfMouthBean post) {
 		Elements carDess = postRight.select("div.koubei_jia ul li");
-		
-		if(carDess.isEmpty()){
+
+		if (carDess.isEmpty()) {
 			return;
 		}
-		
+
 		for (Element dl : carDess) {
 			String data = dl.text();
 			if (StringUtils.startsWith(data, "裸车价：")) {
-				post.setPrice(StringUtils.trim(StringUtils.substringBetween(data,  "：", "|")));
+				post.setPrice(StringUtils.trim(StringUtils.substringBetween(data, "：", "|")));
 			}
-			if(StringUtils.endsWith(data, "购车|")){
+			if (StringUtils.endsWith(data, "购车|")) {
 				post.setBuyTime(StringUtils.trim(StringUtils.substringBefore(data, "购车")));
 			}
-		}	
+		}
 	}
-	
-	
+
 	private void parseKoubeComment(Element postRight, BitautoWordOfMouthBean post) {
 		Elements kbTable = postRight.select("table.kb_compare3");
 		if (kbTable.isEmpty()) {
@@ -284,8 +280,8 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 		}
 	}
 
-	public static void main(String args[]){
+	public static void main(String args[]) {
 		new BitautoWordOfMouthFetch().run();
 	}
-	
+
 }

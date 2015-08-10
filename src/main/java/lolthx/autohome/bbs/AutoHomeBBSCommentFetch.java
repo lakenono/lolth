@@ -30,35 +30,44 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 		Elements replyEs = doc.select("div#maxwrap-reply div.clearfix.contstxt.outer-section");
 
 		for (Element el : replyEs) {
-			AutoHomeBBSUserBean userBean = new AutoHomeBBSUserBean();
+			try {
+				AutoHomeBBSUserBean userBean = new AutoHomeBBSUserBean();
 
-			AutoHomeBBSCommentBean commentBean = new AutoHomeBBSCommentBean();
+				AutoHomeBBSCommentBean commentBean = new AutoHomeBBSCommentBean();
 
-			Element conleft = el.select("div.conleft.fl").first();
+				Element conleft = el.select("div.conleft.fl").first();
 
-			parseUser(conleft, userBean);
+				parseUser(conleft, userBean);
 
-			Element conright = el.select("div.conright.fl").first();
+				Element conright = el.select("div.conright.fl").first();
 
-			String floor = el.attr("id");
-			commentBean.setFloor(floor);
-			commentBean.setAuthor(userBean.getName());
-			commentBean.setUrl(task.getUrl());
-			commentBean.setAuthorId(userBean.getId());
-			
-			String id = StringUtils.substringBetween(task.getUrl(), "bbs/", ".html");
-			commentBean.setId(id + floor);
-			
-			String title = doc.select("div#maxwrap-maintopic span").last().text();
-			commentBean.setTitle(title);
-			
-			parseComment(conright, commentBean);
+				String floor = el.attr("id");
+				commentBean.setFloor(floor);
+				commentBean.setAuthor(userBean.getName());
+				commentBean.setUrl(task.getUrl());
+				commentBean.setAuthorId(userBean.getId());
 
-			userBean.saveOnNotExist();
+				String id = StringUtils.substringBetween(task.getUrl(), "bbs/", ".html");
+				commentBean.setId(id + floor);
 
-			commentBean.saveOnNotExist();
-			
-			
+				String title = doc.select("div#maxwrap-maintopic span").last().text();
+				commentBean.setTitle(title);
+
+				commentBean.setProjectName(task.getProjectName());
+
+				commentBean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
+				commentBean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+
+				parseComment(conright, commentBean);
+
+				userBean.saveOnNotExist();
+
+				commentBean.saveOnNotExist();
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+
 		}
 
 	}
@@ -111,10 +120,10 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 
 	}
 
-	public static void main(String args[]){
-		for(int i = 1; i<=50;i++){
+	public static void main(String args[]) {
+		for (int i = 1; i <= 50; i++) {
 			new AutoHomeBBSCommentFetch().run();
 		}
 	}
-	
+
 }

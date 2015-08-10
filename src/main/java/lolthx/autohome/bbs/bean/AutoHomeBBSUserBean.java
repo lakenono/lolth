@@ -13,12 +13,12 @@ import lombok.Data;
 public class AutoHomeBBSUserBean extends DBBean {
 
 	public static void main(String[] args) throws SQLException {
-		DBBean.createTable(AutoHomeBBSUserBean.class); 
+		DBBean.createTable(AutoHomeBBSUserBean.class);
 	}
 
 	@DBConstraintPK
 	private String id;
-	
+
 	private String name;
 
 	// 作者地址

@@ -18,16 +18,16 @@ public class AutoHomePriceDescription {
 	/**
 	 * 根据主ID解析所有的子明细ID
 	 */
-	public Map<String,String[]> resolveUrl(String[] mainIds,String[] mainkws) throws Exception {
+	public Map<String, String[]> resolveUrl(String[] mainIds, String[] mainkws) throws Exception {
 		String[] ids;
 		String[] keywords;
-		Map<String,String[]> map = new HashMap<String,String[]>();
+		Map<String, String[]> map = new HashMap<String, String[]>();
 		StringBuffer stb = new StringBuffer();
 		StringBuffer sty = new StringBuffer();
 		for (int i = 0; i < mainIds.length; i++) {
 			String mainId = mainIds[i];
 			String keyword = mainkws[i];
-			
+
 			Document doc = GlobalComponents.fetcher.document(buildMainUrl(mainId, 1));
 
 			Elements els = doc.select("div.content div.tab-content div.model-list ul");
@@ -50,16 +50,15 @@ public class AutoHomePriceDescription {
 
 		ids = stb.toString().split(",");
 		keywords = sty.toString().split(",");
-		
+
 		map.put("ids", ids);
 		map.put("keywords", keywords);
-	
+
 		return map;
 	}
 
 	protected String buildMainUrl(String mainId, int pageNum) throws Exception {
 		return MessageFormat.format(AUTOHOME_PRICE_URL, mainId, String.valueOf(pageNum));
 	}
-	
 
 }

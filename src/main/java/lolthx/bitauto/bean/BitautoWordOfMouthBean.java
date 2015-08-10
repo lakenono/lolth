@@ -17,7 +17,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
 public class BitautoWordOfMouthBean extends DBBean {
-	//------------------------------------同 BitautoBBSPostBean
+	// ------------------------------------同 BitautoBBSPostBean
 	@DBConstraintPK
 	private String id;
 	private String title;
@@ -29,10 +29,10 @@ public class BitautoWordOfMouthBean extends DBBean {
 
 	@DBField(type = "text")
 	private String content;
-	
+
 	private String forumId;
-	
-	//发帖用户
+
+	// 发帖用户
 	private String author;
 	private String authorId;
 
@@ -41,66 +41,53 @@ public class BitautoWordOfMouthBean extends DBBean {
 
 	// 回复数
 	private String replys;
-	
+
+	@DBConstraintPK
+	@DBField(type = "varchar(32)")
 	private String projectName;
+
+	@DBField(type = "varchar(32)")
 	private String keyword;
-	
-	//-----------------------------------------------------------
-	//外观
+
+	// -----------------------------------------------------------
+	// 外观
 	private String exteriorScores;
 	private String exteriorComment;
 
-	//内饰
+	// 内饰
 	private String interiorScores;
 	private String interiorComment;
 
-	//空间
+	// 空间
 	private String spaceScores;
 	private String spaceComment;
 
-	//动力
+	// 动力
 	private String powerScores;
 	private String powerComment;
 
-	//操控
+	// 操控
 	private String operationScores;
 	private String operationComment;
 
-	//配置
+	// 配置
 	private String configScores;
 	private String configComment;
 
-	//性价比
+	// 性价比
 	private String costperformanceScores;
 	private String costperformanceComment;
 
-	//舒适度
+	// 舒适度
 	private String comfortScores;
 	private String comfortComment;
 
 	private String buyTime;
 	private String price;
 	private String currentMiles;
-	
-	
+
 	public static void main(String[] args) throws Exception {
 		DBBean.createTable(BitautoWordOfMouthBean.class);
 	}
-	
-	public void update() throws SQLException{
-		GlobalComponents.db.getRunner().update("update " +  BaseBean.getTableName(BitautoWordOfMouthBean.class) + 
-				" set views=? , replys = ?,  content = ? , "
-				+ " exteriorScores = ? , exteriorComment = ? , interiorScores = ? , interiorComment = ? , spaceScores = ? , spaceComment = ? ,"+
-	"powerScores = ? , powerComment = ? , operationScores = ? , operationComment = ? , configScores = ? , configComment = ? ," +
-	"costperformanceScores = ? , costperformanceComment = ? , comfortScores = ? , comfortComment = ? , buyTime = ? , price = ? , currentMiles = ? "
-	+ "where id =?",
-		this.views,this.replys,this.content,
-		this.exteriorScores,this.exteriorComment,this.interiorScores,this.interiorComment,this.spaceScores,this.spaceComment,
-		this.powerScores,this.powerComment,this.operationScores,this.operationComment,this.configScores,this.configComment,
-		this.costperformanceScores,this.costperformanceComment,this.comfortScores,this.comfortComment,this.buyTime,this.price,this.currentMiles,
-		this.id);
-	}
-	
-	
-	
+
 }

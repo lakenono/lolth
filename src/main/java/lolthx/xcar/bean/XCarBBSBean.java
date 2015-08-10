@@ -1,56 +1,53 @@
-package lolthx.autohome.bbs.bean;
+package lolthx.xcar.bean;
 
 import java.sql.SQLException;
 
-import lakenono.core.GlobalComponents;
-import lakenono.db.BaseBean;
 import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@DBTable(name = "data_autohome_bbs")
+@DBTable(name = "data_xcar_bbs")
 @Data
-public class AutoHomeBBSBean extends DBBean {
-
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+public class XCarBBSBean extends DBBean {
 	public static void main(String[] args) throws SQLException {
-		DBBean.createTable(AutoHomeBBSBean.class);
+		DBBean.createTable(XCarBBSBean.class);
 	}
 
 	@DBConstraintPK
 	private String id;
 
+//	private String jobname;
+
 	private String title;
 
 	private String url;
 
-	private String type;
-
-	private String author;
-
 	private String authorId;
 
-	@DBField(type = "varchar(32)")
+//	private String authorUrl;
+
 	private String postTime;
 
-	@DBField(type = "varchar(32)")
 	private String views;
 
-	@DBField(type = "varchar(32)")
 	private String replys;
 
 	@DBField(type = "text")
 	private String text;
 
-	@DBConstraintPK
+//	private String comment_status;
+	
+	private String projectName;
+	
+	private String keyword;
+	
 	private String forumId;
 
-	@DBConstraintPK
-	@DBField(type = "varchar(32)")
-	private String projectName;
-
-	@DBField(type = "varchar(32)")
-	private String keyword;
 
 }
