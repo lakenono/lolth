@@ -1,8 +1,10 @@
 package lolth.baidu.post.task;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import lakenono.core.GlobalComponents;
 import lakenono.task.FetchTask;
 import lakenono.task.FetchTaskProducer;
 import lakenono.task.PageParseFetchTaskHandler;
@@ -83,5 +85,13 @@ public class BaiduPostListFetch extends PageParseFetchTaskHandler {
 			}
 		}
 	}
+
+	@Override
+	protected void handleTask(FetchTask task) throws IOException, InterruptedException, Exception {
+		Document doc = GlobalComponents.dynamicFetch.document(task.getUrl());
+		this.parsePage(doc, task);
+	}
+	
+	
 
 }
