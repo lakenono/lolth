@@ -19,13 +19,13 @@ public class WeiboConcernUserTask extends Producer {
 
 	private final String WEIBO_USER_FOLLOWS_URL_TEMPLATE = "http://weibo.cn/{0}/follow?page={1}";
 	public static final String WEIBO_USER_CONCERN_LIST = "weibo_user_concern_list";
-	private String taskName;
+	private String projectName;
 	private String uid;
 
-	public WeiboConcernUserTask(String uid, String taskName) {
-		super(taskName);
+	public WeiboConcernUserTask(String uid, String projectName) {
+		super(projectName);
 		this.uid = uid;
-		this.taskName = taskName;
+		this.projectName = projectName;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class WeiboConcernUserTask extends Producer {
 	@Override
 	public Task buildTask(String url) {
 		Task task = new Task();
-		task.setProjectName(this.taskName);
+		task.setProjectName(this.projectName);
 		task.setQueueName(WEIBO_USER_CONCERN_LIST);
 		task.setUrl(url);
 		task.setExtra(uid);

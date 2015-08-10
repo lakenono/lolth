@@ -22,12 +22,12 @@ public class WeiboMainPageTask extends Producer {
 	public static final String MAIN_PAGE_QUEUE = "weibo_main_page";
 	private final String USER_MAIN_PAGE_URL_TEMPLATE = "http://weibo.cn/{0}?page={1}";
 	private String user;
-	private String keyword;
+	private String projectName;
 
-	public WeiboMainPageTask(String user, String keyword) {
-		super(keyword);
+	public WeiboMainPageTask(String user, String projectName) {
+		super(projectName);
 		this.user = user;
-		this.keyword = keyword;
+		this.projectName = projectName;
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public class WeiboMainPageTask extends Producer {
 				String html = doc.select("div#pagelist").first().text();
 				String page = StringUtils.substringBetween(html, "/", "页");
 				int maxPage = Integer.parseInt(page);
+				//最大页数
 				if (maxPage > 13) {
 					maxPage = 13;
 				}
@@ -78,7 +79,7 @@ public class WeiboMainPageTask extends Producer {
 	@Override
 	public Task buildTask(String url) {
 		Task task = new Task();
-		task.setProjectName(this.keyword);
+		task.setProjectName(this.projectName);
 		task.setQueueName(MAIN_PAGE_QUEUE);
 		task.setUrl(url);
 		task.setExtra(user);
@@ -985,9 +986,9 @@ public class WeiboMainPageTask extends Producer {
 				"1317509423",
 				"1166807885",
 				"1197043925"};
-		String key = "迈锐宝E2";
+		String projectName = "迈锐宝E2";
 		for (String user : users) {
-			WeiboMainPageTask wb = new WeiboMainPageTask(user, key);
+			WeiboMainPageTask wb = new WeiboMainPageTask(user, projectName);
 			wb.run();
 			Thread.sleep(15000);
 		}

@@ -66,7 +66,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		beans.clear();
 	}
 	
-	public void bulidWeiboUserTask(String id, String keyword) {
+	public void bulidWeiboUserTask(String id, String projectName) {
 		try {
 			String uid = id;
 			if (!StringUtils.isNumeric(uid)) {
@@ -79,7 +79,7 @@ public class WeiboSearchFetch extends DistributedParser {
 			}
 
 			Task t = new Task();
-			t.setProjectName(keyword);
+			t.setProjectName(projectName);
 			t.setQueueName(USER_QUEUE_NAME);
 			t.setUrl(buildUserInfoUrl(uid));
 			t.setExtra(id+","+uid);

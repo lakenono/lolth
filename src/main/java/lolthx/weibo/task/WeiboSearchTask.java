@@ -2,6 +2,8 @@ package lolthx.weibo.task;
 
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import lakenono.base.Queue;
@@ -29,18 +31,22 @@ public class WeiboSearchTask {
 	public static final String WEIBO_SEARCH_QUEUE = "weibo_search_queue";
 	// 微博搜索模板URL
 	private final String CN_WEIBO_SEARCH_URL_TEMPLATE = "http://weibo.cn/search/mblog?hideSearchFrame=&keyword={0}&advancedfilter=1&starttime={1}&endtime={2}&sort=time&page={3}";
+	private String projectName;
 	private String keyword;// 搜索关键字
 	private String startTime;// 开始时间
 	private String endTime;// 结束时间
+
 	// private int sleep = 15000;// 休眠15秒
 
-	public WeiboSearchTask(String keyword) throws ParseException {
-		this(keyword, "", "");
+	public WeiboSearchTask(String projectName, String keyword)
+			throws ParseException {
+		this(projectName, keyword, "", "");
 	}
 
-	public WeiboSearchTask(String keyword, String startTime, String endTime)
-			throws ParseException {
+	public WeiboSearchTask(String projectName, String keyword,
+			String startTime, String endTime) throws ParseException {
 		this.keyword = keyword;
+		this.projectName = projectName;
 		handleTime(startTime, endTime);
 	}
 
@@ -117,8 +123,9 @@ public class WeiboSearchTask {
 
 	private Task buildTask(String url) {
 		Task task = new Task();
-		task.setProjectName(this.keyword);
+		task.setProjectName(this.projectName);
 		task.setQueueName(WEIBO_SEARCH_QUEUE);
+		task.setExtra(this.keyword);
 		task.setUrl(url);
 		return task;
 	}
@@ -127,10 +134,27 @@ public class WeiboSearchTask {
 			InterruptedException {
 		String[] keys = { "电动汽车", "电动车", "英大泰和财产", "英大财险", "英大车险", "平安车险",
 				"平安财险", "阳光车险", "阳光财险", "大地车险", "大地财险" };
+		String projectName = "英大财险";
+		String begin = "20150101";
+		String over = "20150701";
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		for (String key : keys) {
-			WeiboSearchTask weibo = new WeiboSearchTask(key, "20150101",
-					"20150630");
-			weibo.run();
+			Calendar start = Calendar.getInstance();
+			Calendar end = Calendar.getInstance();
+			try {
+				start.setTime(format.parse(begin));
+				end.setTime(format.parse(over));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			while (start.before(end)) {
+				WeiboSearchTask weibo = new WeiboSearchTask(projectName, key,
+						format.format(start.getTime()), format.format(start
+								.getTime()));
+				weibo.run();
+				start.add(Calendar.DAY_OF_MONTH, 1);
+			}
 			Thread.sleep(15000);
 		}
 	}
