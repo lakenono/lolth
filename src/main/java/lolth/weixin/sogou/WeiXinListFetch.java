@@ -119,7 +119,10 @@ public class WeiXinListFetch extends BaseLog
 
 		String countStr = document.select("resnum#scd_num").text();
 		countStr = StringUtils.remove(countStr, ",");
-
+		if(StringUtils.isBlank(countStr)){
+			this.log.info("keyword [{}] count[{}] page[{}]", this.keyword,countStr, 0);
+			return 0;
+		}
 		int count = Integer.parseInt(countStr);
 		int page = count / 10 + 1;
 		this.log.info("keyword [{}] count[{}] page[{}]", this.keyword, count, page);
@@ -132,9 +135,9 @@ public class WeiXinListFetch extends BaseLog
 		{
 			try
 			{
-				new WeiXinListFetch("奥迪").run();
-				new WeiXinListFetch("宝马").run();
-				new WeiXinListFetch("奔驰").run();
+				new WeiXinListFetch("电动汽车").run();
+//				new WeiXinListFetch("宝马").run();
+//				new WeiXinListFetch("奔驰").run();
 			}
 			catch (Exception e)
 			{
