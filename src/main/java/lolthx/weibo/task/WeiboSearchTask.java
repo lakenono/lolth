@@ -105,7 +105,7 @@ public class WeiboSearchTask {
 		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
 		// String cookies =
 		// "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
-		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies);
+		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies,"");
 		Document doc = Jsoup.parse(html);
 
 		if (doc.select("div#pagelist").size() == 0) {
@@ -145,7 +145,6 @@ public class WeiboSearchTask {
 				start.setTime(format.parse(begin));
 				end.setTime(format.parse(over));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			while (start.before(end)) {

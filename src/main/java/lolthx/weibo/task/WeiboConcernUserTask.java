@@ -40,7 +40,7 @@ public class WeiboConcernUserTask extends Producer {
 			String cookies = GlobalComponents.authService
 					.getCookies("weibo.cn");
 			String page_html = GlobalComponents.jsoupFetcher
-					.fetch(url, cookies);
+					.fetch(url, cookies,"");
 			Document doc = Jsoup.parse(page_html);
 			Elements pageList = doc.select("div#pagelist div");
 			if (pageList.size() > 0) {

@@ -101,7 +101,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		String userUrl = buildUserUrl(id);
 		String cookies = GlobalComponents.authService.getCookies(getCookieDomain());
 //		String cookies = "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
-		String html = GlobalComponents.jsoupFetcher.fetch(userUrl, cookies);
+		String html = GlobalComponents.jsoupFetcher.fetch(userUrl, cookies,"");
 		Document doc = Jsoup.parse(html);
 		Elements imgElements = doc.select("img.por");
 		if (imgElements.size() > 0) {
