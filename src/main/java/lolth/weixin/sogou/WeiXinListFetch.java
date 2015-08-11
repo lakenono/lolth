@@ -38,7 +38,6 @@ public class WeiXinListFetch extends BaseLog
 
 			if (GlobalComponents.taskService.isCompleted(taskname))
 			{
-				i++;
 				this.log.info("task {} is completed", taskname);
 				continue;
 			}
