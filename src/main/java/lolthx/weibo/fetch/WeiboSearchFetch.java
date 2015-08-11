@@ -12,10 +12,10 @@ import lakenono.base.DistributedParser;
 import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lolth.weibo.bean.WeiboBean;
-import lolth.weibo.utils.WeiboContentSpliter;
-import lolth.weibo.utils.WeiboIdUtils;
-import lolth.weibo.utils.WeiboTimeUtils;
+import lolthx.weibo.utils.WeiboContentSpliter;
+import lolthx.weibo.utils.WeiboIdUtils;
+import lolthx.weibo.utils.WeiboTimeUtils;
+import lolthx.weibo.bean.WeiboBean;
 import lolthx.weibo.task.WeiboSearchTask;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,7 +56,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		List<WeiboBean> beans = parse(doc,task);
 		for (WeiboBean b : beans) {
 			try {
-				b.persistOnNotExist();
+				b.saveOnNotExist();
 				//发送微博id爬取任务
 //				bulidWeiboUserTask(b.getUserid(),task.getProjectName());
 			} catch (Exception e) {
@@ -88,8 +88,6 @@ public class WeiboSearchFetch extends DistributedParser {
 		} catch (Exception e) {
 			log.error("{} get uid error :", id, e);
 		}
-
-		
 	}
 	
 	private String buildUserInfoUrl(String uid) {
@@ -110,16 +108,11 @@ public class WeiboSearchFetch extends DistributedParser {
 		}
 		return uid;
 	}
-	
-	
 
 	private String buildUserUrl(String id) {
 		return MessageFormat.format(WEIBO_USER_URL_TEMPLATE, id);
 	}
 
-	public static void main(String[] args) {
-		new WeiboSearchFetch().run();
-	}
 	@Override
 	public String getCookieDomain() {
 		return "weibo.cn";
@@ -136,7 +129,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		for (Element element : elements) {
 			String html = element.html();
 
-			WeiboBean bean = new WeiboBean();
+			WeiboBean bean = new WeiboBean(task.getProjectName());
 
 			// mid
 			String mid = StringUtils.substringAfter(element.attr("id"), "M_");

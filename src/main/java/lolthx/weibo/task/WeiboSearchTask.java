@@ -1,5 +1,6 @@
 package lolthx.weibo.task;
 
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,8 @@ import java.util.Date;
 import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
+import lakenono.db.DBBean;
+import lolthx.weibo.bean.WeiboBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -80,7 +83,7 @@ public class WeiboSearchTask {
 				startTime, endTime, String.valueOf(pageNum));
 	}
 
-	private void run() throws TException, InterruptedException {
+	public void run() throws TException, InterruptedException {
 
 		log.info("{} sina_weibo search task startTime {} - {}", this.keyword,
 				this.startTime, this.endTime);
@@ -131,12 +134,14 @@ public class WeiboSearchTask {
 	}
 
 	public static void main(String[] args) throws ParseException, TException,
-			InterruptedException {
+			InterruptedException, SQLException {
 		String[] keys = { "电动汽车", "电动车", "英大泰和财产", "英大财险", "英大车险", "平安车险",
 				"平安财险", "阳光车险", "阳光财险", "大地车险", "大地财险" };
 		String projectName = "英大财险";
 		String begin = "20150101";
 		String over = "20150701";
+		//创建表
+		DBBean.createTable(WeiboBean.class, projectName);
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		for (String key : keys) {
 			Calendar start = Calendar.getInstance();

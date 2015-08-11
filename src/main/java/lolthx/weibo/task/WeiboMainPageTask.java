@@ -5,6 +5,8 @@ import java.text.MessageFormat;
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
+import lakenono.db.DBBean;
+import lolthx.weibo.bean.WeiboBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
@@ -987,6 +989,8 @@ public class WeiboMainPageTask extends Producer {
 				"1166807885",
 				"1197043925"};
 		String projectName = "迈锐宝E2";
+		//创建表
+		DBBean.createTable(WeiboBean.class, projectName);
 		for (String user : users) {
 			WeiboMainPageTask wb = new WeiboMainPageTask(user, projectName);
 			wb.run();

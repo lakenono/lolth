@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
 import lakenono.fetch.adv.utils.HttpURLUtils;
-import lolth.weibo.bean.WeiboUserConcernRefBean;
+import lolthx.weibo.bean.WeiboUserConcernRefBean;
 import lolthx.weibo.task.WeiboConcernUserTask;
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -40,7 +40,11 @@ public class WeiboConcernUserFetch extends DistributedParser {
 				String concernUserId = HttpURLUtils.getUrlParams(href, "GBK").get("uid");
 				if (StringUtils.isNotBlank(concernUserId)) {
 					// 持久化用户，关注对应关系
-					new WeiboUserConcernRefBean(task.getExtra(), concernUserId).persistOnNotExist();
+//					new WeiboUserConcernRefBean(task.getExtra(), concernUserId).persistOnNotExist();
+					WeiboUserConcernRefBean bean = new WeiboUserConcernRefBean(task.getProjectName());
+					bean.setConcernUserId(concernUserId);
+					bean.setUserId(task.getExtra());
+					bean.saveOnNotExist();
 					// 推送用户队列
 					weibo.bulidWeiboUserTask(concernUserId, task.getProjectName());
 				}

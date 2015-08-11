@@ -2,18 +2,18 @@ package lolthx.weibo.fetch;
 
 import java.sql.SQLException;
 
+import lakenono.base.DistributedParser;
+import lakenono.base.Task;
+import lakenono.core.GlobalComponents;
+import lakenono.db.DBBean;
+import lolthx.weibo.bean.WeiboUserBean;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import lakenono.base.DistributedParser;
-import lakenono.base.Task;
-import lakenono.core.GlobalComponents;
-import lakenono.db.BaseBean;
-import lolth.weibo.bean.WeiboUserBean;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 微博用户标签爬取
@@ -51,16 +51,16 @@ public class WeiboUserTagFetch extends DistributedParser {
 
 			String tagStr = tags.toString();
 			if (StringUtils.isNoneBlank(tagStr)) {
-				update(task.getExtra(), tags.toString());
+				update(task.getExtra(), tags.toString(),task.getProjectName());
 			} else {
 				log.debug("{} no tags ! ", task.getExtra());
 			}
 		}
 	}
 
-	private void update(String uid, String tags) throws SQLException {
+	private void update(String uid, String tags,String projectName) throws SQLException {
 		GlobalComponents.db.getRunner().update(
-				"update " + BaseBean.getTableName(WeiboUserBean.class)
+				"update " + DBBean.getTableName(WeiboUserBean.class,projectName)
 						+ " set tags=? where uid=?", tags, uid);
 		log.debug("{} : {}", uid, tags);
 	}

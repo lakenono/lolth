@@ -5,7 +5,7 @@ import java.text.MessageFormat;
 import lakenono.base.DistributedParser;
 import lakenono.base.Queue;
 import lakenono.base.Task;
-import lolth.weibo.bean.WeiboUserBean;
+import lolthx.weibo.bean.WeiboUserBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +43,7 @@ public class WeiboUserFetch extends DistributedParser{
 
 			String[] fields = StringUtils.splitByWholeSeparator(text, "\n<br>");
 			if (fields != null) {
-				WeiboUserBean user = new WeiboUserBean();
+				WeiboUserBean user = new WeiboUserBean(task.getProjectName());
 
 				String[] ids = StringUtils.split(task.getExtra(), ',');
 				user.setId(ids[0]);
@@ -79,7 +79,7 @@ public class WeiboUserFetch extends DistributedParser{
 					}
 				}
 
-				boolean persist = user.persistOnNotExist();
+				boolean persist = user.saveOnNotExist();
 
 				//推送标签任务
 				if(persist){

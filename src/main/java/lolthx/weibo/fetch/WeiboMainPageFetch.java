@@ -15,10 +15,10 @@ import org.jsoup.select.Elements;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
-import lolth.weibo.bean.WeiboBean;
-import lolth.weibo.utils.WeiboContentSpliter;
-import lolth.weibo.utils.WeiboIdUtils;
-import lolth.weibo.utils.WeiboTimeUtils;
+import lolthx.weibo.utils.WeiboContentSpliter;
+import lolthx.weibo.utils.WeiboIdUtils;
+import lolthx.weibo.utils.WeiboTimeUtils;
+import lolthx.weibo.bean.WeiboBean;
 import lolthx.weibo.task.WeiboMainPageTask;
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -42,21 +42,21 @@ public class WeiboMainPageFetch extends DistributedParser{
 			return;
 		}
 		Document doc = Jsoup.parse(result);
-		List<WeiboBean> beans = parseBean(doc, task.getExtra());
+		List<WeiboBean> beans = parseBean(doc, task);
 
 		for (WeiboBean b : beans) {
 			try {
 				b.setUserurl(StringUtils.substringBefore(task.getUrl(), "?"));
 				b.setProjectName(task.getProjectName());
 				b.setKeyword(task.getExtra());
-				b.persistOnNotExist();
+				b.saveOnNotExist();
 //				weibo.bulidWeiboUserTask(b.getUserid(), task.getProjectName());
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
 		}
 	}
-	public List<WeiboBean> parseBean(Document document, String uid) throws IOException, ParseException {
+	public List<WeiboBean> parseBean(Document document, Task task) throws IOException, ParseException {
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
 
 		String username = "";
@@ -73,9 +73,9 @@ public class WeiboMainPageFetch extends DistributedParser{
 		for (Element element : elements) {
 			String html = element.html();
 
-			WeiboBean bean = new WeiboBean();
+			WeiboBean bean = new WeiboBean(task.getProjectName());
 
-			bean.setUserid(uid);
+			bean.setUserid(task.getExtra());
 
 			// mid
 			String mid = StringUtils.substringAfter(element.attr("id"), "M_");
