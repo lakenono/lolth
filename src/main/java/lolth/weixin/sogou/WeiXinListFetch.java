@@ -29,6 +29,8 @@ public class WeiXinListFetch extends BaseLog
 	private void run() throws Exception
 	{
 		int maxPage = this.getMaxPage();
+		
+		Thread.sleep(5000);
 
 		for (int i = 0; i < maxPage; i++)
 		{
@@ -48,6 +50,8 @@ public class WeiXinListFetch extends BaseLog
 			this.process(document);
 
 			GlobalComponents.taskService.success(taskname);
+			
+			Thread.sleep(5000);
 		}
 	}
 
