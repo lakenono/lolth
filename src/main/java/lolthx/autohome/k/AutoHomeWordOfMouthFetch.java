@@ -49,162 +49,173 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 		
 		Elements elements = doc.select("div.mouthcon.js-koubeidataitembox");
 		for (Element element : elements) {
-				AutoHomeWordOfMouthBean bean = new AutoHomeWordOfMouthBean();
+				try {
+					AutoHomeWordOfMouthBean bean = new AutoHomeWordOfMouthBean();
 
-				// 用户名
-				String username = element.select("div.name-text p a").first().ownText();
-				bean.setUsername(username);
+					// 用户名
+					String username = element.select("div.name-text p a").first().ownText();
+					bean.setUsername(username);
 
-				// 用户url
-				String userUrl = element.select("div.name-text p a").first().attr("href");
-				bean.setUserUrl(userUrl);
+					// 用户url
+					String userUrl = element.select("div.name-text p a").first().attr("href");
+					bean.setUserUrl(userUrl);
+					
+					bean.setProjectName(task.getProjectName());
+					bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
+					bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
 
-				// 帖子名称
-				if (element.select("div.mouth-main div.cont-title.fn-clear span.mr-20").text().trim().equals("")) {
-					bean.setSourceTitle("none");
-				} else {
-					// 帖子title
-					String sourceTitle =element.select("div.mouth-main div.cont-title.fn-clear span.mr-20 a").text().trim();
-					bean.setSourceTitle(sourceTitle);
+					// 帖子名称
+					if (element.select("div.mouth-main div.cont-title.fn-clear span.mr-20").text().trim().equals("")) {
+						bean.setSourceTitle("none");
+					} else {
+						// 帖子title
+						String sourceTitle =element.select("div.mouth-main div.cont-title.fn-clear span.mr-20 a").text().trim();
+						bean.setSourceTitle(sourceTitle);
+					}
+
+					// 帖子url
+					String sourceUrl = element.select("div.mouth-main div.cont-title.fn-clear span.time a").attr("href");
+					bean.setSourceUrl(StringUtils.substringBefore(sourceUrl, "?"));
+					bean.setId(StringUtils.substringBetween(sourceUrl, "view_", "_1.html"));
+					
+					// 无认证车
+					if (element.getElementsMatchingOwnText("认证的车：").size() == 0) {
+						bean.setAuthCar("none");
+					} else {
+						String authCar = element.getElementsMatchingOwnText("认证的车：").first().siblingElements().first().text();
+						bean.setAuthCar(authCar);
+					}
+
+					// 购买车型
+					String carType = element.getElementsMatchingOwnText("购买车型").first().siblingElements().first().text();
+					bean.setCarType(carType);
+
+					// 购买地点
+					String purchasedFrom = element.getElementsMatchingOwnText("购买地点").first().siblingElements().first().text();
+					bean.setPurchasedFrom(purchasedFrom);
+					
+					// 购车经销商
+					if (element.getElementsMatchingOwnText("购车经销商").size() == 0) {
+						bean.setDealer("none");
+					} else {
+						String dealer = element.getElementsMatchingOwnText("购车经销商").first().siblingElements().first().text();
+						bean.setDealer(dealer);
+					}
+					
+					// 购买时间
+					String buyTime = element.getElementsMatchingOwnText("购买时间").first().siblingElements().first().text();
+					bean.setBuyTime(buyTime);
+
+					// 裸车购买价
+					String price = element.getElementsMatchingOwnText("裸车购买价").first().siblingElements().first().text();
+					bean.setPrice(price);
+
+					// 油耗 目前行驶
+					if (element.getElementsMatchingOwnText("升/百公里").size() == 0) {
+						bean.setFuelConsumption("none");
+						bean.setKilometre("none");
+					} else {
+						try {
+							String fuelConsumption = element.getElementsMatchingOwnText("升/百公里").first().parent().ownText();
+							bean.setFuelConsumption(fuelConsumption);
+
+							String kilometre = element.getElementsMatchingOwnText("升/百公里").first().parent().nextElementSibling().ownText();
+							bean.setKilometre(kilometre);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					// 评分
+					Elements gradeElements = element.select("div.position-r");
+					for (Element gradeElement : gradeElements) {
+						// 0
+						if (gradeElement.getElementsMatchingOwnText("空间").size() != 0) {
+							String interspaceGrade = gradeElement.getElementsMatchingOwnText("空间").first().siblingElements().first().text();
+							bean.setInterspaceGrade(interspaceGrade);
+						}
+
+						// 1
+						if (gradeElement.getElementsMatchingOwnText("动力").size() != 0) {
+							String powerGrade = gradeElement.getElementsMatchingOwnText("动力").first().siblingElements().first().text();
+							bean.setPowerGrade(powerGrade);
+						}
+
+						// 2
+						if (gradeElement.getElementsMatchingOwnText("操控").size() != 0) {
+							String manipulationGrade = gradeElement.getElementsMatchingOwnText("操控").first().siblingElements().first().text();
+							bean.setManipulationGrade(manipulationGrade);
+						}
+
+						// 3
+						if (gradeElement.getElementsMatchingOwnText("油耗").size() != 0) {
+							String fuelConsumptionGrade = gradeElement.getElementsMatchingOwnText("油耗").first().siblingElements().first().text();
+							bean.setFuelConsumptionGrade(fuelConsumptionGrade);
+						}
+
+						// 4
+						if (gradeElement.getElementsMatchingOwnText("舒适性").size() != 0) {
+							String comfortGrade = gradeElement.getElementsMatchingOwnText("舒适性").first().siblingElements().first().text();
+							bean.setComfortGrade(comfortGrade);
+						}
+
+						// 5
+						if (gradeElement.getElementsMatchingOwnText("外观").size() != 0) {
+							String appearanceGrade = gradeElement.getElementsMatchingOwnText("外观").first().siblingElements().first().text();
+							bean.setAppearanceGrade(appearanceGrade);
+						}
+
+						// 6
+						if (gradeElement.getElementsMatchingOwnText("内饰").size() != 0) {
+							String innerDecorationGrade = gradeElement.getElementsMatchingOwnText("内饰").first().siblingElements().first().text();
+							bean.setInnerDecorationGrade(innerDecorationGrade);
+						}
+
+						// 7
+						if (gradeElement.getElementsMatchingOwnText("性价比").size() != 0) {
+							String performancePriceGrade = gradeElement.getElementsMatchingOwnText("性价比").first().siblingElements().first().text();
+							bean.setPerformancePriceGrade(performancePriceGrade);
+						}
+
+					}
+
+					// 购车目的
+					String aims = element.getElementsMatchingOwnText("购车目的").first().siblingElements().first().text();
+					bean.setAims(aims);
+
+					// 发帖时间
+					String publishTime = element.select("span.time").first().text();
+					publishTime = StringUtils.replace(publishTime, " 发表", "");
+					bean.setPublishTime(publishTime);
+
+					// 帖子内容
+					Elements texts = element.select("div.text-con.height-list div.text-cont");
+					if (!texts.isEmpty()) {
+						String text = texts.first().html();
+						parseComment(text, bean);
+					}
+
+					// 追加
+					Elements appends = element.select("dd.add-dl-text div.text-height");
+					if (!appends.isEmpty()) {
+						String appendText = appends.first().html();
+						parseAppendComment(appendText, bean);
+					}
+
+					// 浏览次数
+					String views = element.getElementsMatchingOwnText("人看过").first().child(0).text();
+					bean.setViews(views);
+
+					// 点赞
+					String likes = element.getElementsMatchingOwnText("人支持该口碑").first().child(0).text();
+					bean.setLikes(likes);
+
+					bean.saveOnNotExist();
+				} catch (Exception e) {
+					e.printStackTrace();
+					continue;
 				}
-
-				// 帖子url
-				String sourceUrl = element.select("div.mouth-main div.cont-title.fn-clear span.time a").attr("href");
-				bean.setSourceUrl(StringUtils.substringBefore(sourceUrl, "?"));
 				
-				// 无认证车
-				if (element.getElementsMatchingOwnText("认证的车：").size() == 0) {
-					bean.setAuthCar("none");
-				} else {
-					String authCar = element.getElementsMatchingOwnText("认证的车：").first().siblingElements().first().text();
-					bean.setAuthCar(authCar);
-				}
-
-				// 购买车型
-				String carType = element.getElementsMatchingOwnText("购买车型").first().siblingElements().first().text();
-				bean.setCarType(carType);
-
-				// 购买地点
-				String purchasedFrom = element.getElementsMatchingOwnText("购买地点").first().siblingElements().first().text();
-				bean.setPurchasedFrom(purchasedFrom);
-				
-				// 购车经销商
-				if (element.getElementsMatchingOwnText("购车经销商").size() == 0) {
-					bean.setDealer("none");
-				} else {
-					String dealer = element.getElementsMatchingOwnText("购车经销商").first().siblingElements().first().text();
-					bean.setDealer(dealer);
-				}
-				
-				// 购买时间
-				String buyTime = element.getElementsMatchingOwnText("购买时间").first().siblingElements().first().text();
-				bean.setBuyTime(buyTime);
-
-				// 裸车购买价
-				String price = element.getElementsMatchingOwnText("裸车购买价").first().siblingElements().first().text();
-				bean.setPrice(price);
-
-				// 油耗 目前行驶
-				if (element.getElementsMatchingOwnText("升/百公里").size() == 0) {
-					bean.setFuelConsumption("none");
-					bean.setKilometre("none");
-				} else {
-					try {
-						String fuelConsumption = element.getElementsMatchingOwnText("升/百公里").first().parent().ownText();
-						bean.setFuelConsumption(fuelConsumption);
-
-						String kilometre = element.getElementsMatchingOwnText("升/百公里").first().parent().nextElementSibling().ownText();
-						bean.setKilometre(kilometre);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-
-				// 评分
-				Elements gradeElements = element.select("div.position-r");
-				for (Element gradeElement : gradeElements) {
-					// 0
-					if (gradeElement.getElementsMatchingOwnText("空间").size() != 0) {
-						String interspaceGrade = gradeElement.getElementsMatchingOwnText("空间").first().siblingElements().first().text();
-						bean.setInterspaceGrade(interspaceGrade);
-					}
-
-					// 1
-					if (gradeElement.getElementsMatchingOwnText("动力").size() != 0) {
-						String powerGrade = gradeElement.getElementsMatchingOwnText("动力").first().siblingElements().first().text();
-						bean.setPowerGrade(powerGrade);
-					}
-
-					// 2
-					if (gradeElement.getElementsMatchingOwnText("操控").size() != 0) {
-						String manipulationGrade = gradeElement.getElementsMatchingOwnText("操控").first().siblingElements().first().text();
-						bean.setManipulationGrade(manipulationGrade);
-					}
-
-					// 3
-					if (gradeElement.getElementsMatchingOwnText("油耗").size() != 0) {
-						String fuelConsumptionGrade = gradeElement.getElementsMatchingOwnText("油耗").first().siblingElements().first().text();
-						bean.setFuelConsumptionGrade(fuelConsumptionGrade);
-					}
-
-					// 4
-					if (gradeElement.getElementsMatchingOwnText("舒适性").size() != 0) {
-						String comfortGrade = gradeElement.getElementsMatchingOwnText("舒适性").first().siblingElements().first().text();
-						bean.setComfortGrade(comfortGrade);
-					}
-
-					// 5
-					if (gradeElement.getElementsMatchingOwnText("外观").size() != 0) {
-						String appearanceGrade = gradeElement.getElementsMatchingOwnText("外观").first().siblingElements().first().text();
-						bean.setAppearanceGrade(appearanceGrade);
-					}
-
-					// 6
-					if (gradeElement.getElementsMatchingOwnText("内饰").size() != 0) {
-						String innerDecorationGrade = gradeElement.getElementsMatchingOwnText("内饰").first().siblingElements().first().text();
-						bean.setInnerDecorationGrade(innerDecorationGrade);
-					}
-
-					// 7
-					if (gradeElement.getElementsMatchingOwnText("性价比").size() != 0) {
-						String performancePriceGrade = gradeElement.getElementsMatchingOwnText("性价比").first().siblingElements().first().text();
-						bean.setPerformancePriceGrade(performancePriceGrade);
-					}
-
-				}
-
-				// 购车目的
-				String aims = element.getElementsMatchingOwnText("购车目的").first().siblingElements().first().text();
-				bean.setAims(aims);
-
-				// 发帖时间
-				String publishTime = element.select("span.time").first().text();
-				publishTime = StringUtils.replace(publishTime, " 发表", "");
-				bean.setPublishTime(publishTime);
-
-				// 帖子内容
-				Elements texts = element.select("div.text-con.height-list div.text-cont");
-				if (!texts.isEmpty()) {
-					String text = texts.first().html();
-					parseComment(text, bean);
-				}
-
-				// 追加
-				Elements appends = element.select("dd.add-dl-text div.text-height");
-				if (!appends.isEmpty()) {
-					String appendText = appends.first().html();
-					parseAppendComment(appendText, bean);
-				}
-
-				// 浏览次数
-				String views = element.getElementsMatchingOwnText("人看过").first().child(0).text();
-				bean.setViews(views);
-
-				// 点赞
-				String likes = element.getElementsMatchingOwnText("人支持该口碑").first().child(0).text();
-				bean.setLikes(likes);
-
-				bean.saveOnNotExist();
 		}	
 	}
 	
@@ -317,11 +328,11 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 	}
 
 	public static void main(String args[]){
-		//for(int i =0;i<5;i++){
-		AutoHomeWordOfMouthFetch fetch = new AutoHomeWordOfMouthFetch();
-		//fetch.useDynamicFetch();
-		fetch.run();
-		//}
+		for(int i =0;i<5;i++){
+			AutoHomeWordOfMouthFetch fetch = new AutoHomeWordOfMouthFetch();
+			//fetch.useDynamicFetch();
+			fetch.run();
+		}
 	}
 
 }

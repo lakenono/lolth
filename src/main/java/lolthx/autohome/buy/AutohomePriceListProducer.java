@@ -57,19 +57,21 @@ public class AutohomePriceListProducer extends Producer {
 	@Override
 	protected Task buildTask(String url) {
 		Task buildTask = super.buildTask(url);
-		buildTask.setExtra(keyword);
+		buildTask.setExtra(id + ":" + keyword);
 		return buildTask;
 	}
 
 	public static void main(String args[]) throws Exception {
 		String projectName = "AutoHomePrice Test";
 
-		//String[] mainIds = { "78", "110", "634", "117", "50", "496", "164", "834", "2313" };
-		//String[] mainkws = { "雅阁", "凯美瑞", "天籁", "蒙迪欧", "索纳塔", "迈腾", "君威", "君越", "迈锐宝" };
-	
-		String[] mainIds = {  "634" };
-		String[] mainkws = {  "天籁"};
-		
+		// String[] mainIds = { "78", "110", "634", "117", "50", "496", "164",
+		// "834", "2313" };
+		// String[] mainkws = { "雅阁", "凯美瑞", "天籁", "蒙迪欧", "索纳塔", "迈腾", "君威",
+		// "君越", "迈锐宝" };
+
+		String[] mainIds = { "634" };
+		String[] mainkws = { "天籁" };
+
 		AutoHomePriceDescription autohpd = new AutoHomePriceDescription();
 		Map<String, String[]> map = new HashMap<String, String[]>();
 		map = autohpd.resolveUrl(mainIds, mainkws);
@@ -77,10 +79,9 @@ public class AutohomePriceListProducer extends Producer {
 		String[] keywords = map.get("keywords");
 
 		/**
-		 String[] ids = { "19491"};
-		 String[] keywords = { "奥迪A4L 2015款" };
+		 * String[] ids = { "19491"}; String[] keywords = { "奥迪A4L 2015款" };
 		 */
-		
+
 		for (int i = 0; i < ids.length; i++) {
 			new AutohomePriceListProducer(projectName, ids[i], keywords[i]).run();
 		}

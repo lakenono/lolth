@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import lakenono.db.BaseBean;
 import lakenono.db.DBBean;
+import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
@@ -18,6 +19,9 @@ public class AutoHomeWordOfMouthBean extends DBBean {
 	public static void main(String[] args) throws SQLException {
 		DBBean.createTable(AutoHomeWordOfMouthBean.class);
 	}
+
+	@DBConstraintPK
+	private String id;
 
 	// 用户名
 	private String username;
@@ -87,67 +91,67 @@ public class AutoHomeWordOfMouthBean extends DBBean {
 
 	// --------------------------口碑信息
 	// 最满意
-	@DBField(type="varchar(1500)")
+	@DBField(type = "varchar(1500)")
 	private String satisfactoryComment;
-	
+
 	// 最不满意
-	@DBField(type="varchar(1500)")
+	@DBField(type = "varchar(1500)")
 	private String unsatisfactoryComment;
 
 	// 空间
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String interspaceComment;
 
 	// 动力
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String powerComment;
 
 	// 操控
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String manipulationComment;
 
 	// 油耗
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String fuelConsumptionComment;
 
 	// 舒适性
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String comfortComment;
 
 	// 外观
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String appearanceComment;
 
 	// 内饰
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String innerDecorationComment;
 
 	// 性价比
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String performancePriceComment;
-	
+
 	// 其他
-	@DBField(type="varchar(1000)")
+	@DBField(type = "varchar(1000)")
 	private String otherComment;
-	
-	//购买原因
-	@DBField(type="text")
+
+	// 购买原因
+	@DBField(type = "text")
 	private String buyReasonComment;
-	
-	//-----------------------------------追加评价
-	//油耗
-	@DBField(type="varchar(1000)")
+
+	// -----------------------------------追加评价
+	// 油耗
+	@DBField(type = "varchar(1000)")
 	private String fuelConsumptionAppend;
-	//保养
-	@DBField(type="varchar(1000)")
+	// 保养
+	@DBField(type = "varchar(1000)")
 	private String maintenanceAppand;
-	//故障
-	@DBField(type="varchar(1000)")
+	// 故障
+	@DBField(type = "varchar(1000)")
 	private String faultAppend;
-	//吐槽
-	@DBField(type="varchar(1000)")
+	// 吐槽
+	@DBField(type = "varchar(1000)")
 	private String tuCaoAppend;
-	
+
 	// 帖子内容
 	@DBField(type = "text")
 	private String text;
@@ -157,5 +161,15 @@ public class AutoHomeWordOfMouthBean extends DBBean {
 
 	// 点赞 25
 	private String likes;
+
+	@DBConstraintPK
+	private String forumId;
+
+	@DBConstraintPK
+	@DBField(type = "varchar(32)")
+	private String projectName;
+
+	@DBField(type = "varchar(32)")
+	private String keyword;
 
 }

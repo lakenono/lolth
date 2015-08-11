@@ -53,11 +53,12 @@ public class AutoHomeBBSListProducer extends Producer {
 	@Override
 	protected Task buildTask(String url) {
 		Task buildTask = super.buildTask(url);
-		buildTask.setExtra(keyword);
+		buildTask.setExtra(id + ":" + keyword);
 		return buildTask;
 	}
 
 	public static void main(String[] args) throws Exception {
+
 		String projectName = "英大财险A20150806";
 		String[] ids = { "596", "3575", "3497", "3827", "2429", "2779", "537", "3648", "3395", "2141", "3119", "2761", "3430", "3533", "2357" };
 		String[] keywords = { "力帆620", "云100", "知豆", "知豆D2", "逸动", "荣威E50", "荣威550", "奇瑞eQ", "江淮iEV", "传祺GA5", "东风风神E30", "秦", "唐", "EV系列", "MODEL S" };

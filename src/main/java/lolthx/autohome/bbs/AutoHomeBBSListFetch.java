@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import lakenono.base.DistributedParser;
+import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 import lolthx.autohome.bbs.bean.AutoHomeBBSBean;
@@ -51,93 +52,97 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 		AutoHomeBBSBean bean = null;
 		Elements elements = doc.select("div#subcontent dl.list_dl[lang]");
 		for (Element element : elements) {
-			// 发帖时间
-			String postTime = element.select("dd").first().select("span").text();
-			if (!isTime(postTime)) {
-				continue;
-			}
-			bean = new AutoHomeBBSBean();
-			bean.setPostTime(postTime);
-
-			// title
-			String title = element.select("dt a").first().text();
-			bean.setTitle(title);
-
-			String type = element.select("dt span").first().attr("class");
-			bean.setType(type);
-
-			// url
-			String url = element.select("dt a").first().attr("href");
-			bean.setUrl("http://club.autohome.com.cn" + url);
-			String id = StringUtils.substringBetween(url, "bbs/", ".html");
-			bean.setId(id);
-			// 作者
-			String author = element.select("dd").first().select("a").first().text();
-			bean.setAuthor(author);
-
-			// 作者url
-			String authorUrl = element.select("dd").first().select("a").first().attr("href");
-			String authorId = StringUtils.substringAfter(authorUrl, "cn/");
-			bean.setAuthorId(authorId);
-			bean.setProjectName(task.getProjectName());
-			bean.setKeyword(task.getExtra());
-			
-			String html = GlobalComponents.fetcher.fetch(bean.getUrl());
-			if (StringUtils.isBlank(html)) {
-				return;
-			}
-			Document docDetail = Jsoup.parse(html);
-
-			// views
-			String views = docDetail.select("font#x-views").first().text();
-			bean.setViews(views);
-
-			// replys
-			String replys = docDetail.select("font#x-replys").first().text();
-			bean.setReplys(replys);
-
-			// text
-			String text = docDetail.select("div.rconten div.conttxt").first().text();
-			{
-				Elements els= docDetail.select("div.rconten div.conttxt img");
-				for (Element el : els) {
-					String attr = el.attr("src");
-					text = text + " " + attr;
-				}
-			}
-
-			// 车主信息
-			bean.setText(text);
 			try {
+				// 发帖时间
+				String postTime = element.select("dd").first().select("span").text();
+				if (!isTime(postTime)) {
+					continue;
+				}
+				bean = new AutoHomeBBSBean();
+				bean.setPostTime(postTime);
+
+				// title
+				String title = element.select("dt a").first().text();
+				bean.setTitle(title);
+
+				String type = element.select("dt span").first().attr("class");
+				bean.setType(type);
+
+				// url
+				String url = element.select("dt a").first().attr("href");
+				bean.setUrl("http://club.autohome.com.cn" + url);
+				String id = StringUtils.substringBetween(url, "bbs/", ".html");
+				bean.setId(id);
+				// 作者
+				String author = element.select("dd").first().select("a").first().text();
+				bean.setAuthor(author);
+
+				// 作者url
+				String authorUrl = element.select("dd").first().select("a").first().attr("href");
+				String authorId = StringUtils.substringAfter(authorUrl, "cn/");
+				bean.setAuthorId(authorId);
+				bean.setProjectName(task.getProjectName());
+				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
+				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+
+				String html = GlobalComponents.fetcher.fetch(bean.getUrl());
+				if (StringUtils.isBlank(html)) {
+					return;
+				}
+				Document docDetail = Jsoup.parse(html);
+
+				// views
+				String views = docDetail.select("font#x-views").first().text();
+				bean.setViews(views);
+
+				// replys
+				String replys = docDetail.select("font#x-replys").first().text();
+				bean.setReplys(replys);
+
+				// text
+				String text = docDetail.select("div.rconten div.conttxt").first().text();
+				{
+					Elements els = docDetail.select("div.rconten div.conttxt img");
+					for (Element el : els) {
+						String attr = el.attr("src");
+						text = text + " " + attr;
+					}
+				}
+
+				// 车主信息
+				bean.setText(text);
+
 				bean.saveOnNotExist();
 				parseUser(docDetail);
-					
-//				String sendurl = StringUtils.replace(bean.getUrl(), "-1.html", "-{0}.html");
-//				int maxpage = this.getMaxPage(docDetail);//执行页面用户评论推送
-//				for(int pagenum = 1 ; pagenum<= maxpage ;pagenum++ ){
-//					String seUrl = buildUrl(sendurl,pagenum);
-//					Task newTask = buildTask(seUrl, "autohome_bbs_comment", task);
-//					Queue.push(newTask);
-//				}
-				
+
+
+				String sendurl = StringUtils.replace(bean.getUrl(), "-1.html", "-{0}.html");
+				int maxpage = this.getMaxPage(docDetail);// 执行页面用户评论推送
+				for (int pagenum = 1; pagenum <= maxpage; pagenum++) {
+					String seUrl = buildUrl(sendurl, pagenum);
+					Task newTask = buildTask(seUrl, "autohome_bbs_comment", task);
+					Queue.push(newTask);
+				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
+				continue;
 			}
-			
+
 		}
 
 	}
-	
-	private int getMaxPage(Document doc) throws Exception{
+
+	private int getMaxPage(Document doc) throws Exception {
 		String attr = doc.select("span.gopage span.fs").first().attr("title");
 		String page = StringUtils.substringBetween(attr, "共", "页").trim();
 		return Integer.valueOf(page);
 	}
-	
-	public String buildUrl(String url,int pageNum){
+
+	public String buildUrl(String url, int pageNum) {
 		return MessageFormat.format(url, String.valueOf(pageNum));
 	}
-	
+
 	private void parseUser(Document doc) {
 		Element topicElement = doc.select("div#maxwrap-maintopic").first();
 
@@ -170,7 +175,7 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private boolean isTime(String time) {
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
@@ -184,8 +189,8 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 	private boolean between(Date beginDate, Date endDate, Date src) {
 		return beginDate.before(src) && endDate.after(src);
 	}
-	
-	public static void main(String args[]){
+
+	public static void main(String args[]) {
 		new AutoHomeBBSListFetch().run();
 	}
 

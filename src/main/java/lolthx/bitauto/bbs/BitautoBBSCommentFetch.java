@@ -35,43 +35,51 @@ public class BitautoBBSCommentFetch extends DistributedParser {
 		BitautoBBSCommentBean bean = null;
 		BitautoBBSUserBean userBean = null;
 		for (Element el : els) {
-			if (el.attr("class").contains("post_fist")) {// 如果为正文信息，则跳出，继续执行下一条
+			try {
+				if (el.attr("class").contains("post_fist")) {// 如果为正文信息，则跳出，继续执行下一条
+					continue;
+				}
+				bean = new BitautoBBSCommentBean();
+				userBean = new BitautoBBSUserBean();
+
+				Element left = el.select("div.postcont_border div.postleft").first();
+				Element right = el.select("div.postcont_border div.postright").first();
+
+				String id = el.select("a").first().attr("id");
+				bean.setId(id);
+
+				String floor = right.select("div.post_text  div.floor_box a").text();
+				bean.setFloor(floor);
+
+				String text = right.select("div.post_text div.post_width").text();
+				bean.setText(text);
+
+				String postTime = right.select("div.footinfor_box div.time_postcont span[role=postTime]").text();
+				bean.setPostTime(postTime);
+
+				String author = left.select("div.user_name a.mingzi").text();
+				bean.setAuthor(author);
+				userBean.setName(author);
+
+				String authorUrl = left.select("div.user_name a.mingzi").attr("href");
+				userBean.setUrl(authorUrl);
+
+				String authorId = StringUtils.substringBetween(authorUrl, "http://i.yiche.com/", "/");
+				bean.setAuthorId(authorId);
+				userBean.setId(authorId);
+				bean.setUrl(task.getUrl());
+				bean.setTitle(title);
+				bean.setProjectName(task.getProjectName());
+				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
+				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+
+				bean.saveOnNotExist();
+
+				// parseUser(left,userBean);
+			} catch (Exception e) {
+				e.printStackTrace();
 				continue;
 			}
-			bean = new BitautoBBSCommentBean();
-			userBean = new BitautoBBSUserBean();
-
-			Element left = el.select("div.postcont_border div.postleft").first();
-			Element right = el.select("div.postcont_border div.postright").first();
-			
-			String id = el.select("a").first().attr("id");
-			bean.setId(id);
-
-			String floor = right.select("div.post_text  div.floor_box a").text();
-			bean.setFloor(floor);
-
-			String text = right.select("div.post_text div.post_width").text();
-			bean.setText(text);
-
-			String postTime = right.select("div.footinfor_box div.time_postcont span[role=postTime]").text();
-			bean.setPostTime(postTime);
-
-			String author = left.select("div.user_name a.mingzi").text();
-			bean.setAuthor(author);
-			userBean.setName(author);
-
-			String authorUrl = left.select("div.user_name a.mingzi").attr("href");
-			userBean.setUrl(authorUrl);
-
-			String authorId = StringUtils.substringBetween(authorUrl, "http://i.yiche.com/", "/");
-			bean.setAuthorId(authorId);
-			userBean.setId(authorId);
-			bean.setUrl(task.getUrl());
-			bean.setTitle(title);
-
-			bean.saveOnNotExist();
-
-			// parseUser(left,userBean);
 		}
 
 	}
@@ -108,7 +116,7 @@ public class BitautoBBSCommentFetch extends DistributedParser {
 
 		try {
 			bean.saveOnNotExist();
-		} catch (IllegalArgumentException | IllegalAccessException  | SQLException e) {
+		} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
 			e.printStackTrace();
 		}
 
