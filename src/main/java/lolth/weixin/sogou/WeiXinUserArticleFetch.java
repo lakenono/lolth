@@ -21,10 +21,11 @@ import org.jsoup.select.Elements;
 public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 
 {
-	private static String taskName = "buick_0629";
+	public static String taskName ;
 	
 	public static void main(String[] args) throws Exception
 	{
+		WeiXinUserArticleFetch.taskName = "buick_0629";
 		while (true)
 		{
 			try
@@ -120,8 +121,9 @@ public class WeiXinUserArticleFetch extends BaseLog implements PageFetchHandler
 			bean.setAuthorid(openid);
 
 			bean.setKeyword(this.username);
+			bean.setProjectName(taskName);
 
-			bean.persist();
+			bean.saveOnNotExist();
 			this.log.info(bean.toString());
 		}
 		Thread.sleep(15000);

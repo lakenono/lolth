@@ -18,6 +18,7 @@ import org.jsoup.select.Elements;
 
 public class WeiXinListFetch extends BaseLog
 {
+	public static String projectName = "";
 	public String keyword;
 
 	public WeiXinListFetch(String keyword)
@@ -95,9 +96,9 @@ public class WeiXinListFetch extends BaseLog
 			bean.setAuthorid(authorid);
 
 			bean.setKeyword(this.keyword);
-
-			bean.persist();
-
+			bean.setProjectName(projectName);
+			bean.saveOnNotExist();
+			
 			this.log.info(bean.toString());
 		}
 	}
@@ -137,6 +138,8 @@ public class WeiXinListFetch extends BaseLog
 
 	public static void main(String[] args) throws Exception
 	{
+		WeiXinListFetch.projectName = "英大财险";
+		
 		while (true)
 		{
 			try
