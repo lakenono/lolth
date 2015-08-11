@@ -129,6 +129,9 @@ public class WeiXinListFetch extends BaseLog
 		}
 		int count = Integer.parseInt(countStr);
 		int page = count / 10 + 1;
+		if(page>10){
+			page = 10;
+		}
 		this.log.info("keyword [{}] count[{}] page[{}]", this.keyword, count, page);
 		return page;
 	}
@@ -139,9 +142,18 @@ public class WeiXinListFetch extends BaseLog
 		{
 			try
 			{
+				new WeiXinListFetch("英大泰和财产").run();
+				new WeiXinListFetch("英大财险").run();
+				new WeiXinListFetch("英大车险").run();
+				new WeiXinListFetch("平安车险").run();
+				new WeiXinListFetch("平安财险").run();
+				new WeiXinListFetch("阳光车险").run();
+				new WeiXinListFetch("阳光财险").run();
+				new WeiXinListFetch("大地车险").run();
+				new WeiXinListFetch("大地财险").run();
+
 				new WeiXinListFetch("电动汽车").run();
-//				new WeiXinListFetch("宝马").run();
-//				new WeiXinListFetch("奔驰").run();
+				new WeiXinListFetch("电动车").run();
 			}
 			catch (Exception e)
 			{
