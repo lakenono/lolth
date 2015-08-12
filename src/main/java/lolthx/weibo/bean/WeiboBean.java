@@ -34,6 +34,10 @@ public class WeiboBean extends DBBean
 	private String pid;
 	private String pmid;
 	private String pweibourl;
+	//原文用户
+	private String forwardUser;
+	//原文内容
+	private String forwardText;
 	
 	private String keyword;
 	

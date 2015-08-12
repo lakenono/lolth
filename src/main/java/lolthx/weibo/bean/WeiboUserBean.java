@@ -26,6 +26,13 @@ public class WeiboUserBean extends DBBean {
 	private String summery;
 
 	private String tags;
+	//微博数
+	private String profile;
+	//关注数
+	private String follow;
+	//粉丝数
+	private String fans;
+	private String userUrl;
 	@DBConstraintPK
 	private String projectName;
 

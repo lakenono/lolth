@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 微博根据关键字实时抓取，projectName为建表附加名
+ * 注意：在创建任务的时候，需根据projectName创建表，projectName为英文
  * @author yanghp
  *
  */

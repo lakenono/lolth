@@ -12,13 +12,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 /**
  * 微博关注用户列表
+ * 注意：在创建任务的时候，需根据projectName创建表，projectName为英文
  * @author yanghp
  *
  */
 public class WeiboConcernUserTask extends Producer {
 
 	private final String WEIBO_USER_FOLLOWS_URL_TEMPLATE = "http://weibo.cn/{0}/follow?page={1}";
-	public static final String WEIBO_USER_CONCERN_LIST = "weibo_user_concern_list";
+	public static final String WEIBO_USER_CONCERN_LIST = "weibo_user_concern_list_test";
 	private String projectName;
 	private String uid;
 
@@ -78,5 +79,9 @@ public class WeiboConcernUserTask extends Producer {
 		task.setExtra(uid);
 		return task;
 	}
+	
+//	public static void main(String[] args) throws Exception {
+//		new WeiboConcernUserTask("1846456555","yang_hp").run();;
+//	}
 	
 }

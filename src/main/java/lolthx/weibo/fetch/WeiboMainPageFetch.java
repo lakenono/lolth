@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class WeiboMainPageFetch extends DistributedParser{
 	
 	private WeiboSearchFetch weibo = new WeiboSearchFetch();
+	
 	@Override
 	public String getQueueName() {
 		return WeiboMainPageTask.MAIN_PAGE_QUEUE;
@@ -43,18 +44,24 @@ public class WeiboMainPageFetch extends DistributedParser{
 		}
 		Document doc = Jsoup.parse(result);
 		List<WeiboBean> beans = parseBean(doc, task);
+		String userUrl = "";
 
 		for (WeiboBean b : beans) {
 			try {
-				b.setUserurl(StringUtils.substringBefore(task.getUrl(), "?"));
+				if(StringUtils.isNumeric(task.getExtra())) {
+					userUrl = "http://weibo.cn/u/"+task.getExtra();
+				}else{
+					userUrl = "http://weibo.cn/"+task.getExtra();
+				}
+				b.setUserurl(userUrl);
 				b.setProjectName(task.getProjectName());
 				b.setKeyword(task.getExtra());
 				b.saveOnNotExist();
-//				weibo.bulidWeiboUserTask(b.getUserid(), task.getProjectName());
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
 		}
+		weibo.bulidWeiboUserTask(task.getExtra(),userUrl, task.getProjectName());
 	}
 	public List<WeiboBean> parseBean(Document document, Task task) throws IOException, ParseException {
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
@@ -62,7 +69,9 @@ public class WeiboMainPageFetch extends DistributedParser{
 		String username = "";
 		Elements user = document.select("div.ut");
 		if (user.size() > 0) {
-			username = user.first().ownText();
+//			username = user.first().ownText();
+			username = StringUtils.splitByCharacterType(user.first().text())[0];
+			username = StringUtils.substringBefore(username, "的");
 		}
 
 		Elements elements = document.select("div.c[id]");
@@ -127,6 +136,12 @@ public class WeiboMainPageFetch extends DistributedParser{
 
 				String text = StringUtils.substringBetween(element.select("div").last().text(), "转发理由:", "赞[");
 				bean.setText(text);
+				//原文用户
+				String forwardUser = element.select("span.cmt a").text();
+				bean.setForwardUser(forwardUser);
+				//原文内容
+				String forwardText = element.select("span.ctt").text();
+				bean.setForwardText(forwardText);
 			} else {
 				String text = element.select("span.ctt").text();
 				bean.setText(text);

@@ -21,7 +21,8 @@ import org.jsoup.select.Elements;
 @Slf4j
 public class WeiboUserFetch extends DistributedParser{
 	
-	public static final String WEIBO_USER_TAG = "cn_weibo_user_tag";
+	public static final String WEIBO_USER_TAG = "cn_weibo_user_tag_test";
+	public static final String WEIBO_FANS_NUM = "cn_weibo_fans_num_test";
 	private static final String WEIBO_USER_TAG_URL_TEMPLATE = "http://weibo.cn/account/privacy/tags/?uid={0}";
 
 	@Override
@@ -48,6 +49,7 @@ public class WeiboUserFetch extends DistributedParser{
 				String[] ids = StringUtils.split(task.getExtra(), ',');
 				user.setId(ids[0]);
 				user.setUid(ids[1]);
+				user.setUserUrl(ids[2]);
 				user.setProjectName(task.getProjectName());
 				for (String f : fields) {
 					if (StringUtils.startsWith(f, "昵称:")) {
@@ -84,6 +86,7 @@ public class WeiboUserFetch extends DistributedParser{
 				//推送标签任务
 				if(persist){
 					buildUserTagTask(user.getUid(), task);
+					buildFansNumTask(user,task);
 				}
 			}
 		}else{
@@ -91,6 +94,21 @@ public class WeiboUserFetch extends DistributedParser{
 		}
 		
 	}
+
+	private void buildFansNumTask(WeiboUserBean user, Task task) {
+		String url = user.getUserUrl();
+		if(StringUtils.isBlank(url)){
+			return;
+		}
+		Task t = new Task();
+		t.setQueueName(WEIBO_FANS_NUM);
+		t.setUrl(url);
+		t.setExtra(user.getUid());
+		t.setProjectName(task.getProjectName());
+		Queue.push(t);
+		
+	}
+
 	private void buildUserTagTask(String uid, Task task) {
 		Task t = new Task();
 		t.setQueueName(WEIBO_USER_TAG);

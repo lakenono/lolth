@@ -12,14 +12,17 @@ import lakenono.fetch.adv.utils.HttpURLUtils;
 import lolthx.weibo.bean.WeiboUserConcernRefBean;
 import lolthx.weibo.task.WeiboConcernUserTask;
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * 微博用户关联抓取
+ * 
  * @author yanghp
  *
  */
 @Slf4j
 public class WeiboConcernUserFetch extends DistributedParser {
 	private WeiboSearchFetch weibo = new WeiboSearchFetch();
+
 	@Override
 	public String getQueueName() {
 		return WeiboConcernUserTask.WEIBO_USER_CONCERN_LIST;
@@ -32,29 +35,33 @@ public class WeiboConcernUserFetch extends DistributedParser {
 			return;
 		}
 		Document doc = Jsoup.parse(result);
-		Elements aS = doc.select("table a");
+		Elements aS = doc.select("table");
 		for (Element a : aS) {
-			if (StringUtils.equals(a.ownText(), "关注他")) {
-				String href = a.absUrl("href");
+			String url = a.select("a").first().absUrl("href");
+			String href = a.select("a").last().absUrl("href");
 
-				String concernUserId = HttpURLUtils.getUrlParams(href, "GBK").get("uid");
-				if (StringUtils.isNotBlank(concernUserId)) {
-					// 持久化用户，关注对应关系
-//					new WeiboUserConcernRefBean(task.getExtra(), concernUserId).persistOnNotExist();
-					WeiboUserConcernRefBean bean = new WeiboUserConcernRefBean(task.getProjectName());
-					bean.setConcernUserId(concernUserId);
-					bean.setUserId(task.getExtra());
-					bean.saveOnNotExist();
-					// 推送用户队列
-					weibo.bulidWeiboUserTask(concernUserId, task.getProjectName());
-				}
+			String concernUserId = HttpURLUtils.getUrlParams(href, "GBK").get(
+					"uid");
+			if (StringUtils.isNotBlank(concernUserId)) {
+				// 持久化用户，关注对应关系
+				// new WeiboUserConcernRefBean(task.getExtra(),
+				// concernUserId).persistOnNotExist();
+				WeiboUserConcernRefBean bean = new WeiboUserConcernRefBean(
+						task.getProjectName());
+				bean.setConcernUserId(concernUserId);
+				bean.setUserId(task.getExtra());
+				bean.saveOnNotExist();
+				// 推送用户队列
+				weibo.bulidWeiboUserTask(concernUserId, url,
+						task.getProjectName());
+
 			}
 		}
 	}
-	
+
 	@Override
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
-	
+
 }

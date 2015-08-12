@@ -1,17 +1,12 @@
 package lolthx.weibo.task;
 
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lakenono.db.DBBean;
-import lolthx.weibo.bean.WeiboBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -24,7 +19,7 @@ import org.jsoup.select.Elements;
 
 /**
  * 微博搜索任务
- * 
+ * 注意：启动任务的时候需要根据projectName创建表，projectName为英文
  * @author yanghp
  *
  */
@@ -133,33 +128,15 @@ public class WeiboSearchTask {
 		return task;
 	}
 
-	public static void main(String[] args) throws ParseException, TException,
-			InterruptedException, SQLException {
-		String[] keys = { "电动汽车", "电动车", "英大泰和财产", "英大财险", "英大车险", "平安车险",
-				"平安财险", "阳光车险", "阳光财险", "大地车险", "大地财险" };
-		String projectName = "英大财险";
-		String begin = "20150101";
-		String over = "20150701";
-		//创建表
-		DBBean.createTable(WeiboBean.class, projectName);
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-		for (String key : keys) {
-			Calendar start = Calendar.getInstance();
-			Calendar end = Calendar.getInstance();
-			try {
-				start.setTime(format.parse(begin));
-				end.setTime(format.parse(over));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			while (start.before(end)) {
-				WeiboSearchTask weibo = new WeiboSearchTask(projectName, key,
-						format.format(start.getTime()), format.format(start
-								.getTime()));
-				weibo.run();
-				start.add(Calendar.DAY_OF_MONTH, 1);
-			}
-			Thread.sleep(15000);
-		}
-	}
+//	public static void main(String[] args) throws ParseException, TException,
+//			InterruptedException, SQLException {
+//		String keys = "现代瑞纳";
+//		String projectName = "ruina";
+//		//创建表
+//		DBBean.createTable(WeiboBean.class, projectName);
+//		DBBean.createTable(WeiboUserBean.class, projectName);
+//		DBBean.createTable(WeiboUserConcernRefBean.class, projectName);
+//		WeiboSearchTask weibo = new WeiboSearchTask(projectName,keys);
+//		weibo.run();
+//	}
 }

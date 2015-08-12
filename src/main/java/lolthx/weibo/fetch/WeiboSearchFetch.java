@@ -39,7 +39,7 @@ public class WeiboSearchFetch extends DistributedParser {
 	private int sleep = 15000;
 	private final String WEIBO_USER_URL_TEMPLATE = "http://weibo.cn/{0}";
 	private final String WEIBO_USER_INFO_URL_TEMPLAGE = "http://weibo.cn/{0}/info";
-	public static final String USER_QUEUE_NAME = "weibo_user_name_queue";
+	public static final String USER_QUEUE_NAME = "weibo_user_name_queue_test";
 
 	@Override
 	public String getQueueName() {
@@ -57,16 +57,16 @@ public class WeiboSearchFetch extends DistributedParser {
 		for (WeiboBean b : beans) {
 			try {
 				b.saveOnNotExist();
-				//发送微博id爬取任务
-//				bulidWeiboUserTask(b.getUserid(),task.getProjectName());
+				//发送微博id爬取任务,抓取用户资料
+				bulidWeiboUserTask(b.getUserid(),b.getUserurl(),task.getProjectName());
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
 		}
 		beans.clear();
 	}
-	
-	public void bulidWeiboUserTask(String id, String projectName) {
+
+	public void bulidWeiboUserTask(String id, String userUrl,String projectName) {
 		try {
 			String uid = id;
 			if (!StringUtils.isNumeric(uid)) {
@@ -82,7 +82,7 @@ public class WeiboSearchFetch extends DistributedParser {
 			t.setProjectName(projectName);
 			t.setQueueName(USER_QUEUE_NAME);
 			t.setUrl(buildUserInfoUrl(uid));
-			t.setExtra(id+","+uid);
+			t.setExtra(id+","+uid+","+userUrl);
 			Queue.push(t);
 			
 		} catch (Exception e) {
@@ -194,6 +194,12 @@ public class WeiboSearchFetch extends DistributedParser {
 
 				String text = StringUtils.substringBetween(element.select("div").last().text(), "转发理由:", "赞[");
 				bean.setText(text);
+				//原文用户
+				String forwardUser = element.select("span.cmt a").text();
+				bean.setForwardUser(forwardUser);
+				//原文内容
+				String forwardText = element.select("span.ctt").text();
+				bean.setForwardText(forwardText);
 			}
 
 			WeiboContentSpliter.spliteContent(bean);
