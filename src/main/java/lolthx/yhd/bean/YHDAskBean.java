@@ -24,6 +24,7 @@ public class YHDAskBean extends BaseBean{
 	@DBField(type="varchar(500)")
 	private String answer;
 	private String date;
+	private String projectName;
 	
 	public static void main(String[] args) throws SQLException {
 		new YHDAskBean().buildTable();

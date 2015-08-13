@@ -75,6 +75,7 @@ public class YHDGoodsFetch extends DistributedParser {
 			bean.setStrong(strong);
 			bean.setCommments(commments);
 			bean.setKeyword(task.getExtra());
+			bean.setProjectName(task.getProjectName());
 			beans.add(bean);
 			// 如果评论个数不为0，则创建评论爬取task
 			try {

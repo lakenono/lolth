@@ -50,6 +50,7 @@ public class YHDCommentFetch extends DistributedParser{
 				bean.setGoodsId(task.getExtra());
 				bean.setRepley(repley);
 				bean.setScore(score);
+				bean.setProjectName(task.getProjectName());
 				list.add(bean);
 			}
 			if (list.isEmpty()) {

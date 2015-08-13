@@ -79,6 +79,7 @@ public class YHDAskFetch extends DistributedParser {
 			bean.setDate(date);
 			bean.setGoodsId(task.getExtra());
 			bean.setQuestion(question);
+			bean.setProjectName(task.getProjectName());
 			if (!bean.exist()) {
 				bean.persist();
 			}

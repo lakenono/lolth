@@ -28,13 +28,15 @@ public class GoodsBean extends BaseBean{
 	private String shop;
 	//好评率
 	private String strong;
-	//搜索关键字
-	private String keyword;
 	//评论id
 	private String parentId;
 	private String productid;
 	//评论个数
 	private String commments;
+	//搜索关键字
+	private String keyword;
+	@DBConstraintPK
+	private String projectName;
 	public static void main(String[] args) throws SQLException {
 		new GoodsBean().buildTable();
 	}

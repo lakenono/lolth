@@ -30,6 +30,7 @@ public class YHDCommentBean extends BaseBean{
 	@DBField(type="varchar(500)")
 	private String repley;
 	private String date;
+	private String projectName;
 	
 	public static void main(String[] args) throws SQLException {
 		new YHDCommentBean().buildTable();
