@@ -24,16 +24,19 @@ public class YhdSearchProduce {
 	private final String BASE_URL1 = "http://search.yhd.com/searchPage/c0-0-0/b/a-s1-v0-p{0}-price-d0-f0-m1-rt0-pid-mid0-k{1}/?isLargeImg=0";
 	private final String BASE_URL2 = "http://search.yhd.com/searchPage/c0-0-0/b/a-s1-v0-p{0}-price-d0-f0-m1-rt0-pid-mid0-k{1}/?isGetMoreProducts=1&moreProductsDefaultTemplate=0&isLargeImg=0";
 	private String projectName;
+	private String keyword;
 	public static final String QUEUENAME = "yhd_search_list";
 
-	public YhdSearchProduce(String projectName) {
+	public YhdSearchProduce(String projectName,String keyword) {
 		this.projectName = projectName;
+		this.keyword = keyword;
 	}
 
 	public static void main(String[] args) throws Exception {
+		String projectName = "ceshi";
 		String[] keywords = { "洗发露", "酸奶" };
 		for (String keyword : keywords) {
-			YhdSearchProduce a = new YhdSearchProduce(keyword);
+			YhdSearchProduce a = new YhdSearchProduce(projectName,keyword);
 			a.run();
 		}
 
@@ -83,6 +86,7 @@ public class YhdSearchProduce {
 		task.setProjectName(this.projectName);
 		task.setQueueName(QUEUENAME);
 		task.setUrl(url);
+		task.setExtra(this.keyword);
 
 		return task;
 	}

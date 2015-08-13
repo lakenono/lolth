@@ -47,7 +47,7 @@ public class YHDCommentFetch extends DistributedParser{
 				bean.setCommentId(id);
 				bean.setContent(text);
 				bean.setDate(date);
-				bean.setGoodsId(task.getProjectName());
+				bean.setGoodsId(task.getExtra());
 				bean.setRepley(repley);
 				bean.setScore(score);
 				list.add(bean);

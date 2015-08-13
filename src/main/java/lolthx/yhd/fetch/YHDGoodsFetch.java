@@ -74,7 +74,7 @@ public class YHDGoodsFetch extends DistributedParser {
 			bean.setShop(shop);
 			bean.setStrong(strong);
 			bean.setCommments(commments);
-			bean.setKeyword(task.getProjectName());
+			bean.setKeyword(task.getExtra());
 			beans.add(bean);
 			// 如果评论个数不为0，则创建评论爬取task
 			try {
@@ -88,7 +88,8 @@ public class YHDGoodsFetch extends DistributedParser {
 								parentId != "0" ? productid : parentId, p);
 						Task t = new Task();
 						// 工程名定义成商品id
-						t.setProjectName(id);
+						t.setProjectName(task.getProjectName());
+						t.setExtra(id);
 						t.setUrl(comUrl);
 						t.setQueueName(COMQUE);
 						Queue.push(t);
@@ -102,7 +103,8 @@ public class YHDGoodsFetch extends DistributedParser {
 			try {
 				Task ask = new Task();
 				ask.setQueueName(ASKQUE);
-				ask.setProjectName(id);
+				ask.setProjectName(task.getProjectName());
+				ask.setExtra(id);
 				ask.setUrl(MessageFormat.format(askUrl, productid, id));
 				Queue.push(ask);
 				
