@@ -33,6 +33,7 @@ public class GoodsBean extends BaseBean{
 	private String productid;
 	//评论个数
 	private String commments;
+	private String classify;
 	//搜索关键字
 	private String keyword;
 	@DBConstraintPK
