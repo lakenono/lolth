@@ -42,7 +42,7 @@ public class YhdSearchProduce {
 
 	}
 
-	private void run() throws Exception {
+	public void run() throws Exception {
 		log.info("{} yi hao dian Producer start ...", this.projectName);
 		int pagenum = this.parse();
 		log.info("{} Get max page : {}", this.projectName, pagenum);
