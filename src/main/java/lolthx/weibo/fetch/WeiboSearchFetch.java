@@ -30,16 +30,26 @@ import com.google.common.base.Strings;
 
 /**
  * 微博新框架爬取，爬取过程中发送微博用户task
+ * 构造函数参数为false的时候不会爬取用户资料
  * @author yanghp
  *
  */
 @Slf4j
 public class WeiboSearchFetch extends DistributedParser {
-	
+
 	private int sleep = 15000;
 	private final String WEIBO_USER_URL_TEMPLATE = "http://weibo.cn/{0}";
 	private final String WEIBO_USER_INFO_URL_TEMPLAGE = "http://weibo.cn/{0}/info";
 	public static final String USER_QUEUE_NAME = "weibo_user_name_queue_test";
+	private boolean isMq = true;
+
+	public WeiboSearchFetch() {
+
+	}
+
+	public WeiboSearchFetch(boolean isMq) {
+		this.isMq = isMq;
+	}
 
 	@Override
 	public String getQueueName() {
@@ -48,17 +58,20 @@ public class WeiboSearchFetch extends DistributedParser {
 
 	@Override
 	public void parse(String result, Task task) throws Exception {
-		if(StringUtils.isBlank(result)){
+		if (StringUtils.isBlank(result)) {
 			log.info("weibo search result is null !");
 			return;
 		}
 		Document doc = Jsoup.parse(result);
-		List<WeiboBean> beans = parse(doc,task);
+		List<WeiboBean> beans = parse(doc, task);
 		for (WeiboBean b : beans) {
 			try {
 				b.saveOnNotExist();
-				//发送微博id爬取任务,抓取用户资料
-				bulidWeiboUserTask(b.getUserid(),b.getUserurl(),task.getProjectName());
+				if (isMq) {
+					// 发送微博id爬取任务,抓取用户资料
+					bulidWeiboUserTask(b.getUserid(), b.getUserurl(),
+							task.getProjectName());
+				}
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
@@ -66,7 +79,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		beans.clear();
 	}
 
-	public void bulidWeiboUserTask(String id, String userUrl,String projectName) {
+	public void bulidWeiboUserTask(String id, String userUrl, String projectName) {
 		try {
 			String uid = id;
 			if (!StringUtils.isNumeric(uid)) {
@@ -82,24 +95,27 @@ public class WeiboSearchFetch extends DistributedParser {
 			t.setProjectName(projectName);
 			t.setQueueName(USER_QUEUE_NAME);
 			t.setUrl(buildUserInfoUrl(uid));
-			t.setExtra(id+","+uid+","+userUrl);
+			t.setExtra(id + "," + uid + "," + userUrl);
 			Queue.push(t);
-			
+
 		} catch (Exception e) {
 			log.error("{} get uid error :", id, e);
 		}
 	}
-	
+
 	private String buildUserInfoUrl(String uid) {
 		return MessageFormat.format(WEIBO_USER_INFO_URL_TEMPLAGE, uid);
 	}
-	
-	private String getUid(String id) throws IOException, InterruptedException, TException {
+
+	private String getUid(String id) throws IOException, InterruptedException,
+			TException {
 		String uid = null;
 		String userUrl = buildUserUrl(id);
-		String cookies = GlobalComponents.authService.getCookies(getCookieDomain());
-//		String cookies = "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
-		String html = GlobalComponents.jsoupFetcher.fetch(userUrl, cookies,"");
+		String cookies = GlobalComponents.authService
+				.getCookies(getCookieDomain());
+		// String cookies =
+		// "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
+		String html = GlobalComponents.jsoupFetcher.fetch(userUrl, cookies, "");
 		Document doc = Jsoup.parse(html);
 		Elements imgElements = doc.select("img.por");
 		if (imgElements.size() > 0) {
@@ -117,12 +133,14 @@ public class WeiboSearchFetch extends DistributedParser {
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
-	
-	public List<WeiboBean> parse(Document document,Task task) throws IOException, ParseException {
+
+	public List<WeiboBean> parse(Document document, Task task)
+			throws IOException, ParseException {
 		Elements elements = document.select("div.c[id]");
 
 		LocalDateTime now = LocalDateTime.now();
-		String fetchTime = now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+		String fetchTime = now.format(DateTimeFormatter
+				.ofPattern("yyyy/MM/dd HH:mm"));
 
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
 
@@ -165,8 +183,10 @@ public class WeiboSearchFetch extends DistributedParser {
 			bean.setSource(source);
 
 			// 赞
-			Element likesElement = element.getElementsMatchingOwnText("赞\\[").last();
-			String likes = StringUtils.substringBetween(likesElement.text(), "赞[", "]");
+			Element likesElement = element.getElementsMatchingOwnText("赞\\[")
+					.last();
+			String likes = StringUtils.substringBetween(likesElement.text(),
+					"赞[", "]");
 			bean.setLikes(likes);
 
 			// 转发
@@ -186,18 +206,20 @@ public class WeiboSearchFetch extends DistributedParser {
 				String pweibourl = element.select("a.cc").first().attr("href");
 				bean.setPweibourl(pweibourl);
 
-				String pmid = StringUtils.substringBetween(pweibourl, "comment/", "?");
+				String pmid = StringUtils.substringBetween(pweibourl,
+						"comment/", "?");
 				bean.setPmid(pmid);
 
 				String pid = WeiboIdUtils.toId(pmid);
 				bean.setPid(pid);
 
-				String text = StringUtils.substringBetween(element.select("div").last().text(), "转发理由:", "赞[");
+				String text = StringUtils.substringBetween(element
+						.select("div").last().text(), "转发理由:", "赞[");
 				bean.setText(text);
-				//原文用户
+				// 原文用户
 				String forwardUser = element.select("span.cmt a").text();
 				bean.setForwardUser(forwardUser);
-				//原文内容
+				// 原文内容
 				String forwardText = element.select("span.ctt").text();
 				bean.setForwardText(forwardText);
 			}
