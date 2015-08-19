@@ -5,6 +5,8 @@ import java.text.MessageFormat;
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
+import lakenono.db.DBBean;
+import lolthx.weibo.bean.WeiboBean;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +22,7 @@ import org.jsoup.select.Elements;
 @Slf4j
 public class WeiboMainPageTask extends Producer {
 
-	public static final String MAIN_PAGE_QUEUE = "weibo_main_page_test";
+	public static final String MAIN_PAGE_QUEUE = "weibo_main_page";
 	private final String USER_MAIN_PAGE_URL_TEMPLATE = "http://weibo.cn/{0}?page={1}";
 	private String user;
 	private String projectName;
@@ -87,17 +89,21 @@ public class WeiboMainPageTask extends Producer {
 		return task;
 	}
 	
-//	public static void main(String[] args) throws Exception {
-//		String[] users = {"1846456555"};
-//		String projectName = "yang_hp";
-//		//创建表
+	public static void main(String[] args) throws Exception {
+		String[] users = {
+				"3048568611",
+				"2876448647",
+				"3064842184"
+		};
+		String projectName = "oppo";
+		//创建表
 //		DBBean.createTable(WeiboBean.class, projectName);
 //		DBBean.createTable(WeiboUserBean.class, projectName);
 //		DBBean.createTable(WeiboUserConcernRefBean.class, projectName);
-//		for (String user : users) {
-//			WeiboMainPageTask wb = new WeiboMainPageTask(user, projectName);
-//			wb.run();
-//			Thread.sleep(15000);
-//		}
-//	}
+		for (String user : users) {
+			WeiboMainPageTask wb = new WeiboMainPageTask(user, projectName);
+			wb.run();
+			Thread.sleep(15000);
+		}
+	}
 }

@@ -40,7 +40,7 @@ public class WeiboSearchFetch extends DistributedParser {
 	private int sleep = 15000;
 	private final String WEIBO_USER_URL_TEMPLATE = "http://weibo.cn/{0}";
 	private final String WEIBO_USER_INFO_URL_TEMPLAGE = "http://weibo.cn/{0}/info";
-	public static final String USER_QUEUE_NAME = "weibo_user_name_queue_test";
+	public static final String USER_QUEUE_NAME = "weibo_user_name_queue";
 	private boolean isMq = true;
 
 	public WeiboSearchFetch() {

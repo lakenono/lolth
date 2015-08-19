@@ -21,8 +21,8 @@ import org.jsoup.select.Elements;
 @Slf4j
 public class WeiboUserFetch extends DistributedParser{
 	
-	public static final String WEIBO_USER_TAG = "cn_weibo_user_tag_test";
-	public static final String WEIBO_FANS_NUM = "cn_weibo_fans_num_test";
+	public static final String WEIBO_USER_TAG = "cn_weibo_user_tag";
+	public static final String WEIBO_FANS_NUM = "cn_weibo_fans_num";
 	private static final String WEIBO_USER_TAG_URL_TEMPLATE = "http://weibo.cn/account/privacy/tags/?uid={0}";
 
 	@Override

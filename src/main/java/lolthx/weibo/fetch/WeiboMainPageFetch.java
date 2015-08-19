@@ -21,16 +21,27 @@ import lolthx.weibo.utils.WeiboTimeUtils;
 import lolthx.weibo.bean.WeiboBean;
 import lolthx.weibo.task.WeiboMainPageTask;
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * 微博主页爬取
+ * 
  * @author yanghp
  *
  */
 @Slf4j
-public class WeiboMainPageFetch extends DistributedParser{
-	
+public class WeiboMainPageFetch extends DistributedParser {
+
 	private WeiboSearchFetch weibo = new WeiboSearchFetch();
-	
+
+	private boolean isMQ = true;
+
+	public WeiboMainPageFetch() {
+	}
+
+	public WeiboMainPageFetch(boolean isMQ) {
+		this.isMQ = isMQ;
+	}
+
 	@Override
 	public String getQueueName() {
 		return WeiboMainPageTask.MAIN_PAGE_QUEUE;
@@ -38,7 +49,7 @@ public class WeiboMainPageFetch extends DistributedParser{
 
 	@Override
 	public void parse(String result, Task task) throws Exception {
-		if(StringUtils.isBlank(result)){
+		if (StringUtils.isBlank(result)) {
 			log.info("weibo main page result is null !");
 			return;
 		}
@@ -48,10 +59,10 @@ public class WeiboMainPageFetch extends DistributedParser{
 
 		for (WeiboBean b : beans) {
 			try {
-				if(StringUtils.isNumeric(task.getExtra())) {
-					userUrl = "http://weibo.cn/u/"+task.getExtra();
-				}else{
-					userUrl = "http://weibo.cn/"+task.getExtra();
+				if (StringUtils.isNumeric(task.getExtra())) {
+					userUrl = "http://weibo.cn/u/" + task.getExtra();
+				} else {
+					userUrl = "http://weibo.cn/" + task.getExtra();
 				}
 				b.setUserurl(userUrl);
 				b.setProjectName(task.getProjectName());
@@ -61,15 +72,20 @@ public class WeiboMainPageFetch extends DistributedParser{
 				log.error("{} persist error ", b, e);
 			}
 		}
-		weibo.bulidWeiboUserTask(task.getExtra(),userUrl, task.getProjectName());
+		if (isMQ) {
+			weibo.bulidWeiboUserTask(task.getExtra(), userUrl,
+					task.getProjectName());
+		}
 	}
-	public List<WeiboBean> parseBean(Document document, Task task) throws IOException, ParseException {
+
+	public List<WeiboBean> parseBean(Document document, Task task)
+			throws IOException, ParseException {
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
 
 		String username = "";
 		Elements user = document.select("div.ut");
 		if (user.size() > 0) {
-//			username = user.first().ownText();
+			// username = user.first().ownText();
 			username = StringUtils.splitByCharacterType(user.first().text())[0];
 			username = StringUtils.substringBefore(username, "的");
 		}
@@ -77,7 +93,8 @@ public class WeiboMainPageFetch extends DistributedParser{
 		Elements elements = document.select("div.c[id]");
 
 		LocalDateTime now = LocalDateTime.now();
-		String fetchTime = now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+		String fetchTime = now.format(DateTimeFormatter
+				.ofPattern("yyyy/MM/dd HH:mm"));
 
 		for (Element element : elements) {
 			String html = element.html();
@@ -110,8 +127,10 @@ public class WeiboMainPageFetch extends DistributedParser{
 			bean.setSource(source);
 
 			// 赞
-			Element likesElement = element.getElementsMatchingOwnText("赞\\[").last();
-			String likes = StringUtils.substringBetween(likesElement.text(), "赞[", "]");
+			Element likesElement = element.getElementsMatchingOwnText("赞\\[")
+					.last();
+			String likes = StringUtils.substringBetween(likesElement.text(),
+					"赞[", "]");
 			bean.setLikes(likes);
 
 			// 转发
@@ -128,18 +147,20 @@ public class WeiboMainPageFetch extends DistributedParser{
 				String pweibourl = element.select("a.cc").first().attr("href");
 				bean.setPweibourl(pweibourl);
 
-				String pmid = StringUtils.substringBetween(pweibourl, "comment/", "?");
+				String pmid = StringUtils.substringBetween(pweibourl,
+						"comment/", "?");
 				bean.setPmid(pmid);
 
 				String pid = WeiboIdUtils.toId(pmid);
 				bean.setPid(pid);
 
-				String text = StringUtils.substringBetween(element.select("div").last().text(), "转发理由:", "赞[");
+				String text = StringUtils.substringBetween(element
+						.select("div").last().text(), "转发理由:", "赞[");
 				bean.setText(text);
-				//原文用户
+				// 原文用户
 				String forwardUser = element.select("span.cmt a").text();
 				bean.setForwardUser(forwardUser);
-				//原文内容
+				// 原文内容
 				String forwardText = element.select("span.ctt").text();
 				bean.setForwardText(forwardText);
 			} else {
@@ -156,6 +177,7 @@ public class WeiboMainPageFetch extends DistributedParser{
 		}
 		return weiboBeans;
 	}
+
 	@Override
 	public String getCookieDomain() {
 		return "weibo.cn";

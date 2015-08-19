@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 public class WeiboConcernUserTask extends Producer {
 
 	private final String WEIBO_USER_FOLLOWS_URL_TEMPLATE = "http://weibo.cn/{0}/follow?page={1}";
-	public static final String WEIBO_USER_CONCERN_LIST = "weibo_user_concern_list_test";
+	public static final String WEIBO_USER_CONCERN_LIST = "weibo_user_concern_list";
 	private String projectName;
 	private String uid;
 
