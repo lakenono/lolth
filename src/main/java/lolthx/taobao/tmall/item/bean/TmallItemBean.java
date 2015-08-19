@@ -1,5 +1,7 @@
 package lolthx.taobao.tmall.item.bean;
 
+import java.sql.SQLException;
+
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
@@ -25,4 +27,8 @@ public class TmallItemBean extends BaseBean {
 
 	@DBField(type = "varchar(32)")
 	private String keyword;
+	
+	public static void main(String[] args) throws SQLException {
+		new TmallItemBean().buildTable();
+	}
 }

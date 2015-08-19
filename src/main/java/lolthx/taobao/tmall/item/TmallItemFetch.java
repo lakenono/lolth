@@ -13,7 +13,14 @@ import lakenono.fetch.adv.utils.HttpURLUtils;
 import lolthx.taobao.tmall.item.bean.TmallItemBean;
 
 public class TmallItemFetch extends DistributedParser {
-
+	private boolean isMQ = true;
+	public TmallItemFetch(){
+		
+	}
+	public TmallItemFetch(boolean isMQ){
+		this.isMQ = isMQ;
+	}
+	
 	@Override
 	public String getQueueName() {
 		return "tmall_item_detail";
@@ -31,11 +38,11 @@ public class TmallItemFetch extends DistributedParser {
 		// #J_DetailMeta div.tb-detail-hd > h1
 		itemBean.setTitle(doc.select("#J_DetailMeta div.tb-detail-hd > h1").text());
 		// #J_PromoPrice > dd span.tm-price
-		itemBean.setPrice(doc.select("#J_PromoPrice > dd span.tm-price").text());
+		itemBean.setPrice(doc.select("div > span.tm-price").text());
 		// #J_DetailMeta li.tm-ind-sellCount span.tm-count
-		itemBean.setMonthSales(doc.select("#J_DetailMeta li.tm-ind-sellCount span.tm-count").text());
+		itemBean.setMonthSales(doc.select("li.tm-ind-item.tm-ind-sellCount.canClick div.tm-indcon span.tm-count").text());
 		// #J_DetailMeta li.tm-ind-reviewCount span.tm-count
-		itemBean.setComments(doc.select("#J_DetailMeta li.tm-ind-reviewCount span.tm-count").text());
+		itemBean.setComments(doc.select("li#J_ItemRates div.tm-indcon span.tm-count").text());
 		// #dsr-userid
 		itemBean.setUserId(doc.select("#dsr-userid").attr("value"));
 		// #LineZing
@@ -44,10 +51,12 @@ public class TmallItemFetch extends DistributedParser {
 			itemId = HttpURLUtils.getUrlParams(itemBean.getUrl(), "GBK").get("id");
 		}
 		itemBean.setItemId(itemId);
+		itemBean.setProjectName(task.getProjectName());
+		itemBean.setKeyword(task.getExtra());
 		String shopUrl = doc.select("#shopExtra > div.slogo > a").attr("href");
 		
 		task.setExtra("1");
-		if (itemBean.persistOnNotExist()) {
+		if (itemBean.persistOnNotExist() && isMQ) {
 			Task newTask = buildTask("https:" + shopUrl, "taobao_item_shop", task);
 			Queue.push(newTask);
 			

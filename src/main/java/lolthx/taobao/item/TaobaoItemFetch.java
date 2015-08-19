@@ -12,6 +12,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class TaobaoItemFetch extends DistributedParser {
+	
+	private boolean isMQ = true;
+	public TaobaoItemFetch(){
+		
+	}
+	public TaobaoItemFetch(boolean isMQ){
+		this.isMQ = isMQ;
+	}
 
 	@Override
 	public String getQueueName() {
@@ -52,7 +60,8 @@ public class TaobaoItemFetch extends DistributedParser {
 		// #J_ShopInfo strong > a 商铺url
 		String shopUrl = doc.select("#J_ShopInfo strong > a").attr("href");
 		task.setExtra("0");
-		if (bean.persistOnNotExist()) {
+		//抓取商品和评论
+		if (bean.persistOnNotExist() && isMQ) {
 			Task newTask = buildTask("https:" + shopUrl, "taobao_item_shop", task);
 			Queue.push(newTask);
 			
