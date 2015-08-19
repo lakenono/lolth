@@ -67,7 +67,7 @@ public class YhdSearchProduce {
 	private int parse() throws Exception {
 		// 获取最大页数
 		Document doc = GlobalComponents.fetcher.document(MessageFormat.format(
-				BASE_URL, 1, UrlUtils.encode(projectName)));
+				BASE_URL, 1, UrlUtils.encode(keyword)));
 		Elements elements = doc.select("a#lastPage");
 		if (!elements.isEmpty()) {
 			String page = elements.first().text();
@@ -78,7 +78,7 @@ public class YhdSearchProduce {
 	}
 
 	private String buildUrl(int pageNum, String url) throws Exception {
-		return MessageFormat.format(url, pageNum, UrlUtils.encode(projectName));
+		return MessageFormat.format(url, pageNum, UrlUtils.encode(keyword));
 	}
 
 	private Task buildTask(String url) {

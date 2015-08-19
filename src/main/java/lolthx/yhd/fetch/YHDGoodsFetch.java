@@ -72,7 +72,7 @@ public class YHDGoodsFetch extends DistributedParser {
 			String commments = comment.first().attr("experiencecount");
 			// 评分
 			// String strong =
-			// comment.first().select("span").text().substring(1);
+//			comment.first().select("span").text().substring(1);
 			String strong = element.select("span.positiveRatio").attr("title");
 			String shop = element.select("div.owner").text();
 			// 抓取分类
@@ -106,7 +106,6 @@ public class YHDGoodsFetch extends DistributedParser {
 							String comUrl = MessageFormat.format(commentUrl,
 									parentId != "0" ? productid : parentId, p);
 							Task t = new Task();
-							// 工程名定义成商品id
 							t.setProjectName(task.getProjectName());
 							t.setExtra(id);
 							t.setUrl(comUrl);
