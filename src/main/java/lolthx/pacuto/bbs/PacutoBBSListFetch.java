@@ -41,6 +41,7 @@ public class PacutoBBSListFetch extends DistributedParser {
 				type = item.attr("title");
 
 				// 搜寻明细信息
+				Thread.sleep(1000);
 				String html = GlobalComponents.fetcher.fetch(sendUrl);
 				Document docDetail = Jsoup.parse(html);
 

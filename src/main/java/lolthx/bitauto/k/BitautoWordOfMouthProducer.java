@@ -1,12 +1,14 @@
 package lolthx.bitauto.k;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
 
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -58,6 +60,12 @@ public class BitautoWordOfMouthProducer extends Producer  {
 	protected Task buildTask(String url) {
 		Task buildTask = super.buildTask(url);
 		buildTask.setExtra(id + ":" + keyword);
+		try {
+			buildTask.setStartDate(DateUtils.parseDate("2015-03-01", "yyyy-MM-dd"));
+			buildTask.setEndDate(DateUtils.parseDate("2015-06-01", "yyyy-MM-dd"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		return buildTask;
 	}
 

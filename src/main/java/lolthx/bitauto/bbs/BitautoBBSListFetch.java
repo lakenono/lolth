@@ -21,22 +21,6 @@ import org.jsoup.select.Elements;
 
 public class BitautoBBSListFetch extends DistributedParser {
 
-	private static Date start = null;// 开始时间
-	private static Date end = null;// 结束时间
-
-	static {
-		try {
-			start = DateUtils.parseDate("2015-02-28", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			end = DateUtils.parseDate("2015-07-28", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public String getQueueName() {
 		return "bitauto_bbs_list";
@@ -47,6 +31,9 @@ public class BitautoBBSListFetch extends DistributedParser {
 		if (StringUtils.isBlank(result)) {
 			return;
 		}
+
+		Date start = task.getStartDate();
+		Date end = task.getEndDate();
 
 		Document doc = Jsoup.parse(result);
 		BitautoBBSBean bean = null;
@@ -60,7 +47,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 				// 发帖时间
 				String postTime = element.select("li.zhhf").first().text();
 
-				if (!isTime(postTime)) {
+				if (!isTime(postTime,start,end)) {
 					continue;
 				}
 
@@ -97,6 +84,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
 				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
 
+				Thread.sleep(2000);
 				String html = GlobalComponents.fetcher.fetch(url);
 				Document docDetail = Jsoup.parse(html);
 
@@ -145,7 +133,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 
 	}
 
-	private boolean isTime(String time) {
+	private boolean isTime(String time,Date start,Date end){
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
 			return between(start, end, srcDate);

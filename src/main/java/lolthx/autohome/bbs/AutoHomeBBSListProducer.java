@@ -1,8 +1,10 @@
 package lolthx.autohome.bbs;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.jsoup.nodes.Document;
 
 import lakenono.base.Producer;
@@ -54,6 +56,12 @@ public class AutoHomeBBSListProducer extends Producer {
 	protected Task buildTask(String url) {
 		Task buildTask = super.buildTask(url);
 		buildTask.setExtra(id + ":" + keyword);
+		try {
+			buildTask.setStartDate(DateUtils.parseDate("2014-12-30", "yyyy-MM-dd"));
+			buildTask.setEndDate(DateUtils.parseDate("2015-06-01", "yyyy-MM-dd"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		return buildTask;
 	}
 

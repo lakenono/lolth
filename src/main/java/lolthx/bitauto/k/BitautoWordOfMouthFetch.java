@@ -18,22 +18,6 @@ import org.jsoup.select.Elements;
 
 public class BitautoWordOfMouthFetch extends DistributedParser {
 
-	private static Date start = null;
-	private static Date end = null;
-
-	static {
-		try {
-			start = DateUtils.parseDate("2014-07-22", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			end = DateUtils.parseDate("2015-07-21", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public String getQueueName() {
 		return "bitauto_kb_list";
@@ -45,6 +29,9 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 			return;
 		}
 
+		Date start = task.getStartDate();
+		Date end = task.getEndDate();
+		
 		Document doc = Jsoup.parse(result);
 		BitautoWordOfMouthBean bean = null;
 		Elements elements = doc.select("div.postscontent div.postslist_xh");
@@ -53,7 +40,7 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 		for (Element element : elements) {
 			try {
 				String postTime = element.select("li.zhhf").first().text();
-				if (!isTime(postTime)) {
+				if (!isTime(postTime,start,end)) {
 					continue;
 				}
 
@@ -89,6 +76,7 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
 				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
 
+				Thread.sleep(2000);
 				String html = GlobalComponents.fetcher.fetch(bean.getUrl());
 				if (StringUtils.isBlank(html)) {
 					return;
@@ -134,7 +122,7 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 
 	}
 
-	private boolean isTime(String time) {
+	private boolean isTime(String time,Date start,Date end){
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
 			return between(start, end, srcDate);

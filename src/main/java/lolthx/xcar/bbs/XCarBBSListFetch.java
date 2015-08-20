@@ -19,24 +19,7 @@ import lolthx.xcar.bean.XCarBBSBean;
 import lolthx.xcar.bean.XCarBBSUserBean;
 
 public class XCarBBSListFetch extends DistributedParser {
-	
-	private static Date start = null;
-	private static Date end = null;
 
-	static {
-		try {
-			start = DateUtils.parseDate("2014-12-31", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			end = DateUtils.parseDate("2015-07-01", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
 	@Override
 	public String getQueueName() {
 		return "xcar_bbs_list";
@@ -49,34 +32,38 @@ public class XCarBBSListFetch extends DistributedParser {
 			return;
 		}
 
+		Date start = task.getStartDate();
+		Date end = task.getEndDate();
+
 		XCarBBSUserBean user = null;
 		XCarBBSBean bbsBean = null;
-				
+
 		Document mainDoc = Jsoup.parse(result);
 		Elements elements = mainDoc.select("#F_box_1 table.row");
-		
+
 		for (Element element : elements) {
-			
+
 			try {
 				String postTime = StringUtils.trim(element.select("span.smalltxt.lighttxt").text());
-				if (!isTime(postTime)) {
+				if (!isTime(postTime,start,end)) {
 					continue;
 				}
 				bbsBean = new XCarBBSBean();
-				
+
 				String lstUrl = element.select("a.open_view").first().attr("href");
 				String sendUrl = "http://www.xcar.com.cn" + lstUrl;
 
-				//搜寻明细信息
+				// 搜寻明细信息
+				Thread.sleep(1000);
 				String html = GlobalComponents.fetcher.fetch(sendUrl);
 				Document doc = Jsoup.parse(html);
-				
+
 				bbsBean.setId(StringUtils.substringAfter(lstUrl, "viewthread.php?tid="));
 				bbsBean.setUrl(sendUrl);
 				bbsBean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
 				bbsBean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
 				bbsBean.setProjectName(task.getProjectName());
-				
+
 				Elements postElements = doc.select("div#_img>div.F_box_2");
 				if (postElements.size() > 0) {
 					Element mainPost = postElements.first();
@@ -115,7 +102,7 @@ public class XCarBBSListFetch extends DistributedParser {
 						// 发表时间
 						String postTimeStr = mainContent.first().text();
 						postTimeStr = StringUtils.substringAfter(postTimeStr, "发表于");
-						//修复发表时间
+						// 修复发表时间
 						postTimeStr = StringUtils.substringBefore(postTimeStr, "|");
 						postTimeStr = StringUtils.normalizeSpace(postTimeStr);
 						postTimeStr = StringUtils.trim(postTimeStr);
@@ -148,11 +135,11 @@ public class XCarBBSListFetch extends DistributedParser {
 				e.printStackTrace();
 				continue;
 			}
-			
+
 		}
 
 	}
-	
+
 	private XCarBBSUserBean getUser(Element userElement, Task task) {
 		XCarBBSUserBean user = new XCarBBSUserBean();
 
@@ -212,8 +199,8 @@ public class XCarBBSListFetch extends DistributedParser {
 		}
 		return user;
 	}
-	
-	private boolean isTime(String time) {
+
+	private boolean isTime(String time,Date start,Date end) {
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
 			return between(start, end, srcDate);
@@ -222,14 +209,15 @@ public class XCarBBSListFetch extends DistributedParser {
 		}
 		return false;
 	}
+
 	private boolean between(Date beginDate, Date endDate, Date src) {
 		return beginDate.before(src) && endDate.after(src);
 	}
-	
-	public static void main(String args[]){
-		//for(int i =1; i <= 4 ;i++){
-			new XCarBBSListFetch().run();
-		//}
+
+	public static void main(String args[]) {
+		// for(int i =1; i <= 4 ;i++){
+		new XCarBBSListFetch().run();
+		// }
 	}
-	
+
 }

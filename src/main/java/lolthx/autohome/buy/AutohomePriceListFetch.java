@@ -16,22 +16,6 @@ import org.jsoup.select.Elements;
 
 public class AutohomePriceListFetch extends DistributedParser {
 
-	private static Date start = null;
-	private static Date end = null;
-
-	static {
-		try {
-			start = DateUtils.parseDate("2014-07-22", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			end = DateUtils.parseDate("2015-07-21", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public String getQueueName() {
 		return "autohome_price_list";
@@ -43,6 +27,9 @@ public class AutohomePriceListFetch extends DistributedParser {
 			return;
 		}
 
+		Date start = task.getStartDate();
+		Date end = task.getEndDate();
+		
 		Document doc = Jsoup.parse(result);
 		Elements lis = doc.select("li.price-item");
 
@@ -56,7 +43,7 @@ public class AutohomePriceListFetch extends DistributedParser {
 				if (!postTimeEl.isEmpty()) {
 					postTime = StringUtils.trim(StringUtils.substringBefore(postTimeEl.first().text(), "发表").replaceAll(" ", ""));
 
-					if (!isTime(postTime)) {
+					if (!isTime(postTime,start,end)) {
 						continue;
 					}
 				}
@@ -190,7 +177,7 @@ public class AutohomePriceListFetch extends DistributedParser {
 		}
 	}
 
-	private boolean isTime(String time) {
+	private boolean isTime(String time,Date start,Date end){
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
 			return between(start, end, srcDate);

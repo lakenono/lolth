@@ -16,23 +16,6 @@ import org.jsoup.select.Elements;
 
 public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 	
-	private static Date start = null;
-	private static Date end = null;
-
-	static {
-		try {
-			start = DateUtils.parseDate("2014-07-22", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			end = DateUtils.parseDate("2015-07-21", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
 	@Override
 	public String getQueueName() {
 		return "autohome_kb_list";

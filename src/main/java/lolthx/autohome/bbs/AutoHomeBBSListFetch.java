@@ -21,22 +21,6 @@ import org.jsoup.select.Elements;
 
 public class AutoHomeBBSListFetch extends DistributedParser {
 
-	private static Date start = null;
-	private static Date end = null;
-
-	static {
-		try {
-			start = DateUtils.parseDate("2014-12-30", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			end = DateUtils.parseDate("2015-07-01", "yyyy-MM-dd");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public String getQueueName() {
 		return "autohome_bbs_list";
@@ -48,14 +32,19 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 			return;
 		}
 
+		Date start = task.getStartDate();
+		Date end = task.getEndDate();
+		
 		Document doc = Jsoup.parse(result);
 		AutoHomeBBSBean bean = null;
 		Elements elements = doc.select("div#subcontent dl.list_dl[lang]");
 		for (Element element : elements) {
 			try {
+				
+				
 				// 发帖时间
 				String postTime = element.select("dd").first().select("span").text();
-				if (!isTime(postTime)) {
+				if (!isTime(postTime,start,end)) {
 					continue;
 				}
 				bean = new AutoHomeBBSBean();
@@ -85,6 +74,8 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
 				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
 
+				//线程休眠1秒
+				Thread.sleep(1000);
 				String html = GlobalComponents.fetcher.fetch(bean.getUrl());
 				if (StringUtils.isBlank(html)) {
 					return;
@@ -176,7 +167,7 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 		}
 	}
 
-	private boolean isTime(String time) {
+	private boolean isTime(String time,Date start,Date end) {
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
 			return between(start, end, srcDate);
