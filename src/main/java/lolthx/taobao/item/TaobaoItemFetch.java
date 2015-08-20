@@ -59,9 +59,9 @@ public class TaobaoItemFetch extends DistributedParser {
 		bean.setItemId(itemId);
 		// #J_ShopInfo strong > a 商铺url
 		String shopUrl = doc.select("#J_ShopInfo strong > a").attr("href");
-		task.setExtra("0");
 		//抓取商品和评论
 		if (bean.persistOnNotExist() && isMQ) {
+			task.setExtra("0");
 			Task newTask = buildTask("https:" + shopUrl, "taobao_item_shop", task);
 			Queue.push(newTask);
 			

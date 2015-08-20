@@ -3,6 +3,7 @@ package lolthx.taobao.tmall.search;
 import java.text.MessageFormat;
 
 import lakenono.base.Producer;
+import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 import lakenono.util.UrlUtils;
 
@@ -54,6 +55,13 @@ public class TmallSearchListProducer extends Producer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected Task buildTask(String url) {
+		Task buildTask = super.buildTask(url);
+		buildTask.setExtra(this.keyword);
+		return buildTask;
 	}
 
 }

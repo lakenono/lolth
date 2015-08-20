@@ -55,8 +55,8 @@ public class TmallItemFetch extends DistributedParser {
 		itemBean.setKeyword(task.getExtra());
 		String shopUrl = doc.select("#shopExtra > div.slogo > a").attr("href");
 		
-		task.setExtra("1");
 		if (itemBean.persistOnNotExist() && isMQ) {
+			task.setExtra("1");
 			Task newTask = buildTask("https:" + shopUrl, "taobao_item_shop", task);
 			Queue.push(newTask);
 			

@@ -15,7 +15,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class TmallSearchListFetch extends DistributedParser {
-
+	private boolean isMQ = true;
+	public TmallSearchListFetch(){}
+	public TmallSearchListFetch(boolean isMQ){
+		this.isMQ = isMQ;
+	}
 	@Override
 	public String getQueueName() {
 		return "tmall_item_list";
@@ -43,16 +47,24 @@ public class TmallSearchListFetch extends DistributedParser {
 
 			// title
 			// #J_ItemList > div:nth-child(5) > div > p.productTitle > a
-			Element title = div.select("p.productTitle > a").first();
-			bean.setTitle(title.attr("title"));
+//			Element title = div.select("p.productTitle > a").first();
+//			bean.setTitle(title.attr("title"));
+			String title = div.select("p.productTitle > a").attr("title");
+			if(StringUtils.isBlank(title)){
+				title = div.select("div.productTitle a").attr("title");
+			}
+			bean.setTitle(title);
 			bean.setUrl("http://detail.tmall.com/item.htm?id=" + id);
 			// #J_ItemList > div:nth-child(1) > div > div.productShop > a
-			String detailUrl = div.select("div.productShop > a").first().attr("href");
+			String detailUrl = div.select("div.productShop > a").attr("href");
 			String userId = HttpURLUtils.getUrlParams(detailUrl, "GBK").get("user_number_id");
 			bean.setUserId(userId);
 
 			// price #J_ItemList > div:nth-child(1) > div > p.productPrice > em
 			String price = div.select("p.productPrice em").attr("title");
+			if(StringUtils.isBlank(price)){
+				price = div.select("em.proSell-price").text();
+			}
 			bean.setPrice(price);
 
 			// 月销售
@@ -70,13 +82,13 @@ public class TmallSearchListFetch extends DistributedParser {
 			}
 
 			try {
-				task.setExtra("1");
-				if (bean.persistOnNotExist()) {
+				if (bean.persistOnNotExist() && isMQ) {
+					task.setExtra("1");
 					Task buildTask = buildTask("https:" + detailUrl, "taobao_item_shop", task);
 					Queue.push(buildTask);
 				}
 
-				if (StringUtils.isNotBlank(bean.getComments()) && !"0".equals(bean.getComments())) {
+				if (StringUtils.isNotBlank(bean.getComments()) && !"0".equals(bean.getComments()) && isMQ) {
 					parseComment(bean.getItemId(), bean.getUserId(), bean.getComments(), task);
 				}
 			} catch (Exception e) {
