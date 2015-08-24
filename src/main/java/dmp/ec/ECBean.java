@@ -1,7 +1,6 @@
 package dmp.ec;
 
 import lakenono.db.DBBean;
-import lakenono.db.DMPBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
@@ -31,7 +30,7 @@ public class ECBean extends DBBean {
 	public static void main(String[] args) throws Exception {
 
 		// 建表时制定网站来源会建立 data_dmp_ec_taobao的表
-		DBBean.createTable(DMPBean.class, "taobao");
+		DBBean.createTable(ECBean.class, "taobao");
 
 		// 插入时指定网站来源 data_dmp_ec_taobao的表插入数据
 		ECBean taobaoBean = new ECBean("taobao");
