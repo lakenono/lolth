@@ -30,10 +30,10 @@ public class ECBean extends DBBean {
 
 	public static void main(String[] args) throws Exception {
 
-		// 建表时制定网站来源
+		// 建表时制定网站来源会建立 data_dmp_ec_taobao的表
 		DBBean.createTable(DMPBean.class, "taobao");
 
-		// 插入时指定网站来源
+		// 插入时指定网站来源 data_dmp_ec_taobao的表插入数据
 		ECBean taobaoBean = new ECBean("taobao");
 		taobaoBean.setId("1");
 		taobaoBean.setUrl("舍HI");
