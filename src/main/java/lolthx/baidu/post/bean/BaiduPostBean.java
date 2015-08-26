@@ -27,6 +27,7 @@ public class BaiduPostBean extends DBBean {
 	private String userId;
 	private String postTime;
 	private String replys;
+	@DBConstraintPK
 	private String projectName;
 	private String keyword;
 
