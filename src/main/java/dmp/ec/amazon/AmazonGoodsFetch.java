@@ -1,6 +1,5 @@
 package dmp.ec.amazon;
 
-
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +9,7 @@ import org.jsoup.nodes.Element;
 import dmp.ec.ECBean;
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
+import lakenono.core.GlobalComponents;
 
 public class AmazonGoodsFetch extends DistributedParser {
 
@@ -37,14 +37,21 @@ public class AmazonGoodsFetch extends DistributedParser {
 			// 商品url
 			Elements h5 = item.select("h5");
 			Elements url = item.select("a.a-size-small");
+			String goodsUrl;
 			if (!h5.isEmpty() && !url.isEmpty()) {
-				String goodsUrl = url.first().absUrl("href");
+				goodsUrl = url.first().absUrl("href");
 				bean.setUrl(goodsUrl);
 			} else {
 				Elements normalurl = item.select("a.a-link-normal");
-				String goodsUrl = normalurl.first().absUrl("href");
+				goodsUrl = normalurl.first().absUrl("href");
 				bean.setUrl(goodsUrl);
 			}
+			// 商品类别
+			Document doc1 = GlobalComponents.fetcher.document(goodsUrl);
+			Elements elements = doc1.select("ul.a-horizontal");
+			String goodsCategory = elements.first().text();
+			bean.setCategory(goodsCategory);
+
 			bean.setKeyword(task.getExtra());
 			bean.saveOnNotExist();
 
@@ -66,11 +73,10 @@ public class AmazonGoodsFetch extends DistributedParser {
 		// TODO Auto-generated method stub
 		return AmazonSearchProducer.QUEUENAME;
 	}
-	
+
 	public static void main(String[] args) {
 		AmazonGoodsFetch a = new AmazonGoodsFetch();
 		a.run();
 	}
-
 
 }
