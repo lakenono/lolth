@@ -30,7 +30,7 @@ public class ECBean extends DBBean {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String tableType = "taobao";
+		String tableType = "taobao_test";
 
 		// 建表时制定网站来源会建立 data_dmp_ec_taobao的表
 		DBBean.createTable(ECBean.class, tableType);
