@@ -2,6 +2,7 @@ package dmp.ec;
 
 import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
+import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ public class ECBean extends DBBean {
 	@DBConstraintPK
 	private String id;
 	// 商品url
+	@DBField(type="varchar(1000)")
 	private String url;
 	// 商品名称
 	private String title;
@@ -28,16 +30,18 @@ public class ECBean extends DBBean {
 	}
 
 	public static void main(String[] args) throws Exception {
+		String tableType = "taobao";
 
 		// 建表时制定网站来源会建立 data_dmp_ec_taobao的表
-		DBBean.createTable(ECBean.class, "taobao");
+		DBBean.createTable(ECBean.class, tableType);
 
 		// 插入时指定网站来源 data_dmp_ec_taobao的表插入数据
-		ECBean taobaoBean = new ECBean("taobao");
+		ECBean taobaoBean = new ECBean(tableType);
 		taobaoBean.setId("1");
-		taobaoBean.setUrl("舍HI");
-		taobaoBean.setTitle("t");
-		taobaoBean.setCategory("123>123>1");
+		taobaoBean.setUrl("http://www.baidu.com");
+		taobaoBean.setTitle("test");
+		taobaoBean.setCategory("1>2>3>4");
+		taobaoBean.setKeyword("生鲜");
 
 		taobaoBean.saveOnNotExist();
 	}
