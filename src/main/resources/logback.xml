@@ -38,7 +38,7 @@
 			<maxHistory>${log_long_history}</maxHistory>
 		</rollingPolicy>
 		<encoder>
-			<pattern>${log_pattern}</pattern>
+			<pattern>%d{MM-dd HH:mm:ss},%msg%n</pattern>
 		</encoder>
 	</appender>
 
