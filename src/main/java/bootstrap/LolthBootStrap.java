@@ -91,17 +91,28 @@ public class LolthBootStrap {
 		log.info("Lolth boot strap ...");
 		LolthBootStrap lolthBootStrap = new LolthBootStrap();
 
-		// 添加要启动的fetch------------------------------------
-		
-		// 使用默认延迟
-		lolthBootStrap.addLolthSolider(new YHDGoodsFetch(false));
-		
-		// 使用制定延迟时间
-//		lolthBootStrap.addLolthSolider(1, TimeUnit.SECONDS, new YHDGoodsFetch(false));
+		// 添加要启动的fetch
+		build(lolthBootStrap);
 
-		// 启动------------------------------------------------
+		// 启动
 		lolthBootStrap.run();
-		
+
 		log.info("Lolth boot finish !");
 	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * 添加fetch
+	 * 
+	 * @param lolthBootStrap
+	 */
+	public static void build(LolthBootStrap lolthBootStrap) {
+		// 使用默认延迟
+		lolthBootStrap.addLolthSolider(new YHDGoodsFetch(false));
+
+		// 使用制定延迟时间
+		// lolthBootStrap.addLolthSolider(1, TimeUnit.SECONDS, new
+		// YHDGoodsFetch(false))
+	}
+	// ---------------------------------------------------------------------------------------------------------------------------------
 }
