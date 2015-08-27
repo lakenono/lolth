@@ -88,6 +88,7 @@ public class LolthBootStrap {
 			}
 		});
 
+		log.info("Lolth boot strap ...");
 		LolthBootStrap lolthBootStrap = new LolthBootStrap();
 
 		// 添加要启动的fetch------------------------------------
@@ -100,5 +101,7 @@ public class LolthBootStrap {
 
 		// 启动------------------------------------------------
 		lolthBootStrap.run();
+		
+		log.info("Lolth boot finish !");
 	}
 }
