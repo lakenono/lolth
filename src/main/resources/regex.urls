@@ -1,0 +1,7 @@
+#把要过滤的url写在里面
+#淘宝url
+#列表推送
+^https://detail.tmall.com/item.htm
+
+
+#
