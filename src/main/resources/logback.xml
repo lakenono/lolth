@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Reference Manual http://logback.qos.ch/manual/index.html -->
+
+<configuration>
+	<property name="log_pattern"
+		value="%d{MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n%ex" />
+	<property name="log_dir" value="./logs/" />
+	<property name="log_long_history" value="120" /><!-- 5 days -->
+	<property name="log_short_history" value="72" /><!-- 3 days -->
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoder 默认配置为PatternLayoutEncoder -->
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="all"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}lolth.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}lolth.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+			<maxHistory>${log_long_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="task_log_appender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}task.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}task.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+			<maxHistory>${log_long_history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{MM-dd HH:mm:ss},%msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<logger name="task_log" level="INFO" additivity="false">
+		<appender-ref ref="task_log_appender" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="all" />
+		<appender-ref ref="stdout" />
+	</root>
+
+	<!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 -->
+	<logger name="com.opensymphony" level="debug" />
+	<logger name="ch.qos" level="error" additivity="false" />
+
+</configuration>
