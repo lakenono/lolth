@@ -47,13 +47,13 @@
 		<appender-ref ref="task_log_appender" />
 	</logger>
 
-	<root level="debug">
+	<root level="INFO">
 		<appender-ref ref="all" />
 		<appender-ref ref="stdout" />
 	</root>
 
 	<!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 -->
 	<logger name="com.opensymphony" level="debug" />
-	<logger name="ch.qos" level="error" additivity="false"/>
+	<logger name="ch.qos" level="error" additivity="false" />
 
 </configuration>
