@@ -2,7 +2,7 @@
 
 <!-- Reference Manual http://logback.qos.ch/manual/index.html -->
 
-<configuration>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
 	<property name="log_pattern"
 		value="%d{MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n%ex" />
 	<property name="log_dir" value="./logs/" />
