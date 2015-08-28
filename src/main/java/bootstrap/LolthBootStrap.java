@@ -7,6 +7,25 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import lolthx.autohome.bbs.AutoHomeBBSCommentFetch;
+import lolthx.autohome.bbs.AutoHomeBBSListFetch;
+import lolthx.autohome.buy.AutohomePriceListFetch;
+import lolthx.autohome.k.AutoHomeWordOfMouthFetch;
+import lolthx.baidu.news.BaiduNewsListFetch;
+import lolthx.baidu.post.BaiduPostDetailFetch;
+import lolthx.baidu.post.BaiduPostListFetch;
+import lolthx.baidu.zhidao.BaiduZhidaoDetailFetch;
+import lolthx.baidu.zhidao.BaiduZhidaoListFetch;
+import lolthx.baidu.zhidao.BaiduZhidaoUserFetch;
+import lolthx.bitauto.bbs.BitautoBBSCommentFetch;
+import lolthx.bitauto.bbs.BitautoBBSListFetch;
+import lolthx.bitauto.k.BitautoWordOfMouthFetch;
+import lolthx.pacuto.bbs.PacutoBBSListFetch;
+import lolthx.pacuto.k.PacutoWordOfMouthListFetch;
+import lolthx.weixin.sogou.WeiXinArticleListFetch;
+import lolthx.weixin.sogou.WeiXinUserArtListFetch;
+import lolthx.xcar.bbs.XCarBBSListFetch;
+import lolthx.xcar.k.XCarWordOfMouthListFetch;
 import lolthx.yhd.fetch.YHDGoodsFetch;
 import lombok.extern.slf4j.Slf4j;
 import bootstrap.bean.Lolth;
@@ -113,6 +132,40 @@ public class LolthBootStrap {
 		// 使用制定延迟时间
 		// lolthBootStrap.addLolthSolider(1, TimeUnit.SECONDS, new
 		// YHDGoodsFetch(false))
+		
+		// 汽车之家  add by wuhao 20150827
+		lolthBootStrap.addLolthSolider(1, TimeUnit.SECONDS,new AutoHomeBBSListFetch());
+		lolthBootStrap.addLolthSolider(new AutoHomeBBSCommentFetch());
+		lolthBootStrap.addLolthSolider(new AutohomePriceListFetch());
+		lolthBootStrap.addLolthSolider(new AutoHomeWordOfMouthFetch());
+		
+		//易车网
+		lolthBootStrap.addLolthSolider(new BitautoBBSListFetch());
+		lolthBootStrap.addLolthSolider(new BitautoBBSCommentFetch());
+		lolthBootStrap.addLolthSolider(new BitautoWordOfMouthFetch());
+		
+		
+		//太平洋
+		lolthBootStrap.addLolthSolider(new PacutoBBSListFetch());
+		lolthBootStrap.addLolthSolider(new PacutoWordOfMouthListFetch());
+		
+		//爱卡
+		lolthBootStrap.addLolthSolider(new XCarBBSListFetch());
+		lolthBootStrap.addLolthSolider(new XCarWordOfMouthListFetch());
+		
+		
+		//微信
+		lolthBootStrap.addLolthSolider(new WeiXinArticleListFetch());
+		lolthBootStrap.addLolthSolider(new WeiXinUserArtListFetch());
+		
+		//百度
+		lolthBootStrap.addLolthSolider(new BaiduNewsListFetch());
+		lolthBootStrap.addLolthSolider(new BaiduPostListFetch());
+		lolthBootStrap.addLolthSolider(new BaiduPostDetailFetch());
+		lolthBootStrap.addLolthSolider(new BaiduZhidaoListFetch());
+		lolthBootStrap.addLolthSolider(new BaiduZhidaoDetailFetch());
+		lolthBootStrap.addLolthSolider(new BaiduZhidaoUserFetch());
+		
 	}
 	// ---------------------------------------------------------------------------------------------------------------------------------
 }
