@@ -53,7 +53,7 @@ public class ECTmallListFetch extends DistributedParser {
 			// 标题
 			taobaoBean.setTitle(title.attr("title"));
 			// url
-			taobaoBean.setUrl(title.attr("href"));
+			taobaoBean.setUrl("https:"+title.attr("href"));
 			taobaoBean.setKeyword(task.getProjectName());
 
 			try {
