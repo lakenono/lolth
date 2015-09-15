@@ -17,7 +17,7 @@ public class AmazonCategoryProducer extends Producer {
 	private String node;
 	
 	// 队列名称
-	public static final String QUEUENAME = "amazon_search_list";
+	public static final String QUEUENAME = AmazonSearchProducer.QUEUENAME;
 
 	public AmazonCategoryProducer(String projectName, String node) {
 		super(projectName);

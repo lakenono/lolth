@@ -17,7 +17,7 @@ public class AmazonSearchProducer extends Producer {
 	// 关键字
 	private String keyword;
 	// 队列名称
-	public static final String QUEUENAME = "ec_dmp_amazon_search_list";
+	public static final String QUEUENAME = "ec_dmp_amazon";
 
 	public AmazonSearchProducer(String projectName, String keyword) {
 		super(projectName);
