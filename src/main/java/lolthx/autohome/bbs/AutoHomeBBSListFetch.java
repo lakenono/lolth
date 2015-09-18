@@ -78,7 +78,7 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 				Thread.sleep(1000);
 				String html = GlobalComponents.fetcher.fetch(bean.getUrl());
 				if (StringUtils.isBlank(html)) {
-					return;
+					continue;
 				}
 				Document docDetail = Jsoup.parse(html);
 
