@@ -1,7 +1,5 @@
 package lolthx.weibo.task;
 
-import lakenono.db.DBBean;
-import lolthx.weibo.bean.WeiboBean;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,7 +19,7 @@ public class RealTimeWeiboTask {
 		String projectName = args[0];
 		String keyword = args[1];
 		//TODO  根据工程名创建表
-		DBBean.createTable(WeiboBean.class, projectName);
+//		DBBean.createTable(WeiboBean.class, projectName);
 		while (true) {
 			try {
 				log.info("start {} fetch ...",keyword);
