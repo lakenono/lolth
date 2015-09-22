@@ -21,7 +21,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class WeiboConcernUserFetch extends DistributedParser {
+	private boolean isMQ = true;
+	public WeiboConcernUserFetch(boolean isMQ){
+		this.isMQ = isMQ;
+	}
 	private WeiboSearchFetch weibo = new WeiboSearchFetch();
+	
 
 	@Override
 	public String getQueueName() {
@@ -37,6 +42,11 @@ public class WeiboConcernUserFetch extends DistributedParser {
 		Document doc = Jsoup.parse(result);
 		Elements aS = doc.select("table");
 		for (Element a : aS) {
+			Elements select = a.select("td a");
+			String name = "";
+			if(select.size()>2){
+				name = select.get(1).text();
+			}
 			String url = a.select("a").first().absUrl("href");
 			String href = a.select("a").last().absUrl("href");
 
@@ -50,11 +60,14 @@ public class WeiboConcernUserFetch extends DistributedParser {
 						task.getProjectName());
 				bean.setConcernUserId(concernUserId);
 				bean.setUserId(task.getExtra());
+				bean.setConcernUserURL(url);
+				bean.setConcernUserName(name);
 				bean.saveOnNotExist();
 				// 推送用户队列
+				if(isMQ){
 				weibo.bulidWeiboUserTask(concernUserId, url,
 						task.getProjectName());
-
+				}
 			}
 		}
 	}
@@ -63,5 +76,7 @@ public class WeiboConcernUserFetch extends DistributedParser {
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
-
+	public static void main(String[] args) {
+		new WeiboConcernUserFetch(false).run();
+	}
 }
