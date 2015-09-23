@@ -107,7 +107,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		return MessageFormat.format(WEIBO_USER_INFO_URL_TEMPLAGE, uid);
 	}
 
-	private String getUid(String id) throws IOException, InterruptedException,
+	public String getUid(String id) throws IOException, InterruptedException,
 			TException {
 		String uid = null;
 		String userUrl = buildUserUrl(id);
