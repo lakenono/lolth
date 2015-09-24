@@ -46,7 +46,7 @@ public class BaiduWebpageListFetch extends DistributedParser {
 			}else{
 				try {
 					String text = ele.text().trim();
-					pageNums = Integer.valueOf(text) * 10;
+					pageNums = (Integer.valueOf(text) - 1 ) * 10;
 				} catch (Exception e) {
 					e.printStackTrace();
 					pageNums = 0;
