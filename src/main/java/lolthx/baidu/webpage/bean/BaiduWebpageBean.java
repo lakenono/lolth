@@ -18,6 +18,7 @@ public class BaiduWebpageBean extends DBBean{
 	@DBConstraintPK
 	private String id;
 	
+	@DBConstraintPK
 	private String projectName;
 	
 	private String keyword;

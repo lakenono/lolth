@@ -18,12 +18,7 @@ public class BaiduWebpageListProducer extends Producer {
 				"https://www.baidu.com/s"+
 				"?wd={0}"+
 				"&pn=750"+
-				//"&oq={1}"+
-				//"&tn=96392254_hao_pg"+
 				"&ie=utf-8"+
-				//"&rsv_idx=1"+
-				//"&rsv_pq=f9669f0b00005c8a"+
-				//"&rsv_t=1105jXu0%2F3br1J4jN1crnvCQXS4oV7uPirg8xDEUoM2W%2BSO9BDa7R2xyH0RSmwYQqHVkETkG"+
 				"&gpc=stf%3D{2}%2C{3}|stftype%3D2"+
 				"&tfflag=1";
 
@@ -59,15 +54,13 @@ public class BaiduWebpageListProducer extends Producer {
 
 		String str0 = URLEncoder.encode(keyword, "utf-8");
 		
-		String str1 = URLEncoder.encode(keyword, "utf-8");
+		String str1 = String.valueOf(startDate.getTime() / 1000);
 		
-		String str2 = String.valueOf(startDate.getTime() / 1000);
-		
-		String str3 = String.valueOf(endDate.getTime() / 1000);
+		String str2 = String.valueOf(endDate.getTime() / 1000);
 
-		System.out.println(MessageFormat.format(BAIDU_WEB_PAGE_URL, str0 , str1 , str2 ,str3));
+		System.out.println(MessageFormat.format(BAIDU_WEB_PAGE_URL, str0 , str1 , str2));
 		
-		return MessageFormat.format(BAIDU_WEB_PAGE_URL, str0 , str1 , str2 ,str3 );
+		return MessageFormat.format(BAIDU_WEB_PAGE_URL, str0 , str1 , str2  );
 	}
 	
 	@Override
