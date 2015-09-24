@@ -40,7 +40,7 @@ public class BaiduWebpageListFetch extends DistributedParser {
 			int pageNums = 0;
 			int nums = 0;
 			
-			Element ele = doc.select("div#page span.pc").first();
+			Element ele = doc.select("div#page span.pc").last();
 			if(ele == null){
 				pageNums = 0;
 			}else{
@@ -70,7 +70,7 @@ public class BaiduWebpageListFetch extends DistributedParser {
 	}
 
 	public static void main(String args[]){
-		for(int i = 1;i<=16104;i++){
+		for(int i = 1;i<=21228;i++){
 			new BaiduWebpageListFetch().run();
 		}
 	}
