@@ -41,13 +41,17 @@ public class ECYhdSearchFetch extends DistributedParser {
 		JSONObject parseObject = JSON.parseObject(result);
 		Object object = parseObject.get("value");
 		Document doc = Jsoup.parse((String) object);
-		Elements eles = doc.select("li.search_item");
+		Elements eles = doc.select("div.mod_search_pro");
 		for (Element element : eles) {
 			ECBean bean = new ECBean("yhd");
-			Elements select = element.select("div a.search_prod_img");
+			Elements select = element.select("p.proName > a");
 			String url = select.first().attr("href");
 			String id = select.first().attr("pmid");
-			String name = select.first().select("img").attr("alt");
+			//过滤没有pid数据
+			if(id.equals("0")){
+				continue;
+			}
+			String name = select.first().attr("title");
 			// 抓取分类
 			Document document = GlobalComponents.fetcher.document(url);
 			String classify = document.select("div.crumb").text();

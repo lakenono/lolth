@@ -67,7 +67,7 @@ public class ECJdKeywordProducer extends Producer {
 		} else {
 			url = page_url;
 		}
-		return MessageFormat.format(url, UrlUtils.encode(this.projectName, "utf-8"), this.catString, pageNum);
+		return MessageFormat.format(url, UrlUtils.encode(this.keyword, "utf-8"), this.catString, pageNum);
 	}
 
 	@Override

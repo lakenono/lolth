@@ -47,10 +47,14 @@ public class AmazonGoodsFetch extends DistributedParser {
 				bean.setUrl(goodsUrl);
 			}
 			// 商品类别
-			Document doc1 = GlobalComponents.fetcher.document(goodsUrl);
-			Elements elements = doc1.select("ul.a-horizontal");
-			String goodsCategory = elements.first().text();
-			bean.setCategory(goodsCategory);
+			if (StringUtils.isNotBlank(goodsUrl)) {
+				Document doc1 = GlobalComponents.fetcher.document(goodsUrl);
+				Elements elements = doc1.select("ul.a-horizontal");
+				if (elements.size() > 0) {
+					String goodsCategory = elements.first().text();
+					bean.setCategory(goodsCategory);
+				}
+			}
 
 			bean.setKeyword(task.getExtra());
 			bean.saveOnNotExist();

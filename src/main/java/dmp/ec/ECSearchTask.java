@@ -4,12 +4,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
-import lolthx.taobao.search.TaobaoSearchListProducer;
-import lolthx.taobao.tmall.search.TmallSearchListProducer;
 import lolthx.yhd.task.YhdSearchProduce;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
+import dmp.ec.amazon.AmazonSearchProducer;
+import dmp.ec.jd.ECJdKeywordProducer;
+import dmp.ec.taobao.ECTaobaoProducer;
+import dmp.ec.taobao.ECTmallProducer;
 
 /**
  * 根据搜索关键字产生电商抓取队列 目前支持的电商:淘宝、天猫、京东、苏宁,一号店，亚马逊
@@ -18,28 +21,28 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  *
  */
 @Slf4j
-public class ECTask {
+public class ECSearchTask {
 
 	public static void main(String[] args) throws Exception {
 
 		String projectName = "ceshi";
-		String keyword = "蓝牙耳机";
+		String keyword = "月饼";
 
 		// 注册一号店线程
-		final ThreadFactory Factory = new ThreadFactoryBuilder().setNameFormat("yhd-task-%d").setDaemon(false).build();
+		final ThreadFactory Factory = new ThreadFactoryBuilder().setNameFormat("lolth-task-%d").setDaemon(false).build();
 		ScheduledExecutorService yhdservice = Executors.newScheduledThreadPool(2, Factory);
 		yhdservice.submit(new Runnable() {
-
 			@Override
 			public void run() {
 				try {
-					new YhdSearchProduce(projectName, keyword).run();
+					YhdSearchProduce yhd = new YhdSearchProduce(projectName, keyword);
+					yhd.setECQueue();
+					yhd.run();
 				} catch (Exception e) {
 					log.error("一号店task任务失败 {}", e);
 				}
 			}
 		});
-		// 关闭线程
 		yhdservice.shutdown();
 
 		// 注册淘宝线程
@@ -49,7 +52,7 @@ public class ECTask {
 			@Override
 			public void run() {
 				try {
-					new TaobaoSearchListProducer(projectName, keyword).run();
+					new ECTaobaoProducer(projectName, keyword,"").run();
 				} catch (Exception e) {
 					log.error("淘宝task任务失败 {}", e);
 				}
@@ -57,32 +60,47 @@ public class ECTask {
 		});
 		taobaoservice.shutdown();
 
-		// 天猫 TmallSearchListProducer
+		// 天猫 
 		ScheduledExecutorService tmallservice = Executors.newScheduledThreadPool(2, Factory);
 		tmallservice.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					new TmallSearchListProducer(projectName, keyword).run();
+					new ECTmallProducer(projectName, keyword,"").run();
 				} catch (Exception e) {
 					log.error("天猫task任务失败 {}", e);
 				}
 			}
 		});
 		tmallservice.shutdown();
+		//京东
+		ScheduledExecutorService jdservice = Executors.newScheduledThreadPool(2, Factory);
+		jdservice.submit(new Runnable() {
 
-		/*
-		 * // 一号店 ECYhdClassfiyProduce yhd = new ECYhdClassfiyProduce(projectName,
-		 * keyword); yhd.run(); // 淘宝列表页任务队列 TaobaoSearchListProducer taobao =
-		 * new TaobaoSearchListProducer(projectName, keyword); taobao.run(); //
-		 * 淘宝商品详细页队列，产生天猫和淘宝的详情任务，需要TmallItemFetch去抓天猫的商品 // tmall的任务队列
-		 * TmallSearchListProducer tmall = new
-		 * TmallSearchListProducer(projectName, keyword); tmall.run(); // 京东任务,
-		 * 还要再启动京东详情页task JDCommoditySearchList jd = new
-		 * JDCommoditySearchList(projectName, keyword); jd.run();
-		 * 
-		 * // 苏宁
-		 */
+			@Override
+			public void run() {
+				try {
+					new ECJdKeywordProducer(projectName, keyword,"").run();
+				} catch (Exception e) {
+					log.error("京东task任务失败 {}", e);
+				}
+			}
+		});
+		jdservice.shutdown();
+		//亚马逊
+		ScheduledExecutorService amzservice = Executors.newScheduledThreadPool(2, Factory);
+		amzservice.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					new AmazonSearchProducer(projectName, keyword).run();
+				} catch (Exception e) {
+					log.error("亚马逊task任务失败 {}", e);
+				}
+			}
+		});
+		amzservice.shutdown();
 	}
 }

@@ -20,6 +20,8 @@ public class WeiboUserConcernRefBean extends DBBean{
 	private String userId;
 	@DBConstraintPK
 	private String concernUserId;
+	private String concernUserName;
+	private String concernUserURL;
 	public WeiboUserConcernRefBean(String tableKey){
 		super(tableKey);
 	}

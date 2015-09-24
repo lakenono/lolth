@@ -17,7 +17,7 @@ public class AmazonSearchProducer extends Producer {
 	// 关键字
 	private String keyword;
 	// 队列名称
-	public static final String QUEUENAME = "amazon_search_list";
+	public static final String QUEUENAME = "ec_dmp_amazon";
 
 	public AmazonSearchProducer(String projectName, String keyword) {
 		super(projectName);
@@ -36,7 +36,8 @@ public class AmazonSearchProducer extends Producer {
 	@Override
 	protected Task buildTask(String url) {
 		Task task = super.buildTask(url);
-		task.setProjectName(this.projectName);
+//		task.setProjectName(this.projectName);
+		task.setExtra(this.keyword);
 		return task;
 	}
 
