@@ -42,6 +42,7 @@ public class ECYhdSearchFetch extends DistributedParser {
 		Object object = parseObject.get("value");
 		Document doc = Jsoup.parse((String) object);
 		Elements eles = doc.select("div.mod_search_pro");
+		String categroy = "";
 		for (Element element : eles) {
 			ECBean bean = new ECBean("yhd");
 			Elements select = element.select("p.proName > a");
@@ -53,13 +54,21 @@ public class ECYhdSearchFetch extends DistributedParser {
 			}
 			String name = select.first().attr("title");
 			// 抓取分类
-			Document document = GlobalComponents.fetcher.document(url);
-			String classify = document.select("div.crumb").text();
-			classify = StringUtils.replaceChars(classify, "", ">");
+			if(StringUtils.isBlank(categroy)){
+				Document document = GlobalComponents.fetcher.document(url);
+				Elements select2 = document.select("div.crumb > a");
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i < select2.size()-1; i++) {
+					sb.append(select2.get(i).text());
+				}
+				sb.deleteCharAt(sb.length()-1);
+				categroy = sb.toString();
+				categroy = StringUtils.replaceChars(categroy, "", "/");
+			}
 			bean.setId(id);
 			bean.setUrl(url);
 			bean.setTitle(name);
-			bean.setCategory(classify);
+			bean.setCategory(categroy);
 			bean.setKeyword(task.getExtra());
 			beans.add(bean);
 		}
@@ -71,5 +80,7 @@ public class ECYhdSearchFetch extends DistributedParser {
 		}
 		beans.clear();
 	}
-	
+	public static void main(String[] args) {
+		new ECYhdSearchFetch().run();
+	}
 }
