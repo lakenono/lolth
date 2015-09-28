@@ -10,13 +10,13 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import dmp.ec.amazon.AmazonGoodsFetch;
 import dmp.ec.jd.ECJdItemFetch;
 import dmp.ec.jd.ECJdListFetch;
+import dmp.ec.suning.ECSuningFetch;
 import dmp.ec.taobao.ECTaobaoListFetch;
 import dmp.ec.taobao.ECTmallListFetch;
 import dmp.ec.yhd.ECYhdClassfiyFetch;
 
 public class ECCategoryFetch {
 	public static void main(String[] args) {
-
 
 		final ThreadFactory Factory = new ThreadFactoryBuilder().setNameFormat("Lolth-%d").setDaemon(false).build();
 		// 一号店
@@ -48,7 +48,7 @@ public class ECCategoryFetch {
 			}
 		}, 0, 5, TimeUnit.SECONDS);
 
-		// 京东 list  模板有变化，需要修改
+		// 京东 list 模板有变化，需要修改
 		ScheduledExecutorService jd_list_service = Executors.newScheduledThreadPool(2, Factory);
 		jd_list_service.scheduleWithFixedDelay(new Runnable() {
 			@Override
@@ -56,8 +56,8 @@ public class ECCategoryFetch {
 				new ECJdListFetch().run();
 			}
 		}, 0, 3, TimeUnit.SECONDS);
-		
-		//京东 item
+
+		// 京东 item
 		ScheduledExecutorService jd_item_service = Executors.newScheduledThreadPool(2, Factory);
 		jd_item_service.scheduleWithFixedDelay(new Runnable() {
 			@Override
@@ -66,7 +66,7 @@ public class ECCategoryFetch {
 			}
 		}, 0, 3, TimeUnit.SECONDS);
 
-		//亚马逊
+		// 亚马逊
 		ScheduledExecutorService amz_service = Executors.newScheduledThreadPool(2, Factory);
 		amz_service.scheduleWithFixedDelay(new Runnable() {
 			@Override
@@ -74,6 +74,15 @@ public class ECCategoryFetch {
 				new AmazonGoodsFetch().run();
 			}
 		}, 0, 1, TimeUnit.SECONDS);
-	
+
+		// 苏宁
+		ScheduledExecutorService sn_service = Executors.newScheduledThreadPool(2, Factory);
+		sn_service.scheduleWithFixedDelay(new Runnable() {
+			@Override
+			public void run() {
+				new ECSuningFetch().run();
+			}
+		}, 0, 1, TimeUnit.SECONDS);
+
 	}
 }

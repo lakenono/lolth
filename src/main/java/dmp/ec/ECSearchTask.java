@@ -4,6 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+import lolthx.suning.keysearch.SuningSearchListProducer;
 import lolthx.yhd.task.YhdSearchProduce;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,8 +16,8 @@ import dmp.ec.taobao.ECTaobaoProducer;
 import dmp.ec.taobao.ECTmallProducer;
 
 /**
- * 根据搜索关键字产生电商抓取队列 目前支持的电商:淘宝、天猫、京东、苏宁,一号店，亚马逊
- * 在生产队列时，先创建bean生产表
+ * 根据搜索关键字产生电商抓取队列 目前支持的电商:淘宝、天猫、京东、苏宁,一号店，亚马逊 在生产队列时，先创建bean生产表
+ * 
  * @author yanghp
  *
  */
@@ -52,7 +53,7 @@ public class ECSearchTask {
 			@Override
 			public void run() {
 				try {
-					new ECTaobaoProducer(projectName, keyword,"").run();
+					new ECTaobaoProducer(projectName, keyword, "").run();
 				} catch (Exception e) {
 					log.error("淘宝task任务失败 {}", e);
 				}
@@ -60,35 +61,35 @@ public class ECSearchTask {
 		});
 		taobaoservice.shutdown();
 
-		// 天猫 
+		// 天猫
 		ScheduledExecutorService tmallservice = Executors.newScheduledThreadPool(2, Factory);
 		tmallservice.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					new ECTmallProducer(projectName, keyword,"").run();
+					new ECTmallProducer(projectName, keyword, "").run();
 				} catch (Exception e) {
 					log.error("天猫task任务失败 {}", e);
 				}
 			}
 		});
 		tmallservice.shutdown();
-		//京东
+		// 京东
 		ScheduledExecutorService jdservice = Executors.newScheduledThreadPool(2, Factory);
 		jdservice.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					new ECJdKeywordProducer(projectName, keyword,"").run();
+					new ECJdKeywordProducer(projectName, keyword, "").run();
 				} catch (Exception e) {
 					log.error("京东task任务失败 {}", e);
 				}
 			}
 		});
 		jdservice.shutdown();
-		//亚马逊
+		// 亚马逊
 		ScheduledExecutorService amzservice = Executors.newScheduledThreadPool(2, Factory);
 		amzservice.submit(new Runnable() {
 
@@ -102,5 +103,21 @@ public class ECSearchTask {
 			}
 		});
 		amzservice.shutdown();
+		// 苏宁
+		ScheduledExecutorService snservice = Executors.newScheduledThreadPool(2, Factory);
+		snservice.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					SuningSearchListProducer sn = new SuningSearchListProducer(projectName, keyword);
+					sn.setECQueue();
+					sn.run();
+				} catch (Exception e) {
+					log.error("亚马逊task任务失败 {}", e);
+				}
+			}
+		});
+		snservice.shutdown();
 	}
 }
