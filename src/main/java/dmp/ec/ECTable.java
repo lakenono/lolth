@@ -11,5 +11,6 @@ public class ECTable {
 		DBBean.createTable(ECBean.class, "taobao");
 		DBBean.createTable(ECBean.class, "tmall");
 		DBBean.createTable(ECBean.class, "amazon");
+		DBBean.createTable(ECBean.class, "suning");
 	}
 }
