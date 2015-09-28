@@ -3,17 +3,15 @@ package lolthx.suning.keysearch;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
-import java.text.ParseException;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class SuningSearchListProducer  extends Producer  {
 	
@@ -21,16 +19,22 @@ public class SuningSearchListProducer  extends Producer  {
 	
 	private String keyword;
 	private String keywordEncode;
+	private String sn_queue = "suning_search_list";
+	
 	
 	public SuningSearchListProducer(String projectName,String keyword) throws UnsupportedEncodingException {
 		super(projectName);
 		this.keyword = keyword;
 		this.keywordEncode = URLEncoder.encode(keyword, "utf-8");
 	}
-
+	
+	public void setECQueue(){
+		this.sn_queue = "ec_suning";
+	}
+	
 	@Override
 	public String getQueueName() {
-		return "suning_search_list";
+		return sn_queue;
 	}
 
 	@Override
@@ -75,11 +79,13 @@ public class SuningSearchListProducer  extends Producer  {
 	}
 	
 	public static void main(String args[]) throws UnsupportedEncodingException, Exception{
-		String projectName = "suning search test";
+		String projectName = "suning";
 		//"惠氏启赋","wyeth启赋","雅培菁智","多美滋致粹","合生元奶粉","诺优能白金版","美赞臣亲舒"
-		String[] keywords = { "惠氏启赋","wyeth启赋","雅培菁智","多美滋致粹","合生元奶粉","诺优能白金版","美赞臣亲舒"  };
+		String[] keywords = { "冰箱"};
 		for(int i =0 ;i < keywords.length;i++){
-			new SuningSearchListProducer(projectName, keywords[i]).run();
+			SuningSearchListProducer sn = new SuningSearchListProducer(projectName, keywords[i]);
+			sn.setECQueue();
+			sn.run();
 		}
 	}
 	
