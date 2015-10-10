@@ -1,32 +1,33 @@
-package lolthx.baidu.webpage;
-
-import lakenono.base.DistributedParser;
-import lakenono.base.Task;
-import lolthx.autohome.bbs.AutoHomeBBSCommentFetch;
-import lolthx.baidu.webpage.bean.BaiduWebpageBean;
-import lombok.extern.slf4j.Slf4j;
+package lolthx.baidu.news;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import lakenono.base.DistributedParser;
+import lakenono.base.Task;
+import lolthx.baidu.news.bean.BaiduNewsNumBean;
+import lolthx.baidu.webpage.BaiduWebpageListFetch;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class BaiduWebpageListFetch extends DistributedParser {
+public class BaiduNewsNumIteratorFetch extends DistributedParser{
 
 	@Override
 	public String getQueueName() {
-		return "baidu_web_page_list";
+		return "baidu_news_iterator_list";
 	}
-	
+
 	@Override
 	public void parse(String result, Task task) throws Exception {
 		if (StringUtils.isBlank(result)) {
 			return;
 		}
 		
-		BaiduWebpageBean bean = new BaiduWebpageBean();
+		BaiduNewsNumBean bean = new BaiduNewsNumBean();
+		
 		bean.setId(task.getUrl());
 		bean.setProjectName(task.getProjectName());
 		
@@ -53,25 +54,27 @@ public class BaiduWebpageListFetch extends DistributedParser {
 				}
 			}
 			
-			Elements elements = doc.select("div#content_left div.result.c-container ");
+			Elements elements = doc.select("div.result[id]");
 			nums = elements.size();
 			
 			int all = pageNums + nums;
+			System.out.println(">>>>>>>>>>>>>>>>> all > " + all);
 			if(pageNums + nums > 0){
 				bean.setNum(String.valueOf(all));
 				bean.saveOnNotExist();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("handle baidu webpage error : {}",e.getMessage(),e);
+			log.error("handle baidu news iterator error : {}",e.getMessage(),e);
 		}
-		
 		
 	}
 
 	public static void main(String args[]){
-		for(int i = 1;i<=200;i++){
-			new BaiduWebpageListFetch().run();
+		for(int i = 1 ; i <=62329 ; i++){
+			new BaiduNewsNumIteratorFetch().run();
 		}
 	}
+	
+	
 }

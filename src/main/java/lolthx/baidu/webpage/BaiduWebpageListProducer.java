@@ -19,7 +19,7 @@ public class BaiduWebpageListProducer extends Producer {
 				"?wd={0}"+
 				"&pn=750"+
 				"&ie=utf-8"+
-				"&gpc=stf%3D{2}%2C{3}|stftype%3D2"+
+				"&gpc=stf%3D{1}%2C{2}|stftype%3D2"+
 				"&tfflag=1";
 
 	private String keyword;
@@ -58,8 +58,6 @@ public class BaiduWebpageListProducer extends Producer {
 		
 		String str2 = String.valueOf(endDate.getTime() / 1000);
 
-		System.out.println(MessageFormat.format(BAIDU_WEB_PAGE_URL, str0 , str1 , str2));
-		
 		return MessageFormat.format(BAIDU_WEB_PAGE_URL, str0 , str1 , str2  );
 	}
 	
@@ -73,6 +71,12 @@ public class BaiduWebpageListProducer extends Producer {
 	public static void main(String args[]) throws Exception {
 		String projectName = "城市口号";
 		String[] citys = {
+				"兰州","吉林","鞍山","安庆","赣州","桂林",
+				"菏泽","九江","上饶","江门","珠海",
+				"茂名","湛江","新乡","焦作","周口",
+				"咸阳","宿迁","运城","漳州","遵义",
+				"泉州","潍坊","盐城","济宁","临沂",
+				"镇江","宜昌","襄阳",
 				"上海","天津","北京","重庆","哈尔滨"
 				,"长春","沈阳","大连","石家庄","邯郸",
 				"郑州","洛阳","南阳","太原","济南",
@@ -84,9 +88,17 @@ public class BaiduWebpageListProducer extends Producer {
 				"杭州","绍兴","宁波","温州","台州",
 				"嘉兴","金华","福州","厦门","广州",
 				"深圳","中山","佛山","东莞","海口",
-				"南昌","合肥","包头"
+				"南昌","合肥","包头"	
+				
 				};
 		String[] keywords = {
+				"黄河之都、金城兰州",
+				"吉祥行、四季行、吉林市行","山泉之城、佛玉之都","和谐安庆，魅力怡城","美丽老家，幸福赣州","桂林山水甲天下",
+				"牡丹之都、好汉之乡","欲识庐山真面目，请到江西九江来","中国经典山水、世界遗产名城","侨乡山水风情","浪漫之城、中国珠海",
+				"新滨海、新茂名","相约在中国大陆最南端","山水太行，风采新乡","焦作山水、人间仙境","羲皇古都、老子故乡",
+				"中国金字塔之都","宿迁有三宝，英雄美酒生态好","华夏之根，诚信之邦，大运之城","水仙花的故乡","转折之城、会议之都",
+				"光明之城---泉州","放飞梦想，逍遥潍坊","东方湿地、鹤鹿故乡","孔孟之乡、运河之都、文化济宁","山水沂蒙、多彩临沂",
+				"镇江，一座美得让你吃醋的城市","金色三峡银色大坝绿色宜昌","千古帝乡，智慧襄阳",
 				"上海---精彩每一天","天天乐道，津津有味","东方古都、长城故乡","重庆，非去不可","冷酷冰城---哈尔滨",
 				"北国春城，绿色都市","新沈阳，新环境","浪漫之都。中国大连","燕赵古韵，魅力之城---石家庄","游名城邯郸，品古赵文化",
 				"黄河之都","国花牡丹城---洛阳","四圣故里---南里","唐风晋韵，锦绣龙城","趵突声韵甲天下 济南潇洒胜江南",

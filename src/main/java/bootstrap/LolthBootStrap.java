@@ -12,9 +12,12 @@ import lolthx.autohome.bbs.AutoHomeBBSListFetch;
 import lolthx.autohome.buy.AutohomePriceListFetch;
 import lolthx.autohome.k.AutoHomeWordOfMouthFetch;
 import lolthx.baidu.news.BaiduNewsListFetch;
+import lolthx.baidu.news.BaiduNewsNumIteratorFetch;
+import lolthx.baidu.news.BaiduNewsNumListFetch;
 import lolthx.baidu.post.BaiduPostDetailFetch;
 import lolthx.baidu.post.BaiduPostListFetch;
 import lolthx.baidu.webpage.BaiduSpotsListFetch;
+import lolthx.baidu.webpage.BaiduWebSiteFetch;
 import lolthx.baidu.webpage.BaiduWebpageListFetch;
 import lolthx.baidu.zhidao.BaiduZhidaoDetailFetch;
 import lolthx.baidu.zhidao.BaiduZhidaoListFetch;
@@ -160,15 +163,23 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new WeiXinArticleListFetch());
 		lolthBootStrap.addLolthSolider(new WeiXinUserArtListFetch());
 		
-		//百度
+		//百度新闻
 		lolthBootStrap.addLolthSolider(new BaiduNewsListFetch());
+		//百度贴吧
 		lolthBootStrap.addLolthSolider(new BaiduPostListFetch());
 		lolthBootStrap.addLolthSolider(new BaiduPostDetailFetch());
+		//百度知道
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoListFetch());
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoDetailFetch());
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoUserFetch());
-		lolthBootStrap.addLolthSolider(new BaiduWebpageListFetch());
-		lolthBootStrap.addLolthSolider(new BaiduSpotsListFetch());
+		//百度 国家形象 特出填写类
+		lolthBootStrap.addLolthSolider(new BaiduWebpageListFetch());//keyword 搜索关键字 number
+		lolthBootStrap.addLolthSolider(new BaiduSpotsListFetch());//处理城市联系词汇
+		lolthBootStrap.addLolthSolider(new BaiduWebSiteFetch());//处理城市主词汇方法
+		lolthBootStrap.addLolthSolider(new BaiduNewsNumListFetch());//搜索百度新闻number
+		lolthBootStrap.addLolthSolider(new BaiduNewsNumIteratorFetch());//处理百度新闻主词汇
+		
+		
 		
 		
 	}

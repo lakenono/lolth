@@ -92,9 +92,9 @@ public class BaiduSpotsListFetch  extends DistributedParser {
 	}
 	
 	public static void main(String args[]){
-		//for(int i = 1; i <= 33 ; i++){
+		for(int i = 1; i <= 70 ; i++){
 			new BaiduSpotsListFetch().run();
-		//}
+		}
 	}
 	
 }
