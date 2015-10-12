@@ -27,6 +27,10 @@ import lolthx.bitauto.bbs.BitautoBBSListFetch;
 import lolthx.bitauto.k.BitautoWordOfMouthFetch;
 import lolthx.pacuto.bbs.PacutoBBSListFetch;
 import lolthx.pacuto.k.PacutoWordOfMouthListFetch;
+import lolthx.weibo.fetch.WeiboFansNumFetch;
+import lolthx.weibo.fetch.WeiboMainPageFetch;
+import lolthx.weibo.fetch.WeiboUserFetch;
+import lolthx.weibo.fetch.WeiboUserTagFetch;
 import lolthx.weixin.sogou.WeiXinArticleListFetch;
 import lolthx.weixin.sogou.WeiXinUserArtListFetch;
 import lolthx.xcar.bbs.XCarBBSListFetch;
@@ -178,6 +182,11 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new BaiduWebSiteFetch());//处理城市主词汇方法
 		lolthBootStrap.addLolthSolider(new BaiduNewsNumListFetch());//搜索百度新闻number
 		lolthBootStrap.addLolthSolider(new BaiduNewsNumIteratorFetch());//处理百度新闻主词汇
+		//微博 国家形象
+		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboMainPageFetch());
+		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserFetch());
+		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboFansNumFetch());
+		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserTagFetch());
 		
 		
 		
