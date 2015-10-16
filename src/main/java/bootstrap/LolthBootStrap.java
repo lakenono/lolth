@@ -32,7 +32,7 @@ import lolthx.bitauto.k.BitautoWordOfMouthFetch;
 import lolthx.pacuto.bbs.PacutoBBSListFetch;
 import lolthx.pacuto.k.PacutoWordOfMouthListFetch;
 import lolthx.weibo.fetch.WeiboFansNumFetch;
-import lolthx.weibo.fetch.WeiboMainPageFetch;
+import lolthx.weibo.fetch.WeiboSearchFetch;
 import lolthx.weibo.fetch.WeiboUserFetch;
 import lolthx.weibo.fetch.WeiboUserTagFetch;
 import lolthx.weixin.sogou.WeiXinArticleListFetch;
@@ -193,7 +193,7 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new BaiduWebpageVisListFetch());
 		
 		//微博 国家形象
-		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboMainPageFetch());
+		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboSearchFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboFansNumFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserTagFetch());
