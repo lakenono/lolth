@@ -27,6 +27,7 @@ public class WeiboSearchByTimeTask {
 			String endTime = format.format(end.getTime());
 			for (String key : keys) {
 				new WeiboSearchTask(projectName, key, endTime, endTime).run();
+				Thread.sleep(15000);
 			}
 			log.info("{}时间任务处理完成",endTime);
 			end.add(Calendar.DAY_OF_MONTH, -1);
