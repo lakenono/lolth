@@ -16,6 +16,10 @@ import lolthx.baidu.news.BaiduNewsNumIteratorFetch;
 import lolthx.baidu.news.BaiduNewsNumListFetch;
 import lolthx.baidu.post.BaiduPostDetailFetch;
 import lolthx.baidu.post.BaiduPostListFetch;
+import lolthx.baidu.visualize.BaiduNewsVisListFetch;
+import lolthx.baidu.visualize.BaiduWebpageVisFirstFetch;
+import lolthx.baidu.visualize.BaiduWebpageVisListFetch;
+import lolthx.baidu.visualize.BaiduWebpageVisSecondFetch;
 import lolthx.baidu.webpage.BaiduSpotsListFetch;
 import lolthx.baidu.webpage.BaiduWebSiteFetch;
 import lolthx.baidu.webpage.BaiduWebpageListFetch;
@@ -182,6 +186,12 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new BaiduWebSiteFetch());//处理城市主词汇方法
 		lolthBootStrap.addLolthSolider(new BaiduNewsNumListFetch());//搜索百度新闻number
 		lolthBootStrap.addLolthSolider(new BaiduNewsNumIteratorFetch());//处理百度新闻主词汇
+		//百度 国家形象 百度网页 百度新闻 内容爬取
+		lolthBootStrap.addLolthSolider(new BaiduNewsVisListFetch());
+		lolthBootStrap.addLolthSolider(new BaiduWebpageVisFirstFetch());
+		lolthBootStrap.addLolthSolider(new BaiduWebpageVisSecondFetch());
+		lolthBootStrap.addLolthSolider(new BaiduWebpageVisListFetch());
+		
 		//微博 国家形象
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboMainPageFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserFetch());
