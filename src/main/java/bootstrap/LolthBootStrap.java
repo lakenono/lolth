@@ -168,8 +168,8 @@ public class LolthBootStrap {
 		
 		
 		//微信
-		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiXinArticleListFetch());
-		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiXinUserArtListFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new WeiXinArticleListFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new WeiXinUserArtListFetch());
 		
 		//百度新闻
 		lolthBootStrap.addLolthSolider(new BaiduNewsListFetch());
