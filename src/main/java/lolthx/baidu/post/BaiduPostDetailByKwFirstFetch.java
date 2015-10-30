@@ -12,7 +12,10 @@ import org.jsoup.select.Elements;
 import lakenono.base.DistributedParser;
 import lakenono.base.Queue;
 import lakenono.base.Task;
+import lolthx.baidu.visualize.BaiduNewsVisListFetch;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BaiduPostDetailByKwFirstFetch extends DistributedParser{
 
 	private static final String BAIDU_POST_DETAIL_URL_PREFIX = "http://tieba.baidu.com";
@@ -31,12 +34,18 @@ public class BaiduPostDetailByKwFirstFetch extends DistributedParser{
 		Elements elements = doc.select("div.s_post");
 		
 		for (Element element : elements) {
-			String urlFirst = element.select("span.p_title a.bluelink").attr("href");
-			
-			String url = BAIDU_POST_DETAIL_URL_PREFIX + StringUtils.substringBefore(urlFirst, "?") + "?pn=1";
-			
-			Task newTask = buildTask(url, "baidu_post_bykw_second", task);
-			Queue.push(newTask);		
+			try {
+				String urlFirst = element.select("span.p_title a.bluelink").attr("href");
+				
+				String url = BAIDU_POST_DETAIL_URL_PREFIX + StringUtils.substringBefore(urlFirst, "?") + "?pn=1";
+				
+				Task newTask = buildTask(url, "baidu_post_bykw_second", task);
+				Queue.push(newTask);
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("handle baidu post kw first error : {}",e.getMessage(),e,task.getExtra());
+				continue;
+			}		
 			
 		}
 		
