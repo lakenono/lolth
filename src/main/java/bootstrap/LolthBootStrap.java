@@ -14,6 +14,8 @@ import lolthx.autohome.k.AutoHomeWordOfMouthFetch;
 import lolthx.baidu.news.BaiduNewsListFetch;
 import lolthx.baidu.news.BaiduNewsNumIteratorFetch;
 import lolthx.baidu.news.BaiduNewsNumListFetch;
+import lolthx.baidu.post.BaiduPostDetailByKwFirstFetch;
+import lolthx.baidu.post.BaiduPostDetailByKwSecondFetch;
 import lolthx.baidu.post.BaiduPostDetailFetch;
 import lolthx.baidu.post.BaiduPostListFetch;
 import lolthx.baidu.visualize.BaiduNewsVisListFetch;
@@ -176,6 +178,8 @@ public class LolthBootStrap {
 		//百度贴吧
 		lolthBootStrap.addLolthSolider(new BaiduPostListFetch());
 		lolthBootStrap.addLolthSolider(new BaiduPostDetailFetch());
+		lolthBootStrap.addLolthSolider(new BaiduPostDetailByKwFirstFetch());
+		lolthBootStrap.addLolthSolider(new BaiduPostDetailByKwSecondFetch());
 		//百度知道
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoListFetch());
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoDetailFetch());
