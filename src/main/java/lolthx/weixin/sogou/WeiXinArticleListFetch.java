@@ -47,6 +47,8 @@ public class WeiXinArticleListFetch extends DistributedParser {
 
 				// url
 				String url = "http://weixin.sogou.com" + element.select("div.txt-box h4 a").first().attr("href");
+				url = url.replace("&amp;", "&");
+				
 				bean.setId(url);
 				bean.setUrl(url);
 
