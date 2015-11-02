@@ -145,7 +145,7 @@ public class WeiboIdUtils
 
 	public static void main(String[] args) throws Exception
 	{
-		String aa = toId("C6F2Xxw18");
+		String aa = toId("zeRxPdQhO");
 		System.out.println(aa);
 		String bb = toMid("3535424213299256");
 		System.out.println(bb);

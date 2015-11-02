@@ -3,10 +3,13 @@ package lolthx.weibo.task;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
+import lolthx.weibo.utils.WeiboFileUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -24,6 +27,7 @@ import org.jsoup.select.Elements;
  *
  */
 @Slf4j
+@Data
 public class WeiboSearchTask {
 	// 队列名称
 	public static final String WEIBO_SEARCH_QUEUE = "weibo_search_queue";
@@ -128,15 +132,26 @@ public class WeiboSearchTask {
 		return task;
 	}
 
-//	public static void main(String[] args) throws ParseException, TException,
-//			InterruptedException, SQLException {
-//		String keys = "现代瑞纳";
-//		String projectName = "ruina";
-//		//创建表
-//		DBBean.createTable(WeiboBean.class, projectName);
-//		DBBean.createTable(WeiboUserBean.class, projectName);
-//		DBBean.createTable(WeiboUserConcernRefBean.class, projectName);
-//		WeiboSearchTask weibo = new WeiboSearchTask(projectName,keys);
-//		weibo.run();
-//	}
+	public static void main(String[] args) throws Exception {
+		String dir = Class.class.getResource("/")+"weiboSearch";
+		dir = StringUtils.substringAfter(dir, ":");
+		String file = WeiboFileUtils.rename2Temp(dir);
+		if(file == null){
+			log.info("no task file,Program exits!!!");
+			return;
+		}
+		log.info("task begin is :{}", file);
+		String projectName = WeiboFileUtils.getProjectName(file);
+		List<String> readFile = WeiboFileUtils.readFile(file);
+		for (String line : readFile) {
+			String[] split = StringUtils.splitByWholeSeparator(line, null);
+			if(split.length == 3){
+				new WeiboSearchTask(projectName, split[0], split[1], split[2]).run();
+			}else{
+				new WeiboSearchTask(projectName, split[0]).run();
+			}
+			Thread.sleep(15000);
+		}
+		WeiboFileUtils.rename2Done(file);
+	}
 }

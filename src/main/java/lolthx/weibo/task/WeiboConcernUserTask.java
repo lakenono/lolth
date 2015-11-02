@@ -1,11 +1,14 @@
 package lolthx.weibo.task;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
 import lolthx.weibo.fetch.WeiboSearchFetch;
+import lolthx.weibo.utils.WeiboFileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -18,6 +21,7 @@ import org.jsoup.select.Elements;
  * @author yanghp
  *
  */
+@Slf4j
 public class WeiboConcernUserTask extends Producer {
 	public WeiboSearchFetch search = new WeiboSearchFetch();
 	private final String WEIBO_USER_FOLLOWS_URL_TEMPLATE = "http://weibo.cn/{0}/follow?page={1}";
@@ -93,11 +97,21 @@ public class WeiboConcernUserTask extends Producer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String projectName = "guanzhi_Relaunch";
-		String[] ids = { "mrroc	", "5701975466", "5687740949", "5687391614", "5687390129", "5687388022", "5687385509", "5687385388", "5687148214", "5687130005", "5687121329", "5687120919", "5687119731", "5687119232", "5687119071", "5686764637", "5686761786", "5686760072", "5685810898", "5685787607", "5684438092", "5684382137", "5684081649", "5684080502", "5683415520", "5682663895", "5681456558", "5683413504", "717176888", "706786281", "639978991", "601266190", "535676740", "534275677", "534109123", "521444123", "521432234", "470480993", "345201069", "333870922", "278204441", "237897919", "236780654", "234036095", "228280826", "207571555", "52966601", "37904174", "27903816" };
-		for (String id : ids) {
-			new WeiboConcernUserTask(id, projectName).run();
+		String dir = Class.class.getResource("/") + "weiboConcernUser";
+		dir = StringUtils.substringAfter(dir, ":");
+		String file = WeiboFileUtils.rename2Temp(dir);
+		if(file == null){
+			log.info("no task file,Program exits!!!");
+			return;
 		}
+		log.info("task begin is :{}", file);
+		String projectName = WeiboFileUtils.getProjectName(file);
+		List<String> readFile = WeiboFileUtils.readFile(file);
+		for (String id : readFile) {
+			new WeiboConcernUserTask(id, projectName).run();
+			Thread.sleep(15000);
+		}
+		WeiboFileUtils.rename2Done(file);
 	}
 
 }

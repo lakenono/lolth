@@ -45,7 +45,7 @@ public class WeiboFansNumFetch extends DistributedParser{
 	private void updateUserFans(Task task, String profile, String follow,
 			String fans) throws SQLException {
 		GlobalComponents.db.getRunner().update(
-				"update " + DBBean.getTableName(WeiboUserBean.class,task.getProjectName())
+				"update " + DBBean.getTableName(WeiboUserBean.class)
 						+ " set profile=? ,follow=? ,fans=? where uid=?", profile, follow,fans,task.getExtra());
 		log.debug("{} : 微博数{},关注数{},粉丝数{}", task.getExtra(), profile,follow,fans);
 	}
