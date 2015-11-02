@@ -48,7 +48,7 @@ public class BaiduZhidaoDetailFetch extends DistributedParser {
 
 			bean.setId(id);
 			bean.setUrl(task.getUrl());
-			bean.setProjectName(task.getExtra());
+			bean.setProjectName(task.getProjectName());
 			bean.setKeyword(task.getExtra());
 
 			// 推送用户
