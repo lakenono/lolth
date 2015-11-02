@@ -51,16 +51,16 @@ public class WeiboUserTagFetch extends DistributedParser {
 
 			String tagStr = tags.toString();
 			if (StringUtils.isNoneBlank(tagStr)) {
-				update(task.getExtra(), tags.toString(),task.getProjectName());
+				update(task.getExtra(), tags.toString());
 			} else {
 				log.debug("{} no tags ! ", task.getExtra());
 			}
 		}
 	}
 
-	private void update(String uid, String tags,String projectName) throws SQLException {
+	private void update(String uid, String tags) throws SQLException {
 		GlobalComponents.db.getRunner().update(
-				"update " + DBBean.getTableName(WeiboUserBean.class,projectName)
+				"update " + DBBean.getTableName(WeiboUserBean.class)
 						+ " set tags=? where uid=?", tags, uid);
 		log.debug("{} : {}", uid, tags);
 	}
@@ -69,5 +69,7 @@ public class WeiboUserTagFetch extends DistributedParser {
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
-
+	public static void main(String[] args) {
+		new WeiboUserTagFetch().run();
+	}
 }

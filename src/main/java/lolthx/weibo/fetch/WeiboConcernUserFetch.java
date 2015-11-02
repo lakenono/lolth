@@ -56,8 +56,7 @@ public class WeiboConcernUserFetch extends DistributedParser {
 				// 持久化用户，关注对应关系
 				// new WeiboUserConcernRefBean(task.getExtra(),
 				// concernUserId).persistOnNotExist();
-				WeiboUserConcernRefBean bean = new WeiboUserConcernRefBean(
-						task.getProjectName());
+				WeiboUserConcernRefBean bean = new WeiboUserConcernRefBean();
 				bean.setConcernUserId(concernUserId);
 				bean.setUserId(task.getExtra());
 				bean.setConcernUserURL(url);
@@ -77,6 +76,6 @@ public class WeiboConcernUserFetch extends DistributedParser {
 		return "weibo.cn";
 	}
 	public static void main(String[] args) {
-		new WeiboConcernUserFetch(false).run();
+		new WeiboConcernUserFetch(true).run();
 	}
 }

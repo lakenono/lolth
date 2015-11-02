@@ -10,10 +10,10 @@ import lolthx.weibo.bean.WeiboUserConcernRefBean;
 public class BuildTable {
 	
 	public static void main(String[] args) throws SQLException {
-		String projectName = "guanzhi_Relaunch";
-		DBBean.createTable(WeiboBean.class, projectName);
-		DBBean.createTable(WeiboUserBean.class, projectName);
-		DBBean.createTable(WeiboUserConcernRefBean.class, projectName);
+//		String projectName = "guanzhi_Relaunch";
+		DBBean.createTable(WeiboBean.class);
+		DBBean.createTable(WeiboUserBean.class);
+		DBBean.createTable(WeiboUserConcernRefBean.class);
 		
 	}
 

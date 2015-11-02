@@ -99,7 +99,7 @@ public class WeiboMainPageFetch extends DistributedParser {
 		for (Element element : elements) {
 			String html = element.html();
 
-			WeiboBean bean = new WeiboBean(task.getProjectName());
+			WeiboBean bean = new WeiboBean();
 
 			bean.setUserid(task.getExtra());
 
@@ -181,5 +181,11 @@ public class WeiboMainPageFetch extends DistributedParser {
 	@Override
 	public String getCookieDomain() {
 		return "weibo.cn";
+	}
+	public static void main(String[] args) throws InterruptedException {
+		while(true){
+			new WeiboMainPageFetch().run();
+			Thread.sleep(15000);
+		}
 	}
 }
