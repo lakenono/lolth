@@ -1,6 +1,7 @@
 package lolthx.weixin.sogou;
 
 import java.util.Date;
+import java.util.Random;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
@@ -70,12 +71,25 @@ public class WeiXinArticleListFetch extends DistributedParser {
 				bean.setKeyword(task.getExtra());
 				bean.setProjectName(task.getProjectName());
 				
-				//线程休眠15秒
-				Thread.sleep(15000);
+				//线程休眠30秒
+				Thread.sleep(30000);
 				
-				//String cookieDomain = getCookieDomain();
-				//String texthtml = GlobalComponents.jsoupFetcher.fetch(url, cookies, "utf-8");
-				String texthtml = GlobalComponents.jsoupFetcher.fetch(url);
+				String SUV = "";
+				String SNUID = "";
+				String SUID = "";
+				String SSUID = "";
+				String abtestTime = String.valueOf(new Date().getTime()/1000) ;
+				
+				SUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+				SSUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+				for(int i  = 1 ; i <= 4 ; i++){
+					SUV = SUV + Integer.toHexString(new Random().nextInt());
+					SNUID = SNUID + Integer.toHexString(new Random().nextInt());
+				}
+				
+				String cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
+				
+				String texthtml = GlobalComponents.jsoupFetcher.fetch(url, cookies, "utf-8");
 				
 				Document textdoc = Jsoup.parse(texthtml);
 
@@ -91,12 +105,32 @@ public class WeiXinArticleListFetch extends DistributedParser {
 		}
 	}
 	
+	
+
+	@Override
+	protected String fetch(Fetcher fetcher, String cookies, String charset, Task task) throws Exception {
+		String SUV = "";
+		String SNUID = "";
+		String SUID = "";
+		String SSUID = "";
+		String abtestTime = String.valueOf(new Date().getTime()/1000) ;
+		
+		SUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+		SSUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+		for(int i  = 1 ; i <= 4 ; i++){
+			SUV = SUV + Integer.toHexString(new Random().nextInt());
+			SNUID = SNUID + Integer.toHexString(new Random().nextInt());
+		}
+		
+		cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
+		
+		return super.fetch(fetcher, cookies, charset, task);
+	}
 
 	public static void main(String args[]) {
 		for(int i = 1; i <= 5 ; i++){
 			new WeiXinArticleListFetch().run();
 		}
-		
 	}
 	
 }
