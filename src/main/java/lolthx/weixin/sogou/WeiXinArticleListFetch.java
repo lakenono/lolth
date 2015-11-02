@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 
 public class WeiXinArticleListFetch extends DistributedParser {
 
-	private  String cookie = "";
+	
 	
 	@Override
 	public String getQueueName() {
@@ -87,8 +87,9 @@ public class WeiXinArticleListFetch extends DistributedParser {
 					SNUID = SNUID + Integer.toHexString(new Random().nextInt());
 				}
 				
-				//String cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
-				String texthtml = GlobalComponents.jsoupFetcher.fetch(url, cookie, "utf-8");
+				String cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
+				
+				String texthtml = GlobalComponents.jsoupFetcher.fetch(url, cookies, "utf-8");
 				
 				Document textdoc = Jsoup.parse(texthtml);
 
@@ -122,7 +123,6 @@ public class WeiXinArticleListFetch extends DistributedParser {
 		}
 		
 		cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
-		cookie = cookies;
 		
 		return super.fetch(fetcher, cookies, charset, task);
 	}
