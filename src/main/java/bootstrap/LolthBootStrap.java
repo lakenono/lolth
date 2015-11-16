@@ -42,6 +42,13 @@ import lolthx.weixin.sogou.WeiXinUserArtListFetch;
 import lolthx.xcar.bbs.XCarBBSListFetch;
 import lolthx.xcar.k.XCarWordOfMouthListFetch;
 import lolthx.yhd.fetch.YHDGoodsFetch;
+import lolthx.yoka.bbs.YokaBBSComment;
+import lolthx.yoka.bbs.YokaBBSDetail;
+import lolthx.yoka.bbs.YokaBBSListResolveFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticDetailFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticListFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticResolveFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticUserFetch;
 import lombok.extern.slf4j.Slf4j;
 import bootstrap.bean.Lolth;
 import bootstrap.bean.LolthSolider;
@@ -202,7 +209,14 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboFansNumFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserTagFetch());
 		
-		
+		//YOKA
+		lolthBootStrap.addLolthSolider(new YokaBBSListResolveFetch());
+		lolthBootStrap.addLolthSolider(new YokaBBSDetail());
+		lolthBootStrap.addLolthSolider(new YokaBBSComment());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticResolveFetch());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticListFetch());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticDetailFetch());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticUserFetch());
 		
 		
 	}
