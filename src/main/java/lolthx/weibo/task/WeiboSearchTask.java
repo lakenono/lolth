@@ -144,7 +144,7 @@ public class WeiboSearchTask {
 		String projectName = WeiboFileUtils.getProjectName(file);
 		List<String> readFile = WeiboFileUtils.readFile(file);
 		for (String line : readFile) {
-			String[] split = StringUtils.splitByWholeSeparator(line, null);
+			String[] split = StringUtils.splitByWholeSeparator(line, "\t");
 			if(split.length == 3){
 				new WeiboSearchTask(projectName, split[0], split[1], split[2]).run();
 			}else{
