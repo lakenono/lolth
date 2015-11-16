@@ -147,7 +147,7 @@ public class WeiboSearchFetch extends DistributedParser {
 		for (Element element : elements) {
 			String html = element.html();
 
-			WeiboBean bean = new WeiboBean(task.getProjectName());
+			WeiboBean bean = new WeiboBean();
 
 			// mid
 			String mid = StringUtils.substringAfter(element.attr("id"), "M_");
@@ -234,5 +234,12 @@ public class WeiboSearchFetch extends DistributedParser {
 			log.debug(bean.toString());
 		}
 		return weiboBeans;
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		while(true){
+		new WeiboSearchFetch().run();
+		Thread.sleep(15000);
+		}
 	}
 }

@@ -4,6 +4,7 @@ import lakenono.base.DistributedParser;
 import lakenono.base.Task;
 import lolthx.autohome.bbs.bean.AutoHomeBBSCommentBean;
 import lolthx.autohome.bbs.bean.AutoHomeBBSUserBean;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+@Slf4j
 public class AutoHomeBBSCommentFetch extends DistributedParser {
 
 	@Override
@@ -48,9 +50,9 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 				commentBean.setAuthorId(userBean.getId());
 
 				String id = StringUtils.substringBetween(task.getUrl(), "bbs/", ".html");
-				commentBean.setId(id + floor);
+				commentBean.setId(id);
 
-				String title = doc.select("div#maxwrap-maintopic span").last().text();
+				String title = doc.select("div#maxwrap-maintopic div#consnav span").last().text();
 				commentBean.setTitle(title);
 
 				commentBean.setProjectName(task.getProjectName());
@@ -63,8 +65,10 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 				userBean.saveOnNotExist();
 
 				commentBean.saveOnNotExist();
+				
 			} catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
+				log.error("handle autohome comment error : {}",e.getMessage(),e);
 				continue;
 			}
 
@@ -121,7 +125,7 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 	}
 
 	public static void main(String args[]) {
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 100000; i++) {
 			new AutoHomeBBSCommentFetch().run();
 		}
 	}

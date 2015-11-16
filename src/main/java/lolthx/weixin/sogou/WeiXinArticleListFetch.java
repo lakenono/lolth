@@ -1,6 +1,7 @@
 package lolthx.weixin.sogou;
 
 import java.util.Date;
+import java.util.Random;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
@@ -14,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 
 public class WeiXinArticleListFetch extends DistributedParser {
 
@@ -44,7 +46,10 @@ public class WeiXinArticleListFetch extends DistributedParser {
 				bean.setTitle(title);
 
 				// url
-				String url = element.select("div.txt-box h4 a").first().attr("href");
+				String url = "http://weixin.sogou.com" + element.select("div.txt-box h4 a").first().attr("href");
+				url = url.replace("&amp;", "&");
+				
+				bean.setId(url);
 				bean.setUrl(url);
 
 				// postTime
@@ -65,19 +70,29 @@ public class WeiXinArticleListFetch extends DistributedParser {
 				String authorid = element.select("a#weixin_account").first().attr("i");
 				bean.setAuthorid(authorid);
 
-				String id = StringUtils.substringBetween(url, "&sn=", "&3rd");
-				bean.setId(id);
-
 				bean.setKeyword(task.getExtra());
 				bean.setProjectName(task.getProjectName());
 				
-				//线程休眠2秒
-				Thread.sleep(2000);
+				//线程休眠30秒
+				Thread.sleep(30000);
 				
-				String cookieDomain = getCookieDomain();
-				String cookies = GlobalComponents.authService.getCookies(cookieDomain);
+				String SUV = "";
+				String SNUID = "";
+				String SUID = "";
+				String SSUID = "";
+				String abtestTime = String.valueOf(new Date().getTime()/1000) ;
+				
+				SUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+				SSUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+				for(int i  = 1 ; i <= 4 ; i++){
+					SUV = SUV + Integer.toHexString(new Random().nextInt());
+					SNUID = SNUID + Integer.toHexString(new Random().nextInt());
+				}
+				
+				String cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
 				
 				String texthtml = GlobalComponents.jsoupFetcher.fetch(url, cookies, "utf-8");
+				
 				Document textdoc = Jsoup.parse(texthtml);
 
 				String text = textdoc.text();
@@ -92,14 +107,32 @@ public class WeiXinArticleListFetch extends DistributedParser {
 		}
 	}
 	
+	
+
 	@Override
-	protected String getCookieDomain() {
-		return "weixin.sogou.com";
+	protected String fetch(Fetcher fetcher, String cookies, String charset, Task task) throws Exception {
+		String SUV = "";
+		String SNUID = "";
+		String SUID = "";
+		String SSUID = "";
+		String abtestTime = String.valueOf(new Date().getTime()/1000) ;
+		
+		SUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+		SSUID = "C50BE83D6A28920A00000000" + Integer.toHexString(new Random().nextInt());
+		for(int i  = 1 ; i <= 4 ; i++){
+			SUV = SUV + Integer.toHexString(new Random().nextInt());
+			SNUID = SNUID + Integer.toHexString(new Random().nextInt());
+		}
+		
+		cookies = "SUID=" + SUID + "; weixinIndexVisited=1; SNUID=" + SNUID + "; ABTEST=5|" + abtestTime +"|v1; IPLOC=CN1100; SUID=" + SSUID + "; SUV=" + SUV  + "; sct=3; wapsogou_qq_nickname=";
+		
+		return super.fetch(fetcher, cookies, charset, task);
 	}
 
-	
 	public static void main(String args[]) {
-		new WeiXinArticleListFetch().run();
+		for(int i = 1; i <= 5 ; i++){
+			new WeiXinArticleListFetch().run();
+		}
 	}
 	
 }

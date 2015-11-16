@@ -18,6 +18,7 @@ public class AutoHomeBBSCommentBean extends DBBean {
 	private String id;
 
 	// 楼层
+	@DBConstraintPK
 	private String floor;
 
 	// text
@@ -39,10 +40,8 @@ public class AutoHomeBBSCommentBean extends DBBean {
 	// 帖子名称
 	private String title;
 
-	@DBConstraintPK
 	private String forumId;
 
-	@DBConstraintPK
 	@DBField(type = "varchar(32)")
 	private String projectName;
 

@@ -44,7 +44,7 @@ public class WeiboUserFetch extends DistributedParser{
 
 			String[] fields = StringUtils.splitByWholeSeparator(text, "\n<br>");
 			if (fields != null) {
-				WeiboUserBean user = new WeiboUserBean(task.getProjectName());
+				WeiboUserBean user = new WeiboUserBean();
 
 				String[] ids = StringUtils.split(task.getExtra(), ',');
 				if(ids.length>2){
@@ -130,5 +130,10 @@ public class WeiboUserFetch extends DistributedParser{
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
-
+	public static void main(String[] args) throws InterruptedException {
+		while(true){
+		new WeiboUserFetch().run();
+		Thread.sleep(15000);
+		}
+	}
 }

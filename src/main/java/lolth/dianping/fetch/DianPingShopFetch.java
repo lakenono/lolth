@@ -23,15 +23,20 @@ public class DianPingShopFetch implements PageFetchHandler
 	public static void main(String[] args) throws Exception
 	{
 		//北京=2,成都=8,广州=4,郑州=160,西安=17,沈阳 =18
-		int[] areas = {2,8,4,160,17,18};
+		int[] areas = {2};
+		String [] keywords = {"旅游","郊游","拓展训练","亲子游","农家乐","休闲游","农业观光游","度假地产","远郊地产","度假楼盘","远郊楼盘","度假小区","远郊小区","远郊地区","远郊区域","房山"};
 		for(int a:areas){
 			
-			new DianPingShopFetch("酸菜鱼", a).run();
-			log.info("酸菜鱼 at {} finish !" ,a);
-			
-			new DianPingShopFetch("火锅", a).run();
-			
-			log.info("火锅 at {} finish !" ,a);
+//			new DianPingShopFetch("酸菜鱼", a).run();
+//			log.info("酸菜鱼 at {} finish !" ,a);
+//			
+//			new DianPingShopFetch("火锅", a).run();
+//			
+//			log.info("火锅 at {} finish !" ,a);
+			for(String k :keywords){
+				new DianPingShopFetch(k, a).run();
+				log.info("{} at {} finish !" ,k,a);
+			}
 		}
 		log.info("all finish !");
 	}
@@ -48,7 +53,7 @@ public class DianPingShopFetch implements PageFetchHandler
 
 		for (int i = 0; i < maxPage; i++)
 		{
-			String taskname = MessageFormat.format("dianping-shop-{0}-{1}-[{2}/{3}]", keyword, cityId, i + 1, maxPage);
+			String taskname = MessageFormat.format("dianping-shop—zhongliang-{0}-{1}-[{2}/{3}]", keyword, cityId, i + 1, maxPage);
 
 			if (!GlobalComponents.taskService.isCompleted(taskname))
 			{
@@ -128,16 +133,33 @@ public class DianPingShopFetch implements PageFetchHandler
 	@Override
 	public int getMaxPage() throws IOException, InterruptedException
 	{
-		String url = this.buildUrl(0);
-		Document document = GlobalComponents.fetcher.document(url);
-		String page = document.select("div.page a.PageLink").last().text();
-		return Integer.parseInt(page);
+		try {
+			String url = this.buildUrl(0);
+			Document document = GlobalComponents.fetcher.document(url);
+			Elements pages = document.select("div.page a.PageLink");
+			if (pages.size() > 0) {
+				try {
+					String page = pages.last().text();
+					return Integer.parseInt(page);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			Elements elements = document.select("div#shop-all-list.shop-list.J_shop-list.shop-all-list ul li");
+			if (elements.size() > 0) {
+				return 1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override
 	public String buildUrl(int pageNum) throws UnsupportedEncodingException
 	{
 		// o10代表按照评论排序
-		return MessageFormat.format("http://www.dianping.com/search/keyword/{0}/0_{1}/o10p{2}", this.cityId, URLEncoder.encode(this.keyword, "UTF-8"), pageNum + 1);
+		return MessageFormat.format("http://www.dianping.com/search/keyword/{0}/0_{1}/r9157o10p{2}", this.cityId, URLEncoder.encode(this.keyword, "UTF-8"), pageNum + 1);
 	}
 }

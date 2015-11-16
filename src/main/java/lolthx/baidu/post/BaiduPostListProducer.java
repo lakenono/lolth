@@ -33,17 +33,19 @@ public class BaiduPostListProducer extends Producer {
 	}
 
 	@Override
-	protected int parse() throws Exception {
-		String html = GlobalComponents.jsoupFetcher.fetch(buildUrl(1));
+	protected int parse() throws Exception {	
+		String html = GlobalComponents.seleniumFetcher.fetch(buildUrl(1));
+		
 		Document doc = Jsoup.parse(html);
-		Elements div = doc.select("div.forum_foot div.th_footer_2 div.th_footer_bright div.th_footer_l");
-		if (div.size() == 0) {
-			return 0;
-		}
+		String pageSize = "0";
+		
+		Elements div = doc.select("div.th_footer_l");
 
-		String pageSize = div.first().text();
+		pageSize = div.first().text();
 		pageSize = StringUtils.substringBetween(pageSize, "共有主题数", "个");
-
+		
+		System.out.println("page  " + pageSize);
+			
 		if (!StringUtils.isNumeric(pageSize)) {
 			return 0;
 		}
@@ -57,6 +59,7 @@ public class BaiduPostListProducer extends Producer {
 
 	@Override
 	protected String buildUrl(int pageNum) throws Exception {
+		System.out.println(" keyword " + keyword + "  url :" +  MessageFormat.format(BAIDU_POST_SEARCH_URL, URLEncoder.encode(keyword, "utf-8"), String.valueOf((pageNum - 1) * PAGE_SIZE)));
 		return MessageFormat.format(BAIDU_POST_SEARCH_URL, URLEncoder.encode(keyword, "utf-8"), String.valueOf((pageNum - 1) * PAGE_SIZE));
 	}
 
@@ -67,13 +70,19 @@ public class BaiduPostListProducer extends Producer {
 		return buildTask;
 	}
 	
-	public static void main(String args[]) throws Exception{
-		String projectName = "tieba test";
-		String[] keywords = { "电动汽车"};
+	public static void main(String args[]) {
+		String projectName = "中粮生态谷大数据调研-百度贴吧-20151028";
+		String[] keywords = {
+				"旅游",	"旅行",	"生态",	"郊游",	"房产",	"买房",	"历史",	"中国历史",	"科技",	"农业",	"农业科技",	"展览馆",	"郊区",	"琉璃河",	"房山",	"北京",	"教育",	"度假",	"科普"
+		};
+		
 		for (int i = 0; i < keywords.length ; i++) {
-			new BaiduPostListProducer(projectName,keywords[i]).run();
+			System.out.println("贴吧：" + keywords[i]);
+			new BaiduPostListProducer(projectName, keywords[i]).run();
 		}
-			
+		
 	}
+	
+	
 	
 }

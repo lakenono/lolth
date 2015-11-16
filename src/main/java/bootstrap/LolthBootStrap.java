@@ -14,8 +14,14 @@ import lolthx.autohome.k.AutoHomeWordOfMouthFetch;
 import lolthx.baidu.news.BaiduNewsListFetch;
 import lolthx.baidu.news.BaiduNewsNumIteratorFetch;
 import lolthx.baidu.news.BaiduNewsNumListFetch;
+import lolthx.baidu.post.BaiduPostDetailByKwFirstFetch;
+import lolthx.baidu.post.BaiduPostDetailByKwSecondFetch;
 import lolthx.baidu.post.BaiduPostDetailFetch;
 import lolthx.baidu.post.BaiduPostListFetch;
+import lolthx.baidu.visualize.BaiduNewsVisListFetch;
+import lolthx.baidu.visualize.BaiduWebpageVisFirstFetch;
+import lolthx.baidu.visualize.BaiduWebpageVisListFetch;
+import lolthx.baidu.visualize.BaiduWebpageVisSecondFetch;
 import lolthx.baidu.webpage.BaiduSpotsListFetch;
 import lolthx.baidu.webpage.BaiduWebSiteFetch;
 import lolthx.baidu.webpage.BaiduWebpageListFetch;
@@ -28,7 +34,7 @@ import lolthx.bitauto.k.BitautoWordOfMouthFetch;
 import lolthx.pacuto.bbs.PacutoBBSListFetch;
 import lolthx.pacuto.k.PacutoWordOfMouthListFetch;
 import lolthx.weibo.fetch.WeiboFansNumFetch;
-import lolthx.weibo.fetch.WeiboMainPageFetch;
+import lolthx.weibo.fetch.WeiboSearchFetch;
 import lolthx.weibo.fetch.WeiboUserFetch;
 import lolthx.weibo.fetch.WeiboUserTagFetch;
 import lolthx.weixin.sogou.WeiXinArticleListFetch;
@@ -36,6 +42,13 @@ import lolthx.weixin.sogou.WeiXinUserArtListFetch;
 import lolthx.xcar.bbs.XCarBBSListFetch;
 import lolthx.xcar.k.XCarWordOfMouthListFetch;
 import lolthx.yhd.fetch.YHDGoodsFetch;
+import lolthx.yoka.bbs.YokaBBSComment;
+import lolthx.yoka.bbs.YokaBBSDetail;
+import lolthx.yoka.bbs.YokaBBSListResolveFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticDetailFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticListFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticResolveFetch;
+import lolthx.yoka.cosmetics.YokaCosmeticUserFetch;
 import lombok.extern.slf4j.Slf4j;
 import bootstrap.bean.Lolth;
 import bootstrap.bean.LolthSolider;
@@ -164,14 +177,16 @@ public class LolthBootStrap {
 		
 		
 		//微信
-		lolthBootStrap.addLolthSolider(new WeiXinArticleListFetch());
-		lolthBootStrap.addLolthSolider(new WeiXinUserArtListFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new WeiXinArticleListFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new WeiXinUserArtListFetch());
 		
 		//百度新闻
 		lolthBootStrap.addLolthSolider(new BaiduNewsListFetch());
 		//百度贴吧
 		lolthBootStrap.addLolthSolider(new BaiduPostListFetch());
 		lolthBootStrap.addLolthSolider(new BaiduPostDetailFetch());
+		lolthBootStrap.addLolthSolider(new BaiduPostDetailByKwFirstFetch());
+		lolthBootStrap.addLolthSolider(new BaiduPostDetailByKwSecondFetch());
 		//百度知道
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoListFetch());
 		lolthBootStrap.addLolthSolider(new BaiduZhidaoDetailFetch());
@@ -182,13 +197,26 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new BaiduWebSiteFetch());//处理城市主词汇方法
 		lolthBootStrap.addLolthSolider(new BaiduNewsNumListFetch());//搜索百度新闻number
 		lolthBootStrap.addLolthSolider(new BaiduNewsNumIteratorFetch());//处理百度新闻主词汇
+		//百度 国家形象 百度网页 百度新闻 内容爬取
+		lolthBootStrap.addLolthSolider(new BaiduNewsVisListFetch());
+		lolthBootStrap.addLolthSolider(new BaiduWebpageVisFirstFetch());
+		lolthBootStrap.addLolthSolider(new BaiduWebpageVisSecondFetch());
+		lolthBootStrap.addLolthSolider(new BaiduWebpageVisListFetch());
+		
 		//微博 国家形象
-		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboMainPageFetch());
+		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboSearchFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboFansNumFetch());
 		lolthBootStrap.addLolthSolider(15, TimeUnit.SECONDS,new WeiboUserTagFetch());
 		
-		
+		//YOKA
+		lolthBootStrap.addLolthSolider(new YokaBBSListResolveFetch());
+		lolthBootStrap.addLolthSolider(new YokaBBSDetail());
+		lolthBootStrap.addLolthSolider(new YokaBBSComment());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticResolveFetch());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticListFetch());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticDetailFetch());
+		lolthBootStrap.addLolthSolider(new YokaCosmeticUserFetch());
 		
 		
 	}
