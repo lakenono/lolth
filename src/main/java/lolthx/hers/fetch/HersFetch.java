@@ -39,6 +39,7 @@ public class HersFetch extends DistributedPageParser {
 		String page = select.first().text();
 		if(!StringUtils.isBlank(page)){
 			page = StringUtils.substringBetween(page, "/", "页").trim();
+			task.setExtra(tmps[0]);
 			return Integer.parseInt(page) - 1;
 		}else{
 		return 0;
