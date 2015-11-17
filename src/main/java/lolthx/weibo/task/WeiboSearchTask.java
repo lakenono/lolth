@@ -21,8 +21,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 /**
- * 微博搜索任务
- * 注意：启动任务的时候需要根据projectName创建表，projectName为英文
+ * 微博搜索任务 注意：启动任务的时候需要根据projectName创建表，projectName为英文
+ * 
  * @author yanghp
  *
  */
@@ -39,21 +39,24 @@ public class WeiboSearchTask {
 	private String endTime;// 结束时间
 
 	// private int sleep = 15000;// 休眠15秒
+	
+	public WeiboSearchTask(){
+		
+	}
 
-	public WeiboSearchTask(String projectName, String keyword)
-			throws ParseException {
+	public WeiboSearchTask(String projectName, String keyword) throws ParseException {
 		this(projectName, keyword, "", "");
 	}
 
-	public WeiboSearchTask(String projectName, String keyword,
-			String startTime, String endTime) throws ParseException {
+	public WeiboSearchTask(String projectName, String keyword, String startTime, String endTime) throws ParseException {
 		this.keyword = keyword;
 		this.projectName = projectName;
 		handleTime(startTime, endTime);
+
+		log.debug("keyword {} , startTime : {} | endTime : {} ", keyword, this.startTime, this.endTime);
 	}
 
-	private void handleTime(String startTime, String endTime)
-			throws ParseException {
+	private void handleTime(String startTime, String endTime) throws ParseException {
 		Date startDate, endDate;
 
 		if (StringUtils.isNotBlank(endTime)) {
@@ -63,8 +66,7 @@ public class WeiboSearchTask {
 		}
 
 		if (StringUtils.isNotBlank(startTime)) {
-			startDate = DateUtils.parseDate(startTime,
-					new String[] { "yyyyMMdd" });
+			startDate = DateUtils.parseDate(startTime, new String[] { "yyyyMMdd" });
 		} else {
 			startDate = DateUtils.addDays(endDate, -1);
 
@@ -72,23 +74,17 @@ public class WeiboSearchTask {
 
 		this.startTime = DateFormatUtils.format(startDate, "yyyyMMdd");
 		this.endTime = DateFormatUtils.format(endDate, "yyyyMMdd");
-
-		log.debug("startTime : {} | endTime : {} ", this.startTime,
-				this.endTime);
 	}
 
 	private String buildUrl(int pageNum) {
-		return MessageFormat.format(CN_WEIBO_SEARCH_URL_TEMPLATE, keyword,
-				startTime, endTime, String.valueOf(pageNum));
+		return MessageFormat.format(CN_WEIBO_SEARCH_URL_TEMPLATE, keyword, startTime, endTime, String.valueOf(pageNum));
 	}
 
 	public void run() throws TException, InterruptedException {
 
-		log.info("{} sina_weibo search task startTime {} - {}", this.keyword,
-				this.startTime, this.endTime);
+		log.info("{} sina_weibo search task startTime {} - {}", this.keyword, this.startTime, this.endTime);
 		int pagenum = getMaxPage();
-		log.info("{} sina_weibo search Get max page : {}", this.keyword,
-				pagenum);
+		log.info("{} sina_weibo search Get max page : {}", this.keyword, pagenum);
 		// Thread.sleep(sleep);
 		// 发送第两个任务
 		for (int i = 1; i <= pagenum; i++) {
@@ -107,7 +103,7 @@ public class WeiboSearchTask {
 		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
 		// String cookies =
 		// "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
-		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies,"");
+		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies, "");
 		Document doc = Jsoup.parse(html);
 
 		if (doc.select("div#pagelist").size() == 0) {
@@ -133,10 +129,10 @@ public class WeiboSearchTask {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String dir = Class.class.getResource("/")+"weiboSearch";
+		String dir = Class.class.getResource("/") + "weiboSearch";
 		dir = StringUtils.substringAfter(dir, ":");
 		String file = WeiboFileUtils.rename2Temp(dir);
-		if(file == null){
+		if (file == null) {
 			log.info("no task file,Program exits!!!");
 			return;
 		}
@@ -145,9 +141,9 @@ public class WeiboSearchTask {
 		List<String> readFile = WeiboFileUtils.readFile(file);
 		for (String line : readFile) {
 			String[] split = StringUtils.splitByWholeSeparator(line, "\t");
-			if(split.length == 3){
+			if (split.length == 3) {
 				new WeiboSearchTask(projectName, split[0], split[1], split[2]).run();
-			}else{
+			} else {
 				new WeiboSearchTask(projectName, split[0]).run();
 			}
 			Thread.sleep(15000);
