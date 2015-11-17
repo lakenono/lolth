@@ -10,7 +10,7 @@ import lakenono.base.Task;
  *
  */
 public class HersPageListTask extends DistributedParser {
-	public HersSearchTask hers = new HersSearchTask("cehi", "面膜");
+	public HersSearchTask hers = new HersSearchTask("华扬联众演讲数据-hers-20151116", "面膜");
 	
 	@Override
 	public String getQueueName() {
@@ -20,6 +20,6 @@ public class HersPageListTask extends DistributedParser {
 	@Override
 	public void parse(String result, Task task) throws Exception {
 		Document doc = Jsoup.parse(result);
-		hers.sendHersBbs(doc);
+		hers.sendHersBbs(doc,task.getExtra());
 	}
 }
