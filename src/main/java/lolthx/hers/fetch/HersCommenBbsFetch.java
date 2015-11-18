@@ -20,6 +20,6 @@ public class HersCommenBbsFetch extends DistributedParser {
 			return;
 		}
 		Document doc = Jsoup.parse(result);
-		hers.extactComment(doc, task);
+		hers.extactComment(doc, task,task.getExtra());
 	}
 }

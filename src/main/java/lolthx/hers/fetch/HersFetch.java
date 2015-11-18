@@ -28,7 +28,9 @@ public class HersFetch extends DistributedPageParser {
 
 	@Override
 	public int getMaxPage(String result, Task task) throws Exception {
-		id = task.getExtra();
+		String tmp = task.getExtra();
+		String [] tmps = tmp.split(":");
+		id=tmps[0];
 		Document doc = Jsoup.parse(result);
 		Elements select = doc.select("label > span[title]");
 		if(select.isEmpty()){
@@ -37,6 +39,7 @@ public class HersFetch extends DistributedPageParser {
 		String page = select.first().text();
 		if(!StringUtils.isBlank(page)){
 			page = StringUtils.substringBetween(page, "/", "页").trim();
+			task.setExtra(tmps[0]);
 			return Integer.parseInt(page) - 1;
 		}else{
 		return 0;
@@ -55,15 +58,18 @@ public class HersFetch extends DistributedPageParser {
 			return;
 		}
 		Document doc = Jsoup.parse(result);
+		String tmp = task.getExtra();
+		String [] tmps = tmp.split(":");
+		id=tmps[0];
 		// 抽取主贴
-		extrctMainText(doc, task);
+		extrctMainText(doc, task,tmps[0],tmps[1]);
 		// 抽取评论
-		extactComment(doc, task);
+		extactComment(doc, task,tmps[0]);
 		//抽取微博
-		extactWeibo(doc, task);
+		extactWeibo(doc, task,tmps[0],tmps[1]);
 	}
 
-	private void extactWeibo(Document doc, Task task) throws IllegalAccessException, SQLException {
+	private void extactWeibo(Document doc, Task task,String id,String keyword) throws IllegalAccessException, SQLException {
 		Elements wb = doc.select("div.wc_list > div");
 		if(wb.isEmpty()){
 			return;
@@ -75,7 +81,8 @@ public class HersFetch extends DistributedPageParser {
 			String content = element.select("div.content_txt").text();
 			String weiboName =  element.select("a.user_name").text();
 			String weiboUrl = element.select("a.user_name").attr("href");
-			weiboBean.setId(task.getExtra());
+//			weiboBean.setId(task.getExtra());
+			weiboBean.setId(id);
 			weiboBean.setContent(content);
 			weiboBean.setTime(time);
 			weiboBean.setWeiboName(weiboName);
@@ -102,7 +109,7 @@ public class HersFetch extends DistributedPageParser {
 		return task;
 	}
 
-	public void extactComment(Document doc, Task task) throws IllegalAccessException, SQLException {
+	public void extactComment(Document doc, Task task,String id) throws IllegalAccessException, SQLException {
 		Elements elements = doc.select("div[id^=post_] > table");
 		if (elements.size() < 1) {
 			return;
@@ -125,7 +132,8 @@ public class HersFetch extends DistributedPageParser {
 				 onlineTime = StringUtils.substringBetween(text, "间", "小").trim();
 			}
 			HersBbsComment bean = new HersBbsComment();
-			bean.setId(task.getExtra());
+//			bean.setId(task.getExtra());
+			bean.setId(id);
 			bean.setArea(area);
 			bean.setComment(comment);
 			bean.setLastOnline(lastOnline);
@@ -142,7 +150,7 @@ public class HersFetch extends DistributedPageParser {
 		beans.clear();
 	}
 
-	private void extrctMainText(Document doc, Task task) throws Exception {
+	private void extrctMainText(Document doc, Task task,String id,String keyword) throws Exception {
 		// 标题
 		String title = doc.select("h1 > a#thread_subject").text();
 		// 查看数 回复数
@@ -166,7 +174,11 @@ public class HersFetch extends DistributedPageParser {
 		String time = doc.select("em[id]").first().text();
 		time = StringUtils.remove(time, "发表于").trim();
 		HersBbsMainText hers = new HersBbsMainText();
-		hers.setId(task.getExtra());
+//		hers.setId(task.getExtra());
+		hers.setId(id);
+		hers.setUrl(task.getUrl());
+		hers.setKeyword(keyword);
+		hers.setProjectName(task.getProjectName());
 		hers.setReaders(readers);
 		hers.setReplies(replies);
 		hers.setStore(store);
@@ -175,5 +187,8 @@ public class HersFetch extends DistributedPageParser {
 		hers.setTime(time);
 		hers.setTitle(title);
 		hers.saveOnNotExist();
+	}
+	public static void main(String[] args) {
+		new HersFetch().run();
 	}
 }

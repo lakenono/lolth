@@ -31,6 +31,9 @@ import lolthx.baidu.zhidao.BaiduZhidaoUserFetch;
 import lolthx.bitauto.bbs.BitautoBBSCommentFetch;
 import lolthx.bitauto.bbs.BitautoBBSListFetch;
 import lolthx.bitauto.k.BitautoWordOfMouthFetch;
+import lolthx.douban.search.DoubanSearchCommentFetch;
+import lolthx.douban.search.DoubanSearchDetailFetch;
+import lolthx.douban.search.DoubanSearchResloveFetch;
 import lolthx.pacuto.bbs.PacutoBBSListFetch;
 import lolthx.pacuto.k.PacutoWordOfMouthListFetch;
 import lolthx.weibo.fetch.WeiboFansNumFetch;
@@ -218,6 +221,10 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new YokaCosmeticDetailFetch());
 		lolthBootStrap.addLolthSolider(new YokaCosmeticUserFetch());
 		
+		//豆瓣
+		lolthBootStrap.addLolthSolider(new DoubanSearchResloveFetch());
+		lolthBootStrap.addLolthSolider(new DoubanSearchDetailFetch());
+		lolthBootStrap.addLolthSolider(new DoubanSearchCommentFetch());
 		
 	}
 	// ---------------------------------------------------------------------------------------------------------------------------------

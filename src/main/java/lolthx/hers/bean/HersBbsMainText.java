@@ -14,6 +14,7 @@ public class HersBbsMainText extends DBBean{
 	@DBConstraintPK
 	@DBField(type = "varchar(32)")
 	private String id;
+	private String url;
 	private String title;
 	@DBField(type = "text")
 	private String text;
@@ -25,6 +26,13 @@ public class HersBbsMainText extends DBBean{
 	private String replies;
 	@DBField(type = "varchar(4)")
 	private String store;
+	
+	@DBField(type = "varchar(32)")
+	private String keyword;
+
+	@DBConstraintPK
+	@DBField(type = "varchar(32)")
+	private String projectName;
 	
 	public static void main(String[] args) throws SQLException {
 		DBBean.createTable(HersBbsMainText.class);
