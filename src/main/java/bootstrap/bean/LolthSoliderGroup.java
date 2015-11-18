@@ -29,6 +29,11 @@ public class LolthSoliderGroup extends Lolth {
 	public void run() {
 		for (int i = 0; i < soldiers.length; i++) {
 			soldiers[i].run();
+			try {
+				Thread.sleep(timeUnit.toMillis(delay));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
