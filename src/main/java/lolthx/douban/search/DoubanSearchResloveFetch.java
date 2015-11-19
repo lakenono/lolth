@@ -82,6 +82,11 @@ public class DoubanSearchResloveFetch extends DistributedParser{
 		return beginDate.before(src) && endDate.after(src);
 	}
 	
+	@Override
+	protected String getCookieDomain() {
+		return "douban.com";
+	}
+	
 	public static void main(String[] args){
 		for(int i = 1 ;i <= 1;i++){
 			new DoubanSearchResloveFetch().run();

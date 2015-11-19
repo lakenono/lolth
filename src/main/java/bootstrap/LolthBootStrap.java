@@ -222,9 +222,9 @@ public class LolthBootStrap {
 		lolthBootStrap.addLolthSolider(new YokaCosmeticUserFetch());
 		
 		//豆瓣
-		lolthBootStrap.addLolthSolider(new DoubanSearchResloveFetch());
-		lolthBootStrap.addLolthSolider(new DoubanSearchDetailFetch());
-		lolthBootStrap.addLolthSolider(new DoubanSearchCommentFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new DoubanSearchResloveFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new DoubanSearchDetailFetch());
+		lolthBootStrap.addLolthSolider(30, TimeUnit.SECONDS,new DoubanSearchCommentFetch());
 		
 	}
 	// ---------------------------------------------------------------------------------------------------------------------------------

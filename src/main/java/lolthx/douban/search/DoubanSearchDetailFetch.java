@@ -68,6 +68,11 @@ public class DoubanSearchDetailFetch extends DistributedParser{
 
 	}
 	
+	@Override
+	protected String getCookieDomain() {
+		return "douban.com";
+	}
+	
 	public static void main(String[] args){
 		for(int i = 1 ;i <= 1;i++){
 			new DoubanSearchDetailFetch().run();
