@@ -13,25 +13,30 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 @Slf4j
-public class CommentTask extends FetchTaskProducer{
+public class CommentTask extends FetchTaskProducer {
 
-	private static final String WEIBO_TEXT_COMMENT_URL = "http://weibo.com/aj/v6/comment/big?ajwvr=6&id=3841253424934874&max_id=3843055931203251&page={0}&__rnd=";
-	
+	private static final String WEIBO_TEXT_COMMENT_URL = "http://weibo.com/aj/v6/comment/big?ajwvr=6&id={0}{1}{2}&__rnd=";
+
 	public static final String WEIBO_TEXT_COMMENT = "weibo_text_comment";
-	
-	public static final String COOKIS = "ALC=ac%3D0%26bt%3D1432175160%26cv%3D5.0%26et%3D1463711160%26uid%3D5613102598%26vf%3D0%26vt%3D0%26es%3Dac6db93d92b98ff9afe4ccfce286257b;ALF=1463711160;ALF=1463711160;LT=1432175160;SUB=_2A254WTJoDeTxGeNI6lEQ8CzJwjSIHXVbLySgrDV_PUNbuNBeLUOgkW8znUqNSz6aS_e14hSW-Kf5RYQrsw..;SUB=_2A254WTJoDeTxGeNI6lEQ8CzJwjSIHXVbLySgrDV8PUNbuNANLVnnkW8n6Aw6_KfUDLhMlR0IMpyqWgaLUg..;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5F6UR9bw47v.XEvjC.OYLa;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5F6UR9bw47v.XEvjC.OYLa5JpX5K2t;SUE=es%3D597617fec61f527f0f0411e940ae11f3%26ev%3Dv1%26es2%3D561595029705519946719be30fb5923b%26rs0%3DBL26fJi%252BKYekPOpw21AbBmLpU5cKgir1%252B8FgmNnbR15snrTEl7amLPZ9sUmBirmpM9MxmssV%252Fzct6XeRubnm52HlSf65%252BglhfjVYmQKsdscss7Ai%252B1a9fW2snpqNwwnT7JC2QiB%252BVUa2UZue65crjjrDCSKUiLb593p60LaUvgs%253D%26rv%3D0;SUE=es%3D49ab121bd4b0d782b1dcd78806dbfe3a%26ev%3Dv1%26es2%3D0ce9186f57c893f6e9d77b84ff33efed%26rs0%3DWLibBTqgIP%252B2XBo0fKwHHcfU9R9X00BCISSEoMnamOGeOABiWTIiUX13GwNUkrfIU4kqzq0proiVL%252Batm0dGOgzxb40DyO7mDPd3vDvWwKk0DEPWBVg8OiQNma%252BAQ8ivzWMCrQeODNOzIU1HobqwtUZWZzBPmRqUO56Ph2hN6Rk%253D%26rv%3D0;SUHB=00xpCXbKu0KlRg;SUP=cv%3D1%26bt%3D1432175160%26et%3D1432261560%26d%3D40c3%26i%3Dac70%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26lt%3D1%26uid%3D5613102598%26user%3D15120039685%26ag%3D1%26name%3D15120039685%26nick%3D%25E5%25B0%258F%25E9%25B9%258F%25E5%25B0%258F%25E8%25B4%25BA%26sex%3D1%26ps%3D0%26email%3D%26dob%3D%26ln%3D15120039685%26os%3D%26fmp%3D%26lcp%3D;SUP=cv%3D1%26bt%3D1432175160%26et%3D1432261560%26d%3Dc909%26i%3D990d%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26uid%3D5613102598%26name%3D15120039685%26nick%3D%25E5%25B0%258F%25E9%25B9%258F%25E5%25B0%258F%25E8%25B4%25BA%26fmp%3D%26lcp%3D;SUS=SID-5613102598-1432175160-GZ-2u1ol-7d5033ca0833de8b1a5acdd95411ac70;SUS=SID-5613102598-1432175160-JA-820y4-e5365f11466818db4229bde471dbac70;YF-Ugrow-G0=69bfe9ce876ec10bd6de7dcebfb6883e;YF-V5-G0=4955da6a9f369238c2a1bc4f70789871;sso_info=v02m6alo5qztKWRk5SlkKOApY6EmKWRk6SlkKOkpY6EmKWRk5SlkKOApY6EmKWRk6ClkKOQpZCkhKadlqWkj5OUtoyTjLGMg4i1jpOgwA==;tgc=TGT-NTYxMzEwMjU5OA==-1432175160-gz-8CC87F81F25B51AF7742DEAFD9795662";
-	
-	private static String subject = "cmcc";
-	
+
+	public static final String COOKIS = "SINAGLOBAL=3323087713215.5.1447989241864; UOR=hexiaoqiao.sinaapp.com,widget.weibo.com,ent.ifeng.com; YF-Page-G0=602506db2d7072c030a3784f887e1d83; _s_tentry=-; Apache=8965875681024.045.1448500392432; ULV=1448500392519:6:6:5:8965875681024.045.1448500392432:1448446090747; YF-V5-G0=9717632f62066ddd544bf04f733ad50a; YF-Ugrow-G0=5b31332af1361e117ff29bb32e4d8439; WBtopGlobal_register_version=0b6ec8a06b61dd96; SUS=SID-2126405771-1448503147-GZ-kh2d9-0c387eea25d8c98aaa649bae08c9ac70; SUE=es%3D16953a1d24df6b98bcace54b401fc06e%26ev%3Dv1%26es2%3D6eece7ca5d5a65fe927c36e988b54271%26rs0%3D0gCWT%252BnMasScJPFFBBR%252F8y2w%252BdnzLwrXfD0j68t9GnIPA6hf3Ni2VPClSiL9L1i7ArI4j%252BFVLxYMlMTe8YO1fZVUYz4QposILdtco59v2s4F7d9clYMV%252Ba%252FAzFfONUQgIFvkLCl0HhnkuS6glGw5683JNC2iyV1BZ3HR%252FkcTLs8%253D%26rv%3D0; SUP=cv%3D1%26bt%3D1448503147%26et%3D1448589547%26d%3Dc909%26i%3Dac70%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D0%26st%3D0%26uid%3D2126405771%26name%3Dgengbushuang%2540163.com%26nick%3D%25E7%2594%25A8%25E6%2588%25B72126405771%26fmp%3D%26lcp%3D2015-02-19%252023%253A51%253A10; SUB=_2A257Uhc7DeTxGeRP6VQV8CvLzD2IHXVYJg_zrDV8PUNbuNBeLUbAkW8cRSoBZiGPf3cTX7q6Jmslj8LRWg..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WFA8sHHd-q.5Iqfxrnyskqo5JpX5K2t; SUHB=0laUGB3PsNxLsJ; ALF=1449107963; SSOLoginState=1448503147; un=gengbushuang@163.com";
+
+	private String subject;
+	private String id;
+	private String max_id = "";
+
 	HttpFetcher fetcher = new HttpClientFetcher();
-	
-	public CommentTask() {
+
+	public CommentTask(String id, String subject) {
 		super(WEIBO_TEXT_COMMENT);
+		this.id = id;
+		this.subject = subject;
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void run() {
 		log.info("FetchTask Producer start ...");
 		int pages = getMaxPage();
@@ -59,9 +64,9 @@ public class CommentTask extends FetchTaskProducer{
 		} catch (InterruptedException e) {
 		}
 	}
-	
+
 	public int getMaxPage() {
-		String url = buildUrl(1)+System.currentTimeMillis();
+		String url = buildUrl(0) + System.currentTimeMillis();
 		HttpRequest req = new HttpRequest();
 		req.setNeedContent(true);
 		req.setUrl(url);
@@ -71,32 +76,51 @@ public class CommentTask extends FetchTaskProducer{
 		try {
 			json = new String(fetcher.run(req).getContent());
 		} catch (Exception e) {
-			log.error("解析最大页数出错了！",e);
-			return 1;
+			log.error("解析最大页数出错了！", e);
+			return 0;
 		}
 
+		try {
+			String page = parseJson(json);
+			if (StringUtils.isNumeric(page)) {
+				return Integer.parseInt(page);
+			}
+		} catch (Exception e) {
+			log.error("解析json出错了！", e);
+		}
+
+		return 0;
+	}
+
+	private String parseJson(String json) {
+		String substringBetween = StringUtils.substringBetween(json, "&max_id=", "&page=1");
+		if(StringUtils.isNumeric(substringBetween)){
+			max_id = "&max_id="+substringBetween;
+		}else{
+			max_id="";
+		}
 		Object obj = JSON.parseObject(json).getJSONObject("data").getJSONObject("page").get("totalpage");
 		String page = obj.toString();
-		if(StringUtils.isNumeric(page)){
-			return Integer.parseInt(page);
-		}
-		return 1;
+		return page;
 	}
-	
+
 	public String buildUrl(int page) {
-		return MessageFormat.format(WEIBO_TEXT_COMMENT_URL, page);
+
+		return MessageFormat.format(WEIBO_TEXT_COMMENT_URL, id, max_id, (page != 0 ? "&page=" + page : ""));
 	}
-	
-	public FetchTask buildTask(String url){
+
+	public FetchTask buildTask(String url) {
 		FetchTask task = new FetchTask();
 		task.setName(subject);
 		task.setBatchName(WEIBO_TEXT_COMMENT);
 		task.setUrl(url);
+		task.setExtra(id);
 		return task;
 	}
-	
+
 	public static void main(String[] args) {
-		new CommentTask().run();
+		String id = "3909481824199797";
+		new CommentTask(id, "测试").run();
 	}
 
 }
