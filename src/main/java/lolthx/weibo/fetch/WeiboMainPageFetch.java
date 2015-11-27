@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import lakenono.base.DistributedParser;
 import lakenono.base.Task;
+import lolth.weibo.com.fetch.comment.CommentTask;
 import lolthx.weibo.utils.WeiboContentSpliter;
 import lolthx.weibo.utils.WeiboIdUtils;
 import lolthx.weibo.utils.WeiboTimeUtils;
@@ -68,18 +69,22 @@ public class WeiboMainPageFetch extends DistributedParser {
 				b.setProjectName(task.getProjectName());
 				b.setKeyword(task.getExtra());
 				b.saveOnNotExist();
+				///评论抓取推送
+				try {
+					new CommentTask(b.getId(), b.getProjectName()).run();
+				} catch (Exception e) {
+					log.error("推送评论爬取出错了！", e);
+				}
 			} catch (Exception e) {
 				log.error("{} persist error ", b, e);
 			}
 		}
 		if (isMQ) {
-			weibo.bulidWeiboUserTask(task.getExtra(), userUrl,
-					task.getProjectName());
+			weibo.bulidWeiboUserTask(task.getExtra(), userUrl, task.getProjectName());
 		}
 	}
 
-	public List<WeiboBean> parseBean(Document document, Task task)
-			throws IOException, ParseException {
+	public List<WeiboBean> parseBean(Document document, Task task) throws IOException, ParseException {
 		List<WeiboBean> weiboBeans = new LinkedList<WeiboBean>();
 
 		String username = "";
@@ -93,8 +98,7 @@ public class WeiboMainPageFetch extends DistributedParser {
 		Elements elements = document.select("div.c[id]");
 
 		LocalDateTime now = LocalDateTime.now();
-		String fetchTime = now.format(DateTimeFormatter
-				.ofPattern("yyyy/MM/dd HH:mm"));
+		String fetchTime = now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
 		for (Element element : elements) {
 			String html = element.html();
@@ -127,10 +131,8 @@ public class WeiboMainPageFetch extends DistributedParser {
 			bean.setSource(source);
 
 			// 赞
-			Element likesElement = element.getElementsMatchingOwnText("赞\\[")
-					.last();
-			String likes = StringUtils.substringBetween(likesElement.text(),
-					"赞[", "]");
+			Element likesElement = element.getElementsMatchingOwnText("赞\\[").last();
+			String likes = StringUtils.substringBetween(likesElement.text(), "赞[", "]");
 			bean.setLikes(likes);
 
 			// 转发
@@ -147,15 +149,13 @@ public class WeiboMainPageFetch extends DistributedParser {
 				String pweibourl = element.select("a.cc").first().attr("href");
 				bean.setPweibourl(pweibourl);
 
-				String pmid = StringUtils.substringBetween(pweibourl,
-						"comment/", "?");
+				String pmid = StringUtils.substringBetween(pweibourl, "comment/", "?");
 				bean.setPmid(pmid);
 
 				String pid = WeiboIdUtils.toId(pmid);
 				bean.setPid(pid);
 
-				String text = StringUtils.substringBetween(element
-						.select("div").last().text(), "转发理由:", "赞[");
+				String text = StringUtils.substringBetween(element.select("div").last().text(), "转发理由:", "赞[");
 				bean.setText(text);
 				// 原文用户
 				String forwardUser = element.select("span.cmt a").text();
@@ -182,8 +182,9 @@ public class WeiboMainPageFetch extends DistributedParser {
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
+
 	public static void main(String[] args) throws InterruptedException {
-		while(true){
+		while (true) {
 			new WeiboMainPageFetch().run();
 			Thread.sleep(15000);
 		}

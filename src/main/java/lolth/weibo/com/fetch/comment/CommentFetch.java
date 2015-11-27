@@ -11,9 +11,7 @@ import lakenono.fetch.adv.httpclient.HttpClientFetcher;
 import lakenono.fetch.adv.utils.CookiesUtils;
 import lakenono.task.FetchTask;
 import lakenono.task.PageParseFetchTaskHandler;
-import lolth.weibo.cn.WeiboUserTaskFetch.WeiboUserTaskProducer;
 import lolth.weibo.com.fetch.comment.bean.CommentBean;
-import lolth.weibo.task.WeiboUserConcernListTaskProducer;
 import lolth.weibo.utils.WeiboContentSpliter;
 import lolth.weibo.utils.WeiboTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +26,12 @@ import com.alibaba.fastjson.JSON;
 
 @Slf4j
 public class CommentFetch extends PageParseFetchTaskHandler {
-	private WeiboUserTaskProducer userTaskProducer = null;
+//	private WeiboUserTaskProducer userTaskProducer = null;
 	HttpFetcher fetcher = new HttpClientFetcher();
 
 	public CommentFetch() {
 		super(CommentTask.WEIBO_TEXT_COMMENT);
-		userTaskProducer = new WeiboUserTaskProducer();
+//		userTaskProducer = new WeiboUserTaskProducer();
 	}
 
 	@Override
@@ -49,6 +47,7 @@ public class CommentFetch extends PageParseFetchTaskHandler {
 			commentBean.setKeyword(task.getName());
 			String cid = element.attr("comment_id");
 			commentBean.setCommentId(cid);
+			commentBean.setMid(task.getExtra());
 
 			parseTextOrUser(element, commentBean);
 
@@ -75,20 +74,20 @@ public class CommentFetch extends PageParseFetchTaskHandler {
 
 		for (CommentBean comment : commentBeans) {
 			try {
-				comment.persistOnNotExist();
+				comment.saveOnNotExist();
 			} catch (Exception e) {
 
 			}
-			try {
-				userTaskProducer.push(comment.getUserId(), task.getName());
-			} catch (Exception e) {
-
-			}
-			try {
-				new WeiboUserConcernListTaskProducer(comment.getUserId(), task.getName()).run();
-			} catch (Exception e) {
-
-			}
+//			try {
+//				userTaskProducer.push(comment.getUserId(), task.getName());
+//			} catch (Exception e) {
+//
+//			}
+//			try {
+//				new WeiboUserConcernListTaskProducer(comment.getUserId(), task.getName()).run();
+//			} catch (Exception e) {
+//
+//			}
 		}
 	}
 

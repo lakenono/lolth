@@ -2,7 +2,7 @@ package lolth.weibo.com.fetch.comment.bean;
 
 import java.sql.SQLException;
 
-import lakenono.db.BaseBean;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
@@ -10,15 +10,18 @@ import lombok.Data;
 
 @DBTable(name = "data_sina_weibo_comment")
 @Data
-public class CommentBean extends BaseBean {
+public class CommentBean extends DBBean{
 
 	public static void main(String[] args) throws SQLException {
-		new CommentBean().buildTable();
+		DBBean.createTable(CommentBean.class);
 	}
 
 	@DBConstraintPK
 	private String commentId;
 
+	@DBConstraintPK
+	private String mid;
+	
 	private String userId;
 
 	private String nick;
@@ -27,7 +30,7 @@ public class CommentBean extends BaseBean {
 
 	@DBField(type = "varchar(500)")
 	private String text;
-	@DBConstraintPK
+	
 	private String keyword;
 
 	private String postTime = "";
