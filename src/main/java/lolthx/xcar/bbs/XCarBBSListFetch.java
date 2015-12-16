@@ -77,6 +77,7 @@ public class XCarBBSListFetch extends DistributedParser {
 						bbsBean.setTitle(titleStr);
 					}
 
+					
 					// 回复
 					Elements viewReply = mainPost.select("td.titleStyle3>p>span");
 					if (!viewReply.isEmpty()) {
