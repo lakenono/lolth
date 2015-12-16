@@ -55,7 +55,7 @@ public class XCarBBSListFetch extends DistributedParser {
 
 				// 搜寻明细信息
 				Thread.sleep(1000);
-				String html = GlobalComponents.jsoupFetcher.fetch(sendUrl);
+				String html = GlobalComponents.jsoupFetcher.fetch(sendUrl, "", "gbk");
 				Document doc = Jsoup.parse(html);
 
 				bbsBean.setId(StringUtils.substringAfter(lstUrl, "viewthread.php?tid="));
