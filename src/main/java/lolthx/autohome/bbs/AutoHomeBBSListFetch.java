@@ -25,7 +25,7 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 	public String getQueueName() {
 		return "autohome_bbs_list";
 	}
-
+	
 	@Override
 	public void parse(String result, Task task) throws Exception {
 		if (StringUtils.isBlank(result)) {
@@ -40,13 +40,16 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 		Elements elements = doc.select("div#subcontent dl.list_dl[lang]");
 		for (Element element : elements) {
 			try {
-				
-				
 				// 发帖时间
 				String postTime = element.select("dd").first().select("span").text();
-				if (!isTime(postTime,start,end)) {
-					continue;
+				Date postDate = this.parseDate(postTime);
+				if(!task.inDateRange(postDate)){
+					break;
 				}
+				//if (!isTime(postTime,start,end)) {
+					//break;
+				//}
+				
 				bean = new AutoHomeBBSBean();
 				bean.setPostTime(postTime);
 
@@ -71,8 +74,13 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 				String authorId = StringUtils.substringAfter(authorUrl, "cn/");
 				bean.setAuthorId(authorId);
 				bean.setProjectName(task.getProjectName());
-				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
-				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+				
+				String[] extras = task.getExtra().split(":");
+				String forumId = extras[0];
+				String keyword = extras[1];
+				String tableKey = extras[2];
+				bean.setForumId(forumId);
+				bean.setKeyword(keyword);
 
 				//线程休眠1秒
 				Thread.sleep(1000);
@@ -103,8 +111,8 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 				// 车主信息
 				bean.setText(text);
 
-				bean.saveOnNotExist();
-				parseUser(docDetail);
+				bean.saveOnNotExist(tableKey);
+				parseUser(docDetail,tableKey);
 
 
 				String sendurl = StringUtils.replace(bean.getUrl(), "-1.html", "-{0}.html");
@@ -134,7 +142,7 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 		return MessageFormat.format(url, String.valueOf(pageNum));
 	}
 
-	private void parseUser(Document doc) {
+	private void parseUser(Document doc,String tableKey) {
 		Element topicElement = doc.select("div#maxwrap-maintopic").first();
 
 		AutoHomeBBSUserBean bean = new AutoHomeBBSUserBean();
@@ -161,7 +169,7 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 			}
 		}
 		try {
-			bean.saveOnNotExist();
+			bean.saveOnNotExist(tableKey);
 		} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -175,6 +183,16 @@ public class AutoHomeBBSListFetch extends DistributedParser {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private Date parseDate(String time){
+		Date srcDate = new Date();
+		try {
+			srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return srcDate;
 	}
 
 	private boolean between(Date beginDate, Date endDate, Date src) {

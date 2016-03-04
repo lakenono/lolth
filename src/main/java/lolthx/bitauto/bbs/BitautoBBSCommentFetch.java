@@ -45,12 +45,14 @@ public class BitautoBBSCommentFetch extends DistributedParser {
 				Element left = el.select("div.postcont_border div.postleft").first();
 				Element right = el.select("div.postcont_border div.postright").first();
 
-				String id = el.select("a").first().attr("id");
-				bean.setId(id);
+				
 
 				String floor = right.select("div.post_text  div.floor_box a").text();
 				bean.setFloor(floor);
 
+				String id = el.select("a").first().attr("id");
+				bean.setId(id+"-"+floor);
+				
 				String text = right.select("div.post_text div.post_width").text();
 				bean.setText(text);
 
@@ -70,10 +72,15 @@ public class BitautoBBSCommentFetch extends DistributedParser {
 				bean.setUrl(task.getUrl());
 				bean.setTitle(title);
 				bean.setProjectName(task.getProjectName());
-				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
-				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
-
-				bean.saveOnNotExist();
+				
+				String[] extras = task.getExtra().split(":");
+				String forumId = extras[0];
+				String keyword = extras[1];
+				String tableKey = extras[2];
+				bean.setForumId(forumId);
+				bean.setKeyword(keyword);
+				
+				bean.saveOnNotExist(tableKey);
 
 				// parseUser(left,userBean);
 			} catch (Exception e) {

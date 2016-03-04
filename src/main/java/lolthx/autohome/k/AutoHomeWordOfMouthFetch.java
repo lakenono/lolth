@@ -29,14 +29,17 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 		}
 		Document doc = Jsoup.parse(result);
 		
+		Elements elements = doc.select("div.mouthcon");
 		
-		Elements elements = doc.select("div.mouthcon.js-koubeidataitembox");
+		System.out.println( " >>>>> size " + elements.size() );
+		
 		for (Element element : elements) {
 				try {
 					AutoHomeWordOfMouthBean bean = new AutoHomeWordOfMouthBean();
 
 					// 用户名
 					String username = element.select("div.name-text p a").first().ownText();
+					System.out.println(" >>> username " + username );
 					bean.setUsername(username);
 
 					// 用户url
@@ -48,24 +51,24 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 					bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
 
 					// 帖子名称
-					if (element.select("div.mouth-main div.cont-title.fn-clear span.mr-20").text().trim().equals("")) {
+					if (element.select("div.title-name.name-width-01 > a").text().trim().equals("")) {
 						bean.setSourceTitle("none");
 					} else {
 						// 帖子title
-						String sourceTitle =element.select("div.mouth-main div.cont-title.fn-clear span.mr-20 a").text().trim();
+						String sourceTitle =element.select("div.title-name.name-width-01 > a").text().trim();
 						bean.setSourceTitle(sourceTitle);
 					}
 
 					// 帖子url
-					String sourceUrl = element.select("div.mouth-main div.cont-title.fn-clear span.time a").attr("href");
+					String sourceUrl = element.select("div.title-name.name-width-01 > b > a").attr("href");
 					bean.setSourceUrl(StringUtils.substringBefore(sourceUrl, "?"));
 					bean.setId(StringUtils.substringBetween(sourceUrl, "view_", "_1.html"));
 					
 					// 无认证车
-					if (element.getElementsMatchingOwnText("认证的车：").size() == 0) {
-						bean.setAuthCar("none");
+					if (element.getElementsMatchingOwnText("认证的车").size() == 0) {
+						bean.setAuthCar("");
 					} else {
-						String authCar = element.getElementsMatchingOwnText("认证的车：").first().siblingElements().first().text();
+						String authCar = element.getElementsMatchingOwnText("认证的车").first().siblingElements().first().text();
 						bean.setAuthCar(authCar);
 					}
 
@@ -167,8 +170,8 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 					bean.setAims(aims);
 
 					// 发帖时间
-					String publishTime = element.select("span.time").first().text();
-					publishTime = StringUtils.replace(publishTime, " 发表", "");
+					String publishTime = element.select("div.title-name.name-width-01 > b > a").text();
+					//publishTime = StringUtils.replace(publishTime, " 发表", "");
 					bean.setPublishTime(publishTime);
 
 					// 帖子内容
@@ -311,11 +314,12 @@ public class AutoHomeWordOfMouthFetch extends DistributedParser  {
 	}
 
 	public static void main(String args[]){
-		for(int i =0;i<5;i++){
+		for(int i =0;i<2;i++){
+			//new AutoHomeWordOfMouthFetch().run();
 			AutoHomeWordOfMouthFetch fetch = new AutoHomeWordOfMouthFetch();
-			//fetch.useDynamicFetch();
+			fetch.useDynamicFetch();
 			fetch.run();
 		}
 	}
-
+	
 }

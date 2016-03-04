@@ -32,9 +32,6 @@ public class BitautoBBSListFetch extends DistributedParser {
 			return;
 		}
 
-		Date start = task.getStartDate();
-		Date end = task.getEndDate();
-
 		Document doc = Jsoup.parse(result);
 		BitautoBBSBean bean = null;
 		Elements elements = doc.select("div.postscontent>div.postslist_xh");
@@ -46,11 +43,20 @@ public class BitautoBBSListFetch extends DistributedParser {
 			try {
 				// 发帖时间
 				String postTime = element.select("li.zhhf").first().text();
-
-				if (!isTime(postTime,start,end)) {
-					continue;
+				
+				System.out.println( " >>>>> postTime : > " + postTime );
+				
+				Date postDate = this.parseDate(postTime);
+				if(!task.inDateRange(postDate)){
+					break;
 				}
-
+				
+				/**
+				if (!isTime(postTime,start,end)) {
+					break;
+				}
+				*/
+				
 				bean = new BitautoBBSBean();
 				bean.setPostTime(postTime);
 
@@ -81,8 +87,16 @@ public class BitautoBBSListFetch extends DistributedParser {
 
 				bean.setAuthorId(authorId);
 				bean.setProjectName(task.getProjectName());
-				bean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
-				bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+				
+				String[] extras = task.getExtra().split(":");
+				String forumId = extras[0];
+				String keyword = extras[1];
+				String tableKey = extras[2];
+				bean.setForumId(forumId);
+				bean.setKeyword(keyword);
+				
+				bean.setForumId(forumId);
+				bean.setKeyword(keyword);
 
 				Thread.sleep(2000);
 				String html = GlobalComponents.fetcher.fetch(url);
@@ -114,7 +128,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 				// 车主信息
 				bean.setText(text);
 
-				bean.saveOnNotExist();
+				bean.saveOnNotExist(tableKey);
 				String sendurl = StringUtils.replace(bean.getUrl(), ".html", "-{0}.html");
 				int maxpage = this.getMaxPage(docDetail);// 执行页面用户评论推送
 				for (int pagenum = 1; pagenum <= maxpage; pagenum++) {
@@ -123,7 +137,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 					Queue.push(newTask);
 				}
 
-				parseUser(docDetail);
+				parseUser(docDetail,tableKey);
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
@@ -148,7 +162,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 	}
 
 	// 存储用户信息
-	private void parseUser(Document doc) {
+	private void parseUser(Document doc,String tableKey) {
 		// 获取左上角用户信息
 		Element topicElement = doc.select("div#postleft1").first();
 		BitautoBBSUserBean bean = new BitautoBBSUserBean();
@@ -204,7 +218,7 @@ public class BitautoBBSListFetch extends DistributedParser {
 			}
 		}
 		try {
-			bean.saveOnNotExist();
+			bean.saveOnNotExist(tableKey);
 		} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -231,8 +245,20 @@ public class BitautoBBSListFetch extends DistributedParser {
 		return MessageFormat.format(url, String.valueOf(pageNum));
 	}
 
+	private Date parseDate(String time){
+		Date srcDate = new Date();
+		try {
+			srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return srcDate;
+	}
+	
 	public static void main(String[] args) throws Exception {
-		new BitautoBBSListFetch().run();
+		for(int i = 1 ; i<= 2 ; i++){
+			new BitautoBBSListFetch().run();
+		}
 	}
 
 }

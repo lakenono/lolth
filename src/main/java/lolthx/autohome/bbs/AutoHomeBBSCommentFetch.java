@@ -50,21 +50,25 @@ public class AutoHomeBBSCommentFetch extends DistributedParser {
 				commentBean.setAuthorId(userBean.getId());
 
 				String id = StringUtils.substringBetween(task.getUrl(), "bbs/", ".html");
-				commentBean.setId(id);
+				commentBean.setId(id + "-" + floor);
 
 				String title = doc.select("div#maxwrap-maintopic div#consnav span").last().text();
 				commentBean.setTitle(title);
 
 				commentBean.setProjectName(task.getProjectName());
-
-				commentBean.setForumId(StringUtils.substringBefore(task.getExtra(), ":"));
-				commentBean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
-
+				
+				String[] extras = task.getExtra().split(":");
+				String forumId = extras[0];
+				String keyword = extras[1];
+				String tableKey = extras[2];
+				commentBean.setForumId(forumId);
+				commentBean.setKeyword(keyword);
+				
 				parseComment(conright, commentBean);
 
-				userBean.saveOnNotExist();
+				userBean.saveOnNotExist(tableKey);
 
-				commentBean.saveOnNotExist();
+				commentBean.saveOnNotExist(tableKey);
 				
 			} catch (Exception e) {
 //				e.printStackTrace();

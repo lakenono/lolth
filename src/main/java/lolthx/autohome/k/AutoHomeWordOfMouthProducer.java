@@ -31,15 +31,12 @@ public class AutoHomeWordOfMouthProducer extends Producer {
 	
 	@Override
 	public String getQueueName() {
-		return "autohome_kb_list";
+		return "autohome_kb_reslove";
 	}
 
 	@Override //获取最大页数
 	protected int parse() throws Exception {
-		Document document = GlobalComponents.fetcher.document(buildUrl(1));
-		String text = document.select("div.page-cont a.page-item-last").attr("href");
-		String page = StringUtils.substringBetween(text, "index_", ".html");
-		return Integer.parseInt(page);
+		return 1;
 	}
 
 	@Override //获取链接
