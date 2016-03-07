@@ -45,7 +45,7 @@ public class Job {
 					for(int i = 0 ; i < forumList.size() ; i++){
 						Map<String,String> forumMap = new HashMap<String,String>();
 						forumMap = forumList.get(i);
-						String forumId = forumMap.get("id");
+						String forumId = forumMap.get("forumId");
 						String keyword = forumMap.get("keyword");
 						
 						this.classProducer(webClass, taskName, taskId, forumId, keyword, startDate, endDate);
@@ -66,16 +66,16 @@ public class Job {
 		
 	}
 	
-	public boolean classProducer(String webClass,String projectName, String taskId,String id, String keyword,String startDate,String endDate){
+	public boolean classProducer(String webClass,String projectName, String taskId,String forumId, String keyword,String startDate,String endDate){
 		try {
 			System.out.println(" >>>>>>>>>>> : >  webClass " +  webClass);
 			System.out.println(" >>>>>>>>>>> : > projectName " +  projectName);
 			System.out.println(" >>>>>>>>>>> : > taskId " + taskId);
-			System.out.println(" >>>>>>>>>>> : > id " + id );
+			System.out.println(" >>>>>>>>>>> : > forumId " + forumId );
 			System.out.println(" >>>>>>>>>>> : > keyword " + startDate);
 			System.out.println(" >>>>>>>>>>> : > endDate" + endDate);
 			
-			((Class<? extends Producer>)Class.forName(webClass)).getConstructor(String.class,String.class,String.class,String.class,String.class,String.class).newInstance(projectName, taskId, id, keyword, startDate, endDate).run();
+			((Class<? extends Producer>)Class.forName(webClass)).getConstructor(String.class,String.class,String.class,String.class,String.class,String.class).newInstance(projectName, taskId, forumId, keyword, startDate, endDate).run();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
