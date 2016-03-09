@@ -59,7 +59,6 @@ public class BaiduPostListProducer extends Producer {
 
 	@Override
 	protected String buildUrl(int pageNum) throws Exception {
-		System.out.println(" keyword " + keyword + "  url :" +  MessageFormat.format(BAIDU_POST_SEARCH_URL, URLEncoder.encode(keyword, "utf-8"), String.valueOf((pageNum - 1) * PAGE_SIZE)));
 		return MessageFormat.format(BAIDU_POST_SEARCH_URL, URLEncoder.encode(keyword, "utf-8"), String.valueOf((pageNum - 1) * PAGE_SIZE));
 	}
 
@@ -71,13 +70,13 @@ public class BaiduPostListProducer extends Producer {
 	}
 	
 	public static void main(String args[]) {
-		String projectName = "中粮生态谷大数据调研-百度贴吧-20151028";
+		String projectName = "OPPO项目-20160108";
 		String[] keywords = {
-				"旅游",	"旅行",	"生态",	"郊游",	"房产",	"买房",	"历史",	"中国历史",	"科技",	"农业",	"农业科技",	"展览馆",	"郊区",	"琉璃河",	"房山",	"北京",	"教育",	"度假",	"科普"
+				"oppo"
 		};
 		
 		for (int i = 0; i < keywords.length ; i++) {
-			System.out.println("贴吧：" + keywords[i]);
+			//System.out.println("贴吧：" + keywords[i]);
 			new BaiduPostListProducer(projectName, keywords[i]).run();
 		}
 		

@@ -45,21 +45,26 @@ public class BaiduNewsListProducer extends Producer {
 	@Override
 	protected int parse() throws Exception {
 		Document document = GlobalComponents.fetcher.document(buildUrl(1));
-		System.out.println(buildUrl(1));
 		String text = document.select("div#header_top_bar span.nums").first().text();
-		String pageNum = StringUtils.substringBetween(text, "新闻", "篇");
-		pageNum = pageNum.replaceAll(",", "");
+		String pageNum = StringUtils.substringBetween(text, "新闻约", "篇");
+		System.out.println(pageNum);
+		if(pageNum == null){
+			return 0;
+		}
+		if(pageNum.indexOf(",") > 0){
+			pageNum = pageNum.replaceAll(",", "");
+		}
+	
 		if("0".equals(pageNum)){
 			return 0;
 		}else{
 			Integer  page =  Integer.valueOf(pageNum)/10 +1 ;
-			if(page >= 66){
-				return 66;
+			if(page >= 75){
+				return 75;
 			}else{
 				return page;
 			}
 		}
-	
 	}
 
 	@Override
@@ -108,22 +113,22 @@ public class BaiduNewsListProducer extends Producer {
 	 * @throws Exception
 	 */
 	public static void main(String args[]) throws Exception {
-		String projectName = "baidu news list";
-		String[] keywords = { "观致SUV" };
+		String projectName = "OPPO项目-百度新闻-20160112";
+		String[] keywords = { 
+				"oppo"	
+};
 		String sort = "0";// 排序方式，1表示按焦点排序，0表示按时间排序。
 		String type = "newsdy";
-		String start = "20150918";
-		String end = "20150918";
+		String start = "20150430";
+		String end = "20160101";
 		
 		Date startDate = DateUtils.parseDate(start, new String[] { "yyyyMMdd" });
 		Date endDate = DateUtils.parseDate(end, new String[] { "yyyyMMdd" });
 		
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + startDate.toString() + "::" + endDate.toString() );
-		
 		for (int i = 0; i < keywords.length; i++) {
+			//new BaiduNewsListProducer(projectName, keywords[i], sort, type, DateFormatUtils.format(startDate, "yyyyMMdd"), DateFormatUtils.format(endDate, "yyyyMMdd")).run();
 			while (true){
 				new BaiduNewsListProducer(projectName, keywords[i], sort, type, DateFormatUtils.format(startDate, "yyyyMMdd"), DateFormatUtils.format(startDate, "yyyyMMdd")).run();
-			
 				if (DateUtils.isSameDay(startDate, endDate)){
 					break;
 				}

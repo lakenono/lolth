@@ -36,9 +36,9 @@ public class XCarWordOfMouthListFetch extends DistributedParser {
 					bean = new XCarWordOfMouthBean();
 
 					bean.setProjectName(task.getProjectName());
-					bean.setKeyword(StringUtils.substringBefore(task.getExtra(), ":"));
-					bean.setFormId(StringUtils.substringAfter(task.getExtra(), ":"));
-
+					bean.setFormId(StringUtils.substringBefore(task.getExtra(), ":"));
+					bean.setKeyword(StringUtils.substringAfter(task.getExtra(), ":"));
+					
 					Elements dts = dl.getElementsByTag("dt");
 					if (dts.size() > 0) {
 						Element dt = dts.first();

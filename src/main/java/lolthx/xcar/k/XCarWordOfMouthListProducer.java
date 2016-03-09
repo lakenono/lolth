@@ -25,24 +25,12 @@ public class XCarWordOfMouthListProducer extends Producer {
 
 	@Override
 	public String getQueueName() {
-		return "xcar_kb_list";
+		return "xcar_kb_reslove";
 	}
 
 	@Override
 	protected int parse() throws Exception {
-		Document doc = GlobalComponents.fetcher.document(buildUrl(1));
-		Elements pages = doc.select("div.pagers a");
-		if (pages.size() == 1) {
-			return 1;
-		}
-
-		if (pages.size() > 2) {
-			int maxPageIdx = pages.size() - 2;
-			String pageStr = pages.get(maxPageIdx).text();
-
-			return Integer.parseInt(pageStr);
-		}
-		return 0;
+		return 1;
 	}
 
 	@Override

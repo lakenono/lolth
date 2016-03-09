@@ -26,32 +26,12 @@ public class PacutoBBSListProducer extends Producer {
 
 	@Override
 	public String getQueueName() {
-		return "pacuto_bbs_list";
+		return "pacuto_bbs_reslove";
 	}
 
 	@Override
 	protected int parse() throws Exception {
-		Document doc = GlobalComponents.fetcher.document(buildUrl(1));
-
-		Elements pageEs = doc.select("div.pager a");
-
-		// 没有分页标签
-		if (pageEs.isEmpty()) {
-			if (!doc.select("span.checkbox_title a.topicurl").isEmpty()) {
-				return 1;
-			}
-		}
-
-		// 有分页标签
-		if (pageEs.size() >= 3) {
-			String pages = pageEs.get(pageEs.size() - 2).text();
-			if (StringUtils.isNumeric(pages)) {
-				return Integer.parseInt(pages);
-			} else {
-				return Integer.parseInt(StringUtils.remove(pages, "..."));
-			}
-		}
-		return 0;
+		return 1;
 	}
 
 	@Override

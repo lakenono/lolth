@@ -26,10 +26,10 @@ public class DoubanSearchCommentFetch extends DistributedParser {
 		Document doc = Jsoup.parse(result);
 		
 		String projectName = task.getProjectName();
-		String keyword = task.getExtra();
+		String[] extras = task.getExtra().split(":");
+		String keyword = extras[0];
 		String url = task.getUrl();
 		String id = StringUtils.substringBetween(url, "topic/","/?start");
-		System.out.println(">>>> id >> " + id);
 		String title = doc.select("div#content h1").first().text();
 		
 		DoubanSearchCommentBean bean = null;

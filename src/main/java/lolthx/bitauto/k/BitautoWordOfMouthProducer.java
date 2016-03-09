@@ -27,28 +27,12 @@ public class BitautoWordOfMouthProducer extends Producer  {
 
 	@Override
 	public String getQueueName() {
-		return "bitauto_kb_list";
+		return "bitauto_kb_reslove";
 	}
 
 	@Override //获取最大页
 	protected int parse() throws Exception {
-		Document document = GlobalComponents.fetcher.document(buildUrl(1));
-		Elements pageEs = document.select("div.the_pages a");
-		
-		// 没有分页标签
-		if (pageEs.isEmpty()) {
-			if (!document.select("div.postslist_xh").isEmpty()) {
-				return 1;
-			}
-		}
-		// 有分页标签
-		if (pageEs.size() >= 3) {
-			String pages = pageEs.get(pageEs.size() - 2).text();
-			if (StringUtils.isNumeric(pages)) {
-				return Integer.parseInt(pages);
-			}
-		}
-		return 0;
+		return 1;
 	}
 
 	@Override

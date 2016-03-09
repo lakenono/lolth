@@ -40,8 +40,9 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 		for (Element element : elements) {
 			try {
 				String postTime = element.select("li.zhhf").first().text();
-				if (!isTime(postTime,start,end)) {
-					continue;
+				Date postDate = this.parseDate(postTime);
+				if(!task.inDateRange(postDate)){
+					break;
 				}
 
 				bean = new BitautoWordOfMouthBean();
@@ -122,6 +123,16 @@ public class BitautoWordOfMouthFetch extends DistributedParser {
 
 	}
 
+	private Date parseDate(String time){
+		Date srcDate = new Date();
+		try {
+			srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return srcDate;
+	}
+	
 	private boolean isTime(String time,Date start,Date end){
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");

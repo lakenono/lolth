@@ -20,36 +20,20 @@ public class XCarBBSListProducer extends Producer {
 
 	private String keyword;
 
-	private int pageInt;
-
-	public XCarBBSListProducer(String projectName, String id, String keyword, int pageInt) {
+	public XCarBBSListProducer(String projectName, String id, String keyword) {
 		super(projectName);
 		this.id = id;
 		this.keyword = keyword;
-		this.pageInt = pageInt;
 	}
 
 	@Override
 	public String getQueueName() {
-		return "xcar_bbs_list";
+		return "xcar_bbs_reslove";
 	}
 
 	@Override
 	protected int parse() throws Exception {
-		if (pageInt != 0) {
-			return pageInt;
-		}
-		Document doc = GlobalComponents.fetcher.document(buildUrl(1));
-		Elements pages = doc.select("div.fn_0209 a");
-		if (pages.size() == 1) {
-			return 1;
-		}
-		if (pages.size() > 2) {
-			int maxPageIdx = pages.size() - 2;
-			String pageStr = pages.get(maxPageIdx).text();
-			return Integer.parseInt(pageStr);
-		}
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -76,7 +60,7 @@ public class XCarBBSListProducer extends Producer {
 		String[] keywords = { "机油论坛" };
 		int[] pages = { 120 };
 		for (int i = 0; i < ids.length; i++) {
-			new XCarBBSListProducer(projectName, ids[i], keywords[i], pages[i]).run();
+			new XCarBBSListProducer(projectName, ids[i], keywords[i]).run();
 		}
 
 	}

@@ -26,25 +26,12 @@ public class PacutoWordOfMouthListProducer extends Producer  {
 
 	@Override
 	public String getQueueName() {
-		return "pacuto_kb_list";
+		return "pacuto_kb_reslove";
 	}
 
 	@Override
 	protected int parse() throws Exception {
-		Document doc = GlobalComponents.fetcher.document(buildUrl(1));
-		Elements pageEs = doc.select("div#pcauto_page a");
-		if (pageEs.isEmpty()) {
-			if (!doc.select("div.main_table.clearfix").isEmpty()) {
-				return 1;
-			}
-		}
-		if (pageEs.size() >= 3) {
-			String pages = pageEs.get(pageEs.size() - 2).text();
-			if (StringUtils.isNumeric(pages)) {
-				return Integer.parseInt(pages);
-			}
-		}
-		return 0;
+		return 1;
 	}
 
 	@Override

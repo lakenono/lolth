@@ -16,6 +16,8 @@ import lakenono.core.GlobalComponents;
 public class WeiXinArticleListProducer extends Producer {
 
 	private static final String WEIXIN_ARTICLE_LIST_URL = "http://weixin.sogou.com/weixin?query={0}&fr=sgsearch&type=2&page={1}&ie=utf8";
+	
+	//http://weixin.sogou.com/weixin?query=%E8%83%A1%E6%AD%8C&fr=sgsearch&ie=utf8&type=2&w=01015002&oq=huge+&sourceid=sugg
 
 	private String keyword;
 
@@ -31,6 +33,10 @@ public class WeiXinArticleListProducer extends Producer {
 
 	@Override
 	protected int parse() throws Exception {
+		if(1 == 1){
+			return 10;
+		}
+		
 		String SUV = "";
 		String SNUID = "";
 		String SUID = "";
@@ -76,9 +82,7 @@ public class WeiXinArticleListProducer extends Producer {
 
 	public static void main(String args[]) throws Exception {
 		String projectName = "中粮生态谷大数据调研-微信爬取-20151028";
-		String[] keywords = { "郊游","农家乐","休闲游","生态游","农业观光游","亲子主题游","一日游","酒店度假","湿地公园","农业","植物园","农场","春游","秋游","拓展训练","展览馆","博物馆",
-				"科技馆","户外活动","房山","琉璃河","郊区","生态","农民","卫星城","小镇 ","远郊 ","农业博览会","农业展览馆","农业科技","农科院","农业产业","农业科普","农业教育",
-				"农业公司","农业产业链","农业开发","农业产业园","有机农业","健康产业","郊区买房","投资买房","度假买房","养老公寓","郊区配套","郊区别墅","郊区花园洋房"
+		String[] keywords = { "郊游"
 		};
 		
 		for (int i = 0; i < keywords.length; i++) {

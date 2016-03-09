@@ -69,8 +69,8 @@ public class YokaBBSListProducer extends Producer{
 		Task buildTask = super.buildTask(url);
 		buildTask.setExtra(keyword);
 		try {
-			buildTask.setStartDate(DateUtils.parseDate("20140831", "yyyyMMdd"));
-			buildTask.setEndDate(DateUtils.parseDate("20150831", "yyyyMMdd"));
+			buildTask.setStartDate(DateUtils.parseDate("20110101", "yyyyMMdd"));
+			buildTask.setEndDate(DateUtils.parseDate("20151116", "yyyyMMdd"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -78,9 +78,12 @@ public class YokaBBSListProducer extends Producer{
 	}
 	
 	public static void main(String[] args){
-		String projectName = "yoka test 1";
+		String projectName = "华扬联众演讲数据-YOKA-20151116";
 		String[] keywords={
-			"干燥"
+				"LouisVuitton","路易威登","Gucci","古驰","CHANL","香奈儿","小香","PRADA","普拉达","HERMES","爱马仕","Dior","迪奥",
+				"bottegaveneta","葆蝶家","Burberry","博柏利","巴宝莉","chloe","蔻依","克洛伊","AlexanderMqueen","亚历山大·麦昆","marcjacobs","马克·雅可布",
+				"MansurGavriel","曼苏丽尔","versace","范思哲","CELINE","思琳","赛琳","FENDI","芬迪","MiuMiu","缪缪","givenchy","纪梵希",
+				"marcbymarcjacobs","Coach","蔻驰","寇驰","MichaelKors","迈克.科尔斯","Katespade","凯特·丝蓓","ToryBurch","汤丽柏琦","MCM","芙拉","GerardDarel","杰哈·达黑勒"
 		};
 		
 		for(int i = 0 ; i< keywords.length; i++){

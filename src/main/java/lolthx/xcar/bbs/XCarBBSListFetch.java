@@ -45,9 +45,17 @@ public class XCarBBSListFetch extends DistributedParser {
 
 			try {
 				String postTime = StringUtils.trim(element.select("span.smalltxt.lighttxt").text());
+				
+				Date postDate = this.parseDate(postTime);
+				if(!task.inDateRange(postDate)){
+					break;
+				}
+				/**
 				if (!isTime(postTime,start,end)) {
 					continue;
 				}
+				*/
+				
 				bbsBean = new XCarBBSBean();
 
 				String lstUrl = element.select("a.open_view").first().attr("href");
@@ -201,6 +209,16 @@ public class XCarBBSListFetch extends DistributedParser {
 		return user;
 	}
 
+	private Date parseDate(String time){
+		Date srcDate = new Date();
+		try {
+			srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return srcDate;
+	}
+	
 	private boolean isTime(String time,Date start,Date end) {
 		try {
 			Date srcDate = DateUtils.parseDate(time.trim(), "yyyy-MM-dd");
