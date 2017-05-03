@@ -13,17 +13,19 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 /**
  * 微博用户爬取，并发送标签任务
+ * 
  * @author yanghp
  *
  */
 @Slf4j
-public class WeiboUserFetch extends DistributedParser{
-	
+public class WeiboUserFetch extends DistributedParser {
+
 	public static final String WEIBO_USER_TAG = "cn_weibo_user_tag";
 	public static final String WEIBO_FANS_NUM = "cn_weibo_fans_num";
-	private static final String WEIBO_USER_TAG_URL_TEMPLATE = "http://weibo.cn/account/privacy/tags/?uid={0}";
+	private static final String WEIBO_USER_TAG_URL_TEMPLATE = "https://weibo.cn/account/privacy/tags/?uid={0}";
 
 	@Override
 	public String getQueueName() {
@@ -32,7 +34,7 @@ public class WeiboUserFetch extends DistributedParser{
 
 	@Override
 	public void parse(String result, Task task) throws Exception {
-		if(StringUtils.isBlank(result)){
+		if (StringUtils.isBlank(result)) {
 			log.info("weibo user result is null !");
 			return;
 		}
@@ -47,11 +49,11 @@ public class WeiboUserFetch extends DistributedParser{
 				WeiboUserBean user = new WeiboUserBean();
 
 				String[] ids = StringUtils.split(task.getExtra(), ',');
-				if(ids.length>2){
+				if (ids.length > 2) {
 					user.setId(ids[0]);
 					user.setUid(ids[1]);
 					user.setUserUrl(ids[2]);
-				}else{
+				} else {
 					user.setId(ids[0]);
 					user.setUid(ids[1]);
 				}
@@ -88,21 +90,21 @@ public class WeiboUserFetch extends DistributedParser{
 
 				boolean persist = user.saveOnNotExist();
 
-				//推送标签任务
-				if(persist){
+				// 推送标签任务
+				if (persist) {
 					buildUserTagTask(user.getUid(), task);
-					buildFansNumTask(user,task);
+					buildFansNumTask(user, task);
 				}
 			}
-		}else{
+		} else {
 			log.error("cookies is lose efficacy !");
 		}
-		
+
 	}
 
 	private void buildFansNumTask(WeiboUserBean user, Task task) {
 		String url = user.getUserUrl();
-		if(StringUtils.isBlank(url)){
+		if (StringUtils.isBlank(url)) {
 			return;
 		}
 		Task t = new Task();
@@ -111,7 +113,7 @@ public class WeiboUserFetch extends DistributedParser{
 		t.setExtra(user.getUid());
 		t.setProjectName(task.getProjectName());
 		Queue.push(t);
-		
+
 	}
 
 	private void buildUserTagTask(String uid, Task task) {
@@ -122,6 +124,7 @@ public class WeiboUserFetch extends DistributedParser{
 		t.setProjectName(task.getProjectName());
 		Queue.push(t);
 	}
+
 	private String buildUrl(String uid) {
 		return MessageFormat.format(WEIBO_USER_TAG_URL_TEMPLATE, uid);
 	}
@@ -130,9 +133,11 @@ public class WeiboUserFetch extends DistributedParser{
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
+
 	public static void main(String[] args) throws InterruptedException {
+		WeiboUserFetch fetch = 	new WeiboUserFetch();
 		while(true){
-		new WeiboUserFetch().run();
+			fetch.run();
 		Thread.sleep(15000);
 		}
 	}

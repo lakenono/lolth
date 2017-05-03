@@ -6,10 +6,6 @@ import java.util.List;
 import lakenono.base.Producer;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lakenono.db.DBBean;
-import lolthx.weibo.bean.WeiboBean;
-import lolthx.weibo.bean.WeiboUserBean;
-import lolthx.weibo.bean.WeiboUserConcernRefBean;
 import lolthx.weibo.utils.WeiboFileUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +24,7 @@ import org.jsoup.select.Elements;
 public class WeiboMainPageTask extends Producer {
 
 	public static final String MAIN_PAGE_QUEUE = "weibo_main_page";
-	private final String USER_MAIN_PAGE_URL_TEMPLATE = "http://weibo.cn/{0}?page={1}";
+	private final String USER_MAIN_PAGE_URL_TEMPLATE = "https://weibo.cn/{0}?page={1}";
 	private String user;
 	private String projectName;
 	private String pageStr="";

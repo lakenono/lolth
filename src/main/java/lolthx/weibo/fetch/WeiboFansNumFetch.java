@@ -54,4 +54,5 @@ public class WeiboFansNumFetch extends DistributedParser{
 	public String getCookieDomain() {
 		return "weibo.cn";
 	}
+	
 }

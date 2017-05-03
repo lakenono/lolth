@@ -61,9 +61,9 @@ public class WeiboMainPageFetch extends DistributedParser {
 		for (WeiboBean b : beans) {
 			try {
 				if (StringUtils.isNumeric(task.getExtra())) {
-					userUrl = "http://weibo.cn/u/" + task.getExtra();
+					userUrl = "https://weibo.cn/u/" + task.getExtra();
 				} else {
-					userUrl = "http://weibo.cn/" + task.getExtra();
+					userUrl = "https://weibo.cn/" + task.getExtra();
 				}
 				b.setUserurl(userUrl);
 				b.setProjectName(task.getProjectName());
@@ -123,7 +123,7 @@ public class WeiboMainPageFetch extends DistributedParser {
 			bean.setPostTime(postTimeText);
 
 			// weibourl
-			bean.setWeibourl("http://weibo.cn/comment/" + mid);
+			bean.setWeibourl("https://weibo.cn/comment/" + mid);
 
 			// source
 			String source = element.select("span.ct").text();

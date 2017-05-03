@@ -34,9 +34,9 @@ public class WeiboUserTask {
 		for (String id : readFile) {
 			String userUrl = "";
 			if (StringUtils.isNumeric(id)) {
-				userUrl = "http://weibo.cn/u/" + id;
+				userUrl = "https://weibo.cn/u/" + id;
 			} else {
-				userUrl = "http://weibo.cn/" + id;
+				userUrl = "https://weibo.cn/" + id;
 			}
 			weibo.bulidWeiboUserTask(id, userUrl, projectName);
 		}

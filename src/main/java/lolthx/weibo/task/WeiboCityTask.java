@@ -22,7 +22,7 @@ import org.jsoup.select.Elements;
 public class WeiboCityTask {
 	// projectName name id
 	public WeiboSearchFetch wei = new WeiboSearchFetch();
-	public final String baseURL = "http://weibo.cn/{0}/profile?hasori=0&haspic=0&starttime={1}&endtime={2}&advancedfilter=1&page={3}";
+	public final String baseURL = "https://weibo.cn/{0}/profile?hasori=0&haspic=0&starttime={1}&endtime={2}&advancedfilter=1&page={3}";
 	public static String fans = "0";
 
 	public int getWeiboList(String id, String startTime, String endTime, int page_num) throws Exception {

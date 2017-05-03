@@ -3,12 +3,11 @@ package lolthx.weibo.task;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
+import java.util.Random;
 
 import lakenono.base.Queue;
 import lakenono.base.Task;
 import lakenono.core.GlobalComponents;
-import lolthx.weibo.utils.WeiboFileUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +31,18 @@ public class WeiboSearchTask {
 	// 队列名称
 	public static final String WEIBO_SEARCH_QUEUE = "weibo_search_queue";
 	// 微博搜索模板URL
-	private final String CN_WEIBO_SEARCH_URL_TEMPLATE = "http://weibo.cn/search/mblog?hideSearchFrame=&keyword={0}&advancedfilter=1&starttime={1}&endtime={2}&sort=time&page={3}";
+	private final String CN_WEIBO_SEARCH_URL_TEMPLATE = "https://weibo.cn/search/mblog?hideSearchFrame=&keyword={0}&advancedfilter=1&starttime={1}&endtime={2}&sort=time&page={3}";
 	private String projectName;
 	private String keyword;// 搜索关键字
 	private String startTime;// 开始时间
 	private String endTime;// 结束时间
+	
+	//固定的cookie
+	private String[] cookies = {"_T_WM=e97f5f10b52eab06635bf70d61af164d; SUB=_2A250DfRaDeRhGedG71QV9SjJzjmIHXVX8ZwSrDV6PUJbkdBeLVDskW2ajVmj4-ixQwEKhLeBQ1jrfsQFZg..; SUHB=0YhQSRU58vKOR4; SCF=AhsVEVO1miKCOnpmU-RU-g74lvjdKlrbkDiLEIjpdwETqdf_pi89FOn4umsCrjrADB0cjwh7BmpkiQZUfmxNY-E.; SSOLoginState=1493795850",
+			"_T_WM=3b52b1385ccb630816d423f41ead103b; SUB=_2A250DetsDeRhGeBO6lQV8SfIzT2IHXVX8fUkrDV6PUJbkdBeLRH7kW2ghmyZBEZJhGe7PQzQvraEvqCIDw..; SUHB=0tKqpLLiYzFzq7; SCF=Al7ETbavcdYrZYVCKBrMpvdRQGFr-R2YQqjcmqErHKL0t1KPX20-vAZFQxIeuGEOXGV_lgJjzAstOLaTaMOUXWI.; SSOLoginState=1493801788",
+			"_T_WM=e998ee2c7be14c2ade0aed9c4c81aefb; SUB=_2A250DexFDeRhGeVP4lYZ8C_NzzyIHXVX8fQNrDV6PUJbkdBeLRnckW1XHUZnp4waJ7O_B9ViLzvRkwekag..; SUHB=0OMUJ2ITCABwaN; SCF=AjbOmIckzpSUu48M541cqryuZOMS2Pp6k5IB2MDBV7_h_o7gXmLGcOttxl3NVo5WvcnIoGHVuF0REaH6mgCqIoM.; SSOLoginState=1493802005; M_WEIBOCN_PARAMS=luicode%3D20000174",
+			"_T_WM=d9d1d37082bf48df150c19293a7488a4; SUB=_2A250DeyhDeThGeRJ7FsS9CfFyj-IHXVX8fTprDV6PUJbkdBeLU34kW01kksdsxsQ47nkYoVH5g-hTZ3tXQ..; SUHB=0btsD6Pf2F6irn; SCF=AuhFa6wa0I5oeJM1zSbqt03JOlaYxBt8findKC4sqZMo0OTdwcrQoPw4r6hsKHSqcTRoisnv3OmT0-ttRMLxQ0o.; SSOLoginState=1493802225"};
+	Random random = new Random();
 
 	// private int sleep = 15000;// 休眠15秒
 	
@@ -100,12 +106,12 @@ public class WeiboSearchTask {
 
 	private int getMaxPage() throws TException, InterruptedException {
 		String url = buildUrl(1);
-		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
-		// String cookies =
-		// "_T_WM=381052f5df15a47db4b6c216d9fa6b8e; SUB=_2A254qy2qDeSRGeNL7FQS9inIyj-IHXVYV7PirDV6PUJbrdANLVPhkW1Mx5Pwf3qtPcXl9Bixn6Md_eO72Q..; gsid_CTandWM=4uDre42b1a7eMv2kMnqKPnoFp6F";
-		String html = GlobalComponents.jsoupFetcher.fetch(url, cookies, "");
+//		String cookies = GlobalComponents.authService.getCookies("weibo.cn");
+		String ck = cookies[random.nextInt(4)];
+//		String ck = "_T_WM=e97f5f10b52eab06635bf70d61af164d; SUB=_2A250DfRaDeRhGedG71QV9SjJzjmIHXVX8ZwSrDV6PUJbkdBeLVDskW2ajVmj4-ixQwEKhLeBQ1jrfsQFZg..; SUHB=0YhQSRU58vKOR4; SCF=AhsVEVO1miKCOnpmU-RU-g74lvjdKlrbkDiLEIjpdwETqdf_pi89FOn4umsCrjrADB0cjwh7BmpkiQZUfmxNY-E.; SSOLoginState=1493795850";
+		String html = GlobalComponents.jsoupFetcher.fetch(url, ck, "UTF-8");
 		Document doc = Jsoup.parse(html);
-
+		
 		if (doc.select("div#pagelist").size() == 0) {
 			Elements elements = doc.select("div.c[id]");
 			if (elements.isEmpty()) {
@@ -129,6 +135,7 @@ public class WeiboSearchTask {
 	}
 
 	public static void main(String[] args) throws Exception {
+		/*
 		String dir = Class.class.getResource("/") + "weiboSearch";
 		dir = StringUtils.substringAfter(dir, ":");
 		String file = WeiboFileUtils.rename2Temp(dir);
@@ -149,5 +156,7 @@ public class WeiboSearchTask {
 			Thread.sleep(15000);
 		}
 		WeiboFileUtils.rename2Done(file);
+		*/
+		new WeiboSearchTask("hangkong", "自由光","20170320","20170420").run();
 	}
 }
